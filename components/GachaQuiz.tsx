@@ -82,7 +82,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
                       [key]: isSelected ? '' : choice,
                     }))
                   }
-                  className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-150 ${
+                  className={`px-4 py-2 rounded-full text-base font-medium border transition-all duration-150 ${
                     isSelected
                       ? 'bg-white text-black border-white'
                       : 'bg-transparent text-zinc-300 border-zinc-600 hover:border-zinc-400 hover:text-white'

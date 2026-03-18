@@ -1,6 +1,8 @@
 import { kv } from '@vercel/kv'
 import { ulid } from 'ulid'
 
+const KV_TTL_24H = 86400
+
 export type TrackStatus = 'processing' | 'done' | 'failed' | 'timeout'
 
 export interface TrackRecord {
@@ -22,7 +24,7 @@ export async function saveTrack(
   trackId: string,
   record: TrackRecord,
 ): Promise<void> {
-  await kv.set(`track:${trackId}`, record, { ex: 86400 })
+  await kv.set(`track:${trackId}`, record, { ex: KV_TTL_24H })
 }
 
 // Get a track record; returns null if not found
@@ -38,7 +40,7 @@ export async function updateTrack(
   const existing = await getTrack(trackId)
   if (existing === null) return
   const updated: TrackRecord = { ...existing, ...updates }
-  const remainingTtl = Math.min(86400, Math.max(1, 86400 - Math.floor((Date.now() - existing.createdAt) / 1000)))
+  const remainingTtl = Math.min(KV_TTL_24H, Math.max(1, KV_TTL_24H - Math.floor((Date.now() - existing.createdAt) / 1000)))
   await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
 }
 
@@ -47,7 +49,7 @@ export async function getRateLimitCount(ip: string): Promise<number> {
   try {
     const dateStr = new Date().toISOString().split('T')[0]
     const key = `ratelimit:${ip}:${dateStr}`
-    await kv.set(key, 0, { ex: 86400, nx: true })
+    await kv.set(key, 0, { ex: KV_TTL_24H, nx: true })
     const count = await kv.incr(key)
     return count
   } catch {

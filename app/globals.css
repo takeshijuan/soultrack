@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes waveform-pulse {
+  from { transform: scaleY(0.5); }
+  to { transform: scaleY(1.2); }
+}

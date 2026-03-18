@@ -8,11 +8,16 @@ import { Q1_SET, Q2_SET, Q3_SET } from '@/lib/pool'
 
 export async function POST(request: NextRequest) {
   // 1. Parse body
-  const body = await request.json()
-  const { q1, q2, q3 } = body as { q1: string; q2: string; q3: string }
+  let body: { q1?: string; q2?: string; q3?: string }
+  try {
+    body = await request.json()
+  } catch {
+    return Response.json({ error: 'Invalid request body' }, { status: 400 })
+  }
+  const { q1, q2, q3 } = body
 
-  // 2. Allowlist validation
-  if (!Q1_SET.has(q1) || !Q2_SET.has(q2) || !Q3_SET.has(q3)) {
+  // 2. Allowlist validation (also rejects missing/undefined fields)
+  if (!q1 || !q2 || !q3 || !Q1_SET.has(q1) || !Q2_SET.has(q2) || !Q3_SET.has(q3)) {
     return Response.json({ error: 'Invalid selection' }, { status: 400 })
   }
 

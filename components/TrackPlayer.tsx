@@ -168,14 +168,6 @@ export default function TrackPlayer({
         className="hidden"
       />
 
-      {/* Waveform animation keyframes */}
-      <style>{`
-        @keyframes waveform-pulse {
-          from { transform: scaleY(0.5); }
-          to { transform: scaleY(1.2); }
-        }
-      `}</style>
-
       {/* Share buttons */}
       <div className="mt-2">
         <ShareButtons trackId={trackId} title={title} />

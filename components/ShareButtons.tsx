@@ -35,7 +35,7 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
       <button
         type="button"
         onClick={shareOnX}
-        className="flex-1 px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-white text-sm font-medium hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-150 flex items-center justify-center gap-2"
+        className="flex-1 px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-white text-base font-medium hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-150 flex items-center justify-center gap-2"
       >
         <span>𝕏</span>
         <span>Share on X</span>
@@ -44,7 +44,7 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
       <button
         type="button"
         onClick={copyLink}
-        className="flex-1 px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-sm font-medium hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-150 flex items-center justify-center gap-2 text-white"
+        className="flex-1 px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-base font-medium hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-150 flex items-center justify-center gap-2 text-white"
       >
         <span>{copied ? '✓' : '🔗'}</span>
         <span className={copied ? 'text-green-400' : 'text-white'}>
@@ -55,7 +55,7 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
       <button
         type="button"
         onClick={generateAgain}
-        className="flex-1 px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-white text-sm font-medium hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-150 flex items-center justify-center gap-2"
+        className="flex-1 px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-700 text-white text-base font-medium hover:bg-zinc-800 hover:border-zinc-600 transition-all duration-150 flex items-center justify-center gap-2"
       >
         <span>✨</span>
         <span>Generate Again</span>
