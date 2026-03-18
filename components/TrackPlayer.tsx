@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import ShareButtons from '@/components/ShareButtons'
 
 interface TrackPlayerProps {
   trackId: string
@@ -174,6 +175,11 @@ export default function TrackPlayer({
           to { transform: scaleY(1.2); }
         }
       `}</style>
+
+      {/* Share buttons */}
+      <div className="mt-2">
+        <ShareButtons trackId={trackId} title={title} />
+      </div>
     </div>
   )
 }
