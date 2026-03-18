@@ -13,7 +13,7 @@ interface TrackPlayerProps {
 // Deterministic waveform heights pattern (20 bars)
 const WAVEFORM_HEIGHTS = [40, 65, 80, 55, 90, 70, 45, 85, 60, 95, 50, 75, 88, 42, 78, 62, 92, 48, 72, 58]
 
-type Status = 'processing' | 'done' | 'failed' | 'timeout' | 'error'
+type Status = 'processing' | 'done' | 'failed' | 'timeout'
 
 export default function TrackPlayer({
   trackId,
@@ -37,7 +37,7 @@ export default function TrackPlayer({
 
       if (pollCountRef.current > 30) {
         if (intervalRef.current) clearInterval(intervalRef.current)
-        setStatus('error')
+        setStatus('timeout')
         return
       }
 
@@ -79,14 +79,6 @@ export default function TrackPlayer({
   }
 
   // Error/failed states
-  if (status === 'error') {
-    return (
-      <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 text-center">
-        <p className="text-zinc-400">Generation is taking too long. Try again.</p>
-      </div>
-    )
-  }
-
   if (status === 'failed') {
     return (
       <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 text-center">

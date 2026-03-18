@@ -12,15 +12,15 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
   const router = useRouter()
 
-  const trackUrl = `${window.location.origin}/track/${trackId}`
-
   const shareOnX = () => {
+    const trackUrl = `${window.location.origin}/track/${trackId}`
     const text = encodeURIComponent(`"${title}" — the music of my moment 🎵 #Soultrack`)
     const url = encodeURIComponent(trackUrl)
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
   }
 
   const copyLink = async () => {
+    const trackUrl = `${window.location.origin}/track/${trackId}`
     await navigator.clipboard.writeText(trackUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
