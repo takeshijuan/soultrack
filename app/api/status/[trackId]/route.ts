@@ -2,11 +2,16 @@ import { NextRequest } from 'next/server'
 import { getTrack, updateTrack } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 
+const ULID_REGEX = /^[0-9A-HJKMNP-TV-Z]{26}$/
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ trackId: string }> },
 ) {
   const { trackId } = await params
+  if (!ULID_REGEX.test(trackId)) {
+    return Response.json({ error: 'Track not found' }, { status: 404 })
+  }
 
   // 1. Get track from KV
   const track = await getTrack(trackId)

@@ -18,9 +18,12 @@ export async function POST(request: NextRequest) {
 
   // 3. Rate limiting
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
-  const count = await getRateLimitCount(ip)
-  if (count > 3) {
-    return Response.json({ error: 'Daily limit reached' }, { status: 429 })
+  // Skip rate limiting when IP cannot be determined (e.g., local dev)
+  if (ip !== 'unknown') {
+    const count = await getRateLimitCount(ip)
+    if (count > 3) {
+      return Response.json({ error: 'Daily limit reached' }, { status: 429 })
+    }
   }
 
   // 4. Claude: get musicPrompt, title, copy
@@ -56,7 +59,8 @@ export async function POST(request: NextRequest) {
         throw err
       }
     }
-  } catch {
+  } catch (err) {
+    console.error('[generate] Claude error:', err)
     return Response.json({ error: 'Failed to generate track metadata' }, { status: 500 })
   }
 

@@ -4,20 +4,16 @@ import { getTrack } from '@/lib/kv'
 
 export const runtime = 'edge'
 
+const ULID_REGEX = /^[0-9A-HJKMNP-TV-Z]{26}$/
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
 
   let title = 'Soultrack'
-  if (id) {
-    try {
-      const track = await getTrack(id)
-      if (track?.title) {
-        title = track.title
-      }
-    } catch {
-      // fall back to default title
-    }
+  if (id && ULID_REGEX.test(id)) {
+    const track = await getTrack(id)
+    if (track?.title) title = track.title
   }
 
   return new ImageResponse(

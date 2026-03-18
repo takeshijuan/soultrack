@@ -38,7 +38,7 @@ export async function updateTrack(
   const existing = await getTrack(trackId)
   if (existing === null) return
   const updated: TrackRecord = { ...existing, ...updates }
-  const remainingTtl = Math.max(1, 86400 - Math.floor((Date.now() - existing.createdAt) / 1000))
+  const remainingTtl = Math.min(86400, Math.max(1, 86400 - Math.floor((Date.now() - existing.createdAt) / 1000)))
   await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
 }
 
