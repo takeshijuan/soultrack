@@ -5,21 +5,20 @@ import {
   MusicGenerationStatus,
 } from '../types'
 
-const MUSICGEN_MODEL =
-  'meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043694e0a9dbf6f54e5a51fd5b8f'
+const MUSICGEN_VERSION = '671ac645ce5e552cc63a54a2bbff63fcf798043694e0a9dbf6f54e5a51fd5b8f'
 
 export class ReplicateProvider implements MusicGenerationProvider {
   private client: Replicate
 
   constructor() {
-    this.client = new Replicate({
-      auth: process.env.REPLICATE_API_TOKEN,
-    })
+    const token = process.env.REPLICATE_API_TOKEN
+    if (!token) throw new Error('REPLICATE_API_TOKEN is not set')
+    this.client = new Replicate({ auth: token })
   }
 
   async startGeneration(prompt: MusicPrompt): Promise<string> {
     const prediction = await this.client.predictions.create({
-      version: MUSICGEN_MODEL.split(':')[1],
+      version: MUSICGEN_VERSION,
       input: {
         prompt: prompt.description,
         model_version: 'stereo-large',
@@ -39,7 +38,10 @@ export class ReplicateProvider implements MusicGenerationProvider {
         const audioUrl = Array.isArray(prediction.output)
           ? prediction.output[0]
           : prediction.output
-        return { status: 'succeeded', audioUrl: audioUrl as string }
+        if (typeof audioUrl !== 'string' || !audioUrl) {
+          return { status: 'failed', error: 'No audio URL in response' }
+        }
+        return { status: 'succeeded', audioUrl }
       }
       case 'failed':
       case 'canceled':

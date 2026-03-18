@@ -27,12 +27,15 @@ export function parseClaudeResponse(raw: string): {
   copy: string
 } {
   try {
-    const parsed = JSON.parse(raw) as {
-      musicPrompt: string
-      title: string
-      copy: string
+    const parsed = JSON.parse(raw)
+    if (
+      typeof parsed.musicPrompt !== 'string' || !parsed.musicPrompt ||
+      typeof parsed.title !== 'string' || !parsed.title ||
+      typeof parsed.copy !== 'string' || !parsed.copy
+    ) {
+      throw new Error('PARSE_FAILED')
     }
-    return parsed
+    return { musicPrompt: parsed.musicPrompt, title: parsed.title, copy: parsed.copy }
   } catch {
     throw new Error('PARSE_FAILED')
   }

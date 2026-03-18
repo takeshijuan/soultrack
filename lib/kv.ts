@@ -38,7 +38,8 @@ export async function updateTrack(
   const existing = await getTrack(trackId)
   if (existing === null) return
   const updated: TrackRecord = { ...existing, ...updates }
-  await kv.set(`track:${trackId}`, updated, { ex: 86400 })
+  const remainingTtl = Math.max(1, 86400 - Math.floor((Date.now() - existing.createdAt) / 1000))
+  await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
 }
 
 // Rate limiting: increment daily counter for IP, return current count
@@ -46,10 +47,8 @@ export async function getRateLimitCount(ip: string): Promise<number> {
   try {
     const dateStr = new Date().toISOString().split('T')[0]
     const key = `ratelimit:${ip}:${dateStr}`
+    await kv.set(key, 0, { ex: 86400, nx: true })
     const count = await kv.incr(key)
-    if (count === 1) {
-      await kv.expire(key, 86400)
-    }
     return count
   } catch {
     return Infinity
