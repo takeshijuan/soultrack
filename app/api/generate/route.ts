@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       durationSeconds: 20,
     })
   } catch (err) {
-    console.error('[generate] Music generation error:', err)
+    console.error('[generate] Music generation error:', err instanceof Error ? err.message : String(err))
     return Response.json({ error: "Couldn't start generation" }, { status: 500 })
   }
 
