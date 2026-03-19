@@ -11,6 +11,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@ai-sdk/gateway": "latest",
     "@ai-sdk/anthropic": "^3.0.58",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.3.1",

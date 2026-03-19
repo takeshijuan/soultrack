@@ -1,16 +1,13 @@
 import { NextRequest } from 'next/server'
 import { generateText } from 'ai'
-import { createAnthropic } from '@ai-sdk/anthropic'
+import { createGateway } from '@ai-sdk/gateway'
 import { getRateLimitCount, saveTrack, generateTrackId } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 import { buildClaudePrompt, parseClaudeResponse } from '@/lib/prompts'
 import { Q1_SET, Q2_SET, Q3_SET } from '@/lib/pool'
 import { EMOTION_COLORS } from '@/lib/emotions'
 
-const anthropic = createAnthropic({
-  baseURL: 'https://ai-gateway.vercel.sh',
-  apiKey: process.env.AI_GATEWAY_API_KEY,
-})
+const gateway = createGateway()
 
 export async function POST(request: NextRequest) {
   // 1. Parse body
@@ -46,7 +43,7 @@ export async function POST(request: NextRequest) {
 
   const callClaude = async () => {
     const result = await generateText({
-      model: anthropic('anthropic/claude-sonnet-4-5'),
+      model: gateway('anthropic/claude-sonnet-4-5'),
       system,
       prompt: user,
     })
