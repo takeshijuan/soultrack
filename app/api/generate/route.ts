@@ -83,7 +83,8 @@ export async function POST(request: NextRequest) {
       description: musicPrompt,
       durationSeconds: 20,
     })
-  } catch {
+  } catch (err) {
+    console.error('[generate] Music generation error:', err)
     return Response.json({ error: "Couldn't start generation" }, { status: 500 })
   }
 
@@ -100,7 +101,8 @@ export async function POST(request: NextRequest) {
       emotion: q2,
       emotionColor,
     })
-  } catch {
+  } catch (err) {
+    console.error('[generate] KV save error:', err)
     return Response.json({ error: 'Failed to save track' }, { status: 500 })
   }
 
