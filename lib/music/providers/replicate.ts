@@ -6,7 +6,7 @@ import {
 } from '../types'
 
 const MUSICGEN_VERSION =
-  '671ac645ce5e552cc63a54a2bbff63fcf798043694e0a9dbf6f54e5a51fd5b8f'
+  '671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb'
 
 export class ReplicateProvider implements MusicGenerationProvider {
   private client: Replicate
