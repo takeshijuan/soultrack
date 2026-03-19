@@ -5,6 +5,9 @@ import {
   MusicGenerationStatus,
 } from '../types'
 
+const MUSICGEN_VERSION =
+  '671ac645ce5e552cc63a54a2bbff63fcf798043694e0a9dbf6f54e5a51fd5b8f'
+
 export class ReplicateProvider implements MusicGenerationProvider {
   private client: Replicate
 
@@ -16,7 +19,7 @@ export class ReplicateProvider implements MusicGenerationProvider {
 
   async startGeneration(prompt: MusicPrompt): Promise<string> {
     const prediction = await this.client.predictions.create({
-      model: 'meta/musicgen',
+      version: MUSICGEN_VERSION,
       input: {
         prompt: prompt.description,
         model_version: 'stereo-large',
