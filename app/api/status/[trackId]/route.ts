@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server'
+import { put } from '@vercel/blob'
 import { getTrack, updateTrack } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 
@@ -33,8 +34,24 @@ export async function GET(
     const result = await getMusicProvider().getStatus(track.predictionId)
 
     if (result.status === 'succeeded') {
-      await updateTrack(trackId, { status: 'done', audioUrl: result.audioUrl })
-      return Response.json({ status: 'done', audioUrl: result.audioUrl })
+      // Persist audio to Vercel Blob for long-term availability
+      let permanentUrl = result.audioUrl
+      try {
+        const response = await fetch(result.audioUrl)
+        const audioBuffer = await response.arrayBuffer()
+        const blob = await put(`tracks/${trackId}.wav`, audioBuffer, {
+          access: 'public',
+          contentType: 'audio/wav',
+        })
+        permanentUrl = blob.url
+        console.log(`[status] blob upload success: trackId=${trackId}, url=${permanentUrl}, size=${audioBuffer.byteLength}`)
+      } catch (blobErr) {
+        console.error(`[status] blob upload failed, falling back to temp URL: trackId=${trackId}, error=${blobErr}`)
+        // Graceful degradation: use temp URL
+      }
+
+      await updateTrack(trackId, { status: 'done', audioUrl: permanentUrl })
+      return Response.json({ status: 'done', audioUrl: permanentUrl })
     }
 
     if (result.status === 'failed') {

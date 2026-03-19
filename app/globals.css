@@ -2,7 +2,89 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══ CHROMATIC EMOTION DESIGN SYSTEM ═══ */
+
+@layer base {
+  :root {
+    --bg:           #0A0A0F;
+    --surface-1:    #111118;
+    --surface-2:    #17171F;
+    --border:       rgba(255,255,255,0.07);
+    --border-hover: rgba(255,255,255,0.14);
+    --text-primary: #F0F0F8;
+    --text-muted:   #8080A0;  /* WCAG AA 5.72:1 on #0A0A0F */
+    --accent-teal:  #00F5D4;
+    --accent-amber: #FF9A3C;
+    --emotion-hue:  #00F5D4;
+  }
+  html {
+    background-color: #0A0A0F; /* FOUC防止: JSより前に背景色を確定 */
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--text-primary);
+  }
+  /* キーボードナビ用フォーカスリング (teal) */
+  :focus-visible {
+    outline: 2px solid var(--accent-teal);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ── Ambient Background ─────────────────────────────── */
+.ambient-bg {
+  position: relative;
+  overflow-x: hidden;
+}
+.ambient-bg::before,
+.ambient-bg::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+.ambient-bg::before {
+  width: 600px; height: 600px;
+  background: var(--emotion-hue, var(--accent-teal));
+  opacity: 0.10;
+  top: -200px; right: -100px;
+  transition: background 800ms ease;
+  animation: drift-a 25s ease-in-out infinite alternate;
+}
+.ambient-bg::after {
+  width: 500px; height: 500px;
+  background: var(--accent-amber);
+  opacity: 0.08;
+  bottom: -150px; left: -100px;
+  animation: drift-b 30s ease-in-out infinite alternate;
+}
+.ambient-content { position: relative; z-index: 1; }
+
+/* ── Keyframes ──────────────────────────────────────── */
+@keyframes drift-a {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(-80px,60px) scale(1.15); }
+  66%  { transform: translate(60px,-40px) scale(0.9); }
+  100% { transform: translate(-30px,80px) scale(1.05); }
+}
+@keyframes drift-b {
+  0%   { transform: translate(0,0) scale(1); }
+  40%  { transform: translate(70px,-50px) scale(1.1); }
+  70%  { transform: translate(-50px,30px) scale(0.95); }
+  100% { transform: translate(40px,-70px) scale(1.1); }
+}
 @keyframes waveform-pulse {
-  from { transform: scaleY(0.5); }
-  to { transform: scaleY(1.2); }
+  from { transform: scaleY(0.35); opacity: 0.6; }
+  to   { transform: scaleY(1.0);  opacity: 1.0; }
+}
+@keyframes spin-once {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
 }

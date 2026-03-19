@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import ShareButtons from '@/components/ShareButtons'
+import { EMOTION_LOADING_COPY } from '@/lib/emotions'
 
 interface TrackPlayerProps {
   trackId: string
@@ -9,12 +11,42 @@ interface TrackPlayerProps {
   initialAudioUrl?: string
   title: string
   copy: string
+  emotion?: string
 }
 
-// Deterministic waveform heights pattern (20 bars)
-const WAVEFORM_HEIGHTS = [40, 65, 80, 55, 90, 70, 45, 85, 60, 95, 50, 75, 88, 42, 78, 62, 92, 48, 72, 58]
+const WAVEFORM_HEIGHTS = [
+  40, 65, 80, 55, 90, 70, 45, 85, 60, 95, 50, 75, 88, 42, 78, 62, 92, 48, 72, 58,
+  44, 68, 82, 58, 86, 74, 50, 80, 64, 90, 52, 70,
+]
 
 type Status = 'processing' | 'done' | 'failed' | 'timeout'
+
+function CelebrationBurst() {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          initial={{ scale: 0, opacity: 1, x: 0, y: 0 }}
+          animate={{
+            scale: [0, 1.5, 0],
+            opacity: [1, 0.8, 0],
+            x: Math.cos((i * 36 * Math.PI) / 180) * 120,
+            y: Math.sin((i * 36 * Math.PI) / 180) * 120,
+          }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          style={{
+            width: 12,
+            height: 12,
+            background: 'var(--accent-teal)',
+            boxShadow: '0 0 12px var(--accent-teal)',
+          }}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default function TrackPlayer({
   trackId,
@@ -22,99 +54,106 @@ export default function TrackPlayer({
   initialAudioUrl,
   title,
   copy,
+  emotion,
 }: TrackPlayerProps) {
-  const [status, setStatus] = useState<Status>(initialStatus)
+  const [status, setStatus]     = useState<Status>(initialStatus)
   const [audioUrl, setAudioUrl] = useState<string | undefined>(initialAudioUrl)
   const [isPlaying, setIsPlaying] = useState(false)
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const [showBurst, setShowBurst] = useState(false)
+  const audioRef     = useRef<HTMLAudioElement>(null)
   const pollCountRef = useRef(0)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const intervalRef  = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     if (status !== 'processing') return
 
     const poll = async () => {
       pollCountRef.current += 1
-
       if (pollCountRef.current > 30) {
         if (intervalRef.current) clearInterval(intervalRef.current)
         setStatus('timeout')
         return
       }
-
       try {
-        const res = await fetch(`/api/status/${trackId}`)
+        const res  = await fetch(`/api/status/${trackId}`)
         if (!res.ok) return
         const data = await res.json() as { status: string; audioUrl?: string }
-
         if (data.status === 'done') {
           if (intervalRef.current) clearInterval(intervalRef.current)
           setAudioUrl(data.audioUrl)
           setStatus('done')
+          // Celebration burst: triggered from async callback (not sync effect body)
+          setShowBurst(true)
+          setTimeout(() => setShowBurst(false), 800)
         } else if (data.status === 'failed' || data.status === 'timeout') {
           if (intervalRef.current) clearInterval(intervalRef.current)
           setStatus(data.status as 'failed' | 'timeout')
         }
-      } catch {
-        // silently ignore network errors and retry on next tick
-      }
+      } catch { /* retry on next tick */ }
     }
 
     intervalRef.current = setInterval(poll, 3000)
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [status, trackId])
 
   const togglePlay = () => {
     const audio = audioRef.current
     if (!audio) return
-    if (isPlaying) {
-      audio.pause()
-      setIsPlaying(false)
-    } else {
-      audio.play().catch(() => {})
-      setIsPlaying(true)
-    }
+    if (isPlaying) { audio.pause(); setIsPlaying(false) }
+    else { audio.play().catch(() => {}); setIsPlaying(true) }
   }
 
-  // Error/failed states
-  if (status === 'failed') {
+  // ── Error states ──
+  if (status === 'failed' || status === 'timeout') {
+    const msg = status === 'failed' ? 'Generation failed.' : 'Generation timed out.'
     return (
-      <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 text-center">
-        <p className="text-zinc-400">Generation failed. Try again.</p>
+      <div
+        className="rounded-2xl p-8 text-center"
+        style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}
+      >
+        <p className="text-[var(--text-muted)] mb-2">{msg}</p>
+        <a href="/create" className="text-[var(--accent-teal)] text-sm hover:underline">Try again →</a>
       </div>
     )
   }
 
-  if (status === 'timeout') {
-    return (
-      <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 text-center">
-        <p className="text-zinc-400">Generation timed out. Try again.</p>
-      </div>
-    )
-  }
+  const loadingText = (emotion && EMOTION_LOADING_COPY[emotion]) ?? 'Composing your moment...'
 
-  // Loading / processing state
+  // ── Processing state ──
   if (status === 'processing') {
     return (
-      <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 flex flex-col items-center gap-4">
-        <p
-          className="text-zinc-300 text-lg font-medium animate-pulse"
-          style={{ animationDuration: '2s' }}
-        >
-          Composing your moment...
-        </p>
-        <div className="flex gap-1 items-end h-8">
+      <div
+        className="rounded-2xl p-8 flex flex-col items-center gap-6"
+        style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}
+      >
+        <div className="text-center">
+          <motion.p
+            className="font-display font-bold text-2xl text-[var(--text-primary)] mb-1"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            {loadingText}
+          </motion.p>
+          <p className="text-[var(--text-muted)] text-sm">This takes about 30–60 seconds</p>
+        </div>
+
+        {/* Animated waveform */}
+        <div className="flex gap-[3px] items-end h-14">
           {WAVEFORM_HEIGHTS.map((h, i) => (
-            <div
+            <motion.div
               key={i}
-              className="w-1 bg-zinc-600 rounded-full animate-pulse"
+              className="w-[3px] rounded-full"
               style={{
-                height: `${h * 0.3}px`,
-                animationDelay: `${i * 0.1}s`,
-                animationDuration: '1.5s',
+                background: 'linear-gradient(to top, var(--accent-amber), var(--accent-teal))',
+                originY: 1,
+                height: `${(h / 100) * 56}px`,
+              }}
+              animate={{ scaleY: [0.3, 1, 0.3] }}
+              transition={{
+                duration: 1.4,
+                delay: i * 0.05,
+                repeat: Infinity,
+                ease: 'easeInOut',
               }}
             />
           ))}
@@ -123,55 +162,84 @@ export default function TrackPlayer({
     )
   }
 
-  // Done state — show player
+  // ── Done state ──
   return (
-    <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 flex flex-col gap-5">
-      {/* Title & copy */}
-      <div>
-        <h2 className="text-white text-xl font-bold leading-tight">{title}</h2>
-        <p className="text-zinc-400 text-sm italic mt-1">{copy}</p>
-      </div>
+    <>
+      <AnimatePresence>
+        {showBurst && <CelebrationBurst />}
+      </AnimatePresence>
 
-      {/* Waveform */}
-      <div className="flex gap-1 items-end h-12">
-        {WAVEFORM_HEIGHTS.map((h, i) => (
-          <div
-            key={i}
-            className={`w-1.5 rounded-full transition-all ${isPlaying ? 'bg-white' : 'bg-zinc-600'}`}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="rounded-2xl p-6 flex flex-col gap-6"
+        style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}
+      >
+        {/* Title & copy */}
+        <div>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-[var(--text-primary)] leading-tight mb-2">
+            {title}
+          </h2>
+          <p className="text-[var(--text-muted)] text-sm italic leading-relaxed">{copy}</p>
+        </div>
+
+        {/* Waveform */}
+        <div className="flex gap-[3px] items-end h-14">
+          {WAVEFORM_HEIGHTS.map((h, i) => (
+            <div
+              key={i}
+              className="w-[3px] rounded-full transition-all duration-200"
+              style={{
+                height: `${(h / 100) * 56}px`,
+                background: isPlaying
+                  ? 'linear-gradient(to top, var(--accent-amber), var(--accent-teal))'
+                  : 'var(--border-hover)',
+                transformOrigin: 'bottom',
+                animation: isPlaying
+                  ? `waveform-pulse 1s ease-in-out ${i * 0.04}s infinite alternate`
+                  : 'none',
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Play button */}
+        <div className="flex justify-center">
+          <motion.button
+            type="button"
+            onClick={togglePlay}
+            whileTap={{ scale: 0.93 }}
+            className="w-16 h-16 rounded-full flex items-center justify-center text-black font-bold text-xl"
             style={{
-              height: `${(h / 100) * 48}px`,
-              animation: isPlaying
-                ? `waveform-pulse 1s ease-in-out ${i * 0.05}s infinite alternate`
-                : 'none',
+              background: 'var(--accent-teal)',
+              boxShadow: isPlaying
+                ? '0 0 40px rgba(0,245,212,0.5), 0 0 80px rgba(0,245,212,0.2)'
+                : '0 0 20px rgba(0,245,212,0.25)',
             }}
-          />
-        ))}
-      </div>
+            animate={isPlaying ? {
+              boxShadow: [
+                '0 0 20px rgba(0,245,212,0.3)',
+                '0 0 50px rgba(0,245,212,0.6)',
+                '0 0 20px rgba(0,245,212,0.3)',
+              ],
+            } : {}}
+            transition={isPlaying ? { duration: 1.5, repeat: Infinity } : {}}
+            aria-label={isPlaying ? '一時停止' : '再生'}
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </motion.button>
+        </div>
 
-      {/* Play/Pause button */}
-      <div className="flex justify-center">
-        <button
-          type="button"
-          onClick={togglePlay}
-          className="w-14 h-14 rounded-full bg-white text-black flex items-center justify-center text-xl font-bold hover:bg-zinc-200 transition-colors"
-          aria-label={isPlaying ? '一時停止' : '再生'}
-        >
-          {isPlaying ? '⏸' : '▶'}
-        </button>
-      </div>
+        <audio
+          ref={audioRef}
+          src={audioUrl}
+          onEnded={() => setIsPlaying(false)}
+          className="hidden"
+        />
 
-      {/* Hidden audio element */}
-      <audio
-        ref={audioRef}
-        src={audioUrl}
-        onEnded={() => setIsPlaying(false)}
-        className="hidden"
-      />
-
-      {/* Share buttons */}
-      <div className="mt-2">
         <ShareButtons trackId={trackId} title={title} />
-      </div>
-    </div>
+      </motion.div>
+    </>
   )
 }

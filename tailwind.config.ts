@@ -7,7 +7,16 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: ['Clash Grotesk', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-dm-sans)', 'DM Sans', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        'accent-teal':  '#00F5D4',
+        'accent-amber': '#FF9A3C',
+      },
+    },
   },
   plugins: [],
 }

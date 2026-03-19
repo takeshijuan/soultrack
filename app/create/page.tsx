@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import GachaQuiz from '@/components/GachaQuiz'
 
 export default function CreatePage() {
@@ -37,14 +38,33 @@ export default function CreatePage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white">
-      <div className="max-w-2xl mx-auto px-4 py-12">
-        <h1 className="text-2xl font-bold mb-8 text-center">Your Moment</h1>
+    <main className="ambient-bg min-h-screen text-[var(--text-primary)]">
+      <div className="ambient-content max-w-xl mx-auto px-5 py-10">
+
+        {/* Nav */}
+        <div className="mb-10">
+          <Link href="/" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm transition-colors">
+            ← Soultrack
+          </Link>
+        </div>
+
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="font-display font-bold text-4xl sm:text-5xl text-[var(--text-primary)] leading-tight mb-2">
+            Your Moment
+          </h1>
+          <p className="text-[var(--text-muted)] text-sm">
+            3 questions · then your melody begins
+          </p>
+        </div>
+
+        {/* Error */}
         {error && (
-          <div className="mb-6 p-4 bg-red-900/30 border border-red-500/30 rounded-lg text-red-400 text-center">
+          <div className="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
             {error}
           </div>
         )}
+
         <GachaQuiz onSubmit={handleSubmit} isLoading={isLoading} />
       </div>
     </main>

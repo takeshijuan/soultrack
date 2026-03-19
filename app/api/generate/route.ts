@@ -5,6 +5,7 @@ import { getRateLimitCount, saveTrack, generateTrackId } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 import { buildClaudePrompt, parseClaudeResponse } from '@/lib/prompts'
 import { Q1_SET, Q2_SET, Q3_SET } from '@/lib/pool'
+import { EMOTION_COLORS } from '@/lib/emotions'
 
 export async function POST(request: NextRequest) {
   // 1. Parse body
@@ -82,6 +83,7 @@ export async function POST(request: NextRequest) {
 
   // 6. Save to KV
   const trackId = generateTrackId()
+  const emotionColor = EMOTION_COLORS[q2] ?? '#00F5D4'
   try {
     await saveTrack(trackId, {
       predictionId,
@@ -89,6 +91,8 @@ export async function POST(request: NextRequest) {
       copy,
       status: 'processing',
       createdAt: Date.now(),
+      emotion: q2,
+      emotionColor,
     })
   } catch {
     return Response.json({ error: 'Failed to save track' }, { status: 500 })

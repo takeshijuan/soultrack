@@ -12,6 +12,8 @@ export interface TrackRecord {
   status: TrackStatus
   audioUrl?: string
   createdAt: number
+  emotion?: string
+  emotionColor?: string
 }
 
 // Generate a ULID-based track ID

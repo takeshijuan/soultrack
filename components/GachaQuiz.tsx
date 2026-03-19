@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Q1_POOL, Q2_POOL, Q3_POOL } from '@/lib/pool'
+import { EMOTION_COLORS } from '@/lib/emotions'
 
 interface GachaQuizProps {
   onSubmit: (answers: { q1: string; q2: string; q3: string }) => void
@@ -9,14 +11,20 @@ interface GachaQuizProps {
 }
 
 function pickRandom(pool: readonly string[], count: number): string[] {
-  const shuffled = [...pool].sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, count)
+  return [...pool].sort(() => Math.random() - 0.5).slice(0, count)
+}
+
+// Q1=teal, Q2=emotion color (dynamic), Q3=amber
+const QUESTION_ACCENT: Record<'q1' | 'q2' | 'q3', string> = {
+  q1: '#00F5D4',
+  q2: '#00F5D4', // overridden dynamically from EMOTION_COLORS
+  q3: '#FF9A3C',
 }
 
 const QUESTIONS = [
   { key: 'q1' as const, label: '今直面していること', pool: Q1_POOL },
-  { key: 'q2' as const, label: '今の感情', pool: Q2_POOL },
-  { key: 'q3' as const, label: '欲しいサウンド', pool: Q3_POOL },
+  { key: 'q2' as const, label: '今の感情',           pool: Q2_POOL },
+  { key: 'q3' as const, label: '欲しいサウンド',     pool: Q3_POOL },
 ]
 
 export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
@@ -25,89 +33,133 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
     q2: pickRandom(Q2_POOL, 5),
     q3: pickRandom(Q3_POOL, 5),
   })
-
   const [selected, setSelected] = useState<{ q1: string; q2: string; q3: string }>({
-    q1: '',
-    q2: '',
-    q3: '',
+    q1: '', q2: '', q3: '',
+  })
+  const [shuffleKeys, setShuffleKeys] = useState<Record<'q1' | 'q2' | 'q3', number>>({
+    q1: 0, q2: 0, q3: 0,
   })
 
   const reshuffle = (key: 'q1' | 'q2' | 'q3', pool: readonly string[]) => {
     const newChoices = pickRandom(pool, 5)
-    setChoices((prev) => ({ ...prev, [key]: newChoices }))
-    // Clear selection if it's no longer in the new choices
-    setSelected((prev) => ({
+    setChoices(prev => ({ ...prev, [key]: newChoices }))
+    setShuffleKeys(prev => ({ ...prev, [key]: prev[key] + 1 }))
+    setSelected(prev => ({
       ...prev,
       [key]: newChoices.includes(prev[key]) ? prev[key] : '',
     }))
   }
 
-  const allAnswered = selected.q1 !== '' && selected.q2 !== '' && selected.q3 !== ''
+  const handleChipSelect = (key: 'q1' | 'q2' | 'q3', choice: string, isSelected: boolean) => {
+    const newVal = isSelected ? '' : choice
+    setSelected(prev => ({ ...prev, [key]: newVal }))
 
-  const handleSubmit = () => {
-    if (!isLoading && allAnswered) {
-      onSubmit(selected)
+    // Emotion-reactive background (Q2 only)
+    if (key === 'q2' && !isSelected) {
+      const color = EMOTION_COLORS[choice] ?? '#00F5D4'
+      document.documentElement.style.setProperty('--emotion-hue', color)
+    } else if (key === 'q2' && isSelected) {
+      document.documentElement.style.setProperty('--emotion-hue', '#00F5D4')
     }
   }
 
+  const allAnswered = selected.q1 !== '' && selected.q2 !== '' && selected.q3 !== ''
+
   return (
-    <div className="flex flex-col gap-6 w-full max-w-xl mx-auto">
-      {QUESTIONS.map(({ key, label, pool }) => (
-        <div
-          key={key}
-          className="bg-zinc-900 rounded-2xl p-5 border border-zinc-800"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-white font-semibold text-base">{label}</h2>
-            <button
-              onClick={() => reshuffle(key, pool)}
-              className="text-zinc-400 hover:text-white transition-colors text-xl leading-none"
-              aria-label={`${label}の選択肢をシャッフル`}
-              type="button"
-            >
-              🔄
-            </button>
-          </div>
+    <div className="flex flex-col gap-4 w-full">
+      {QUESTIONS.map(({ key, label, pool }, cardIdx) => {
+        const accentColor = key === 'q2' && selected.q2
+          ? (EMOTION_COLORS[selected.q2] ?? QUESTION_ACCENT.q2)
+          : QUESTION_ACCENT[key]
 
-          <div className="flex flex-wrap gap-2">
-            {choices[key].map((choice) => {
-              const isSelected = selected[key] === choice
-              return (
-                <button
-                  key={choice}
-                  type="button"
-                  onClick={() =>
-                    setSelected((prev) => ({
-                      ...prev,
-                      [key]: isSelected ? '' : choice,
-                    }))
-                  }
-                  className={`px-4 py-2 rounded-full text-base font-medium border transition-all duration-150 ${
-                    isSelected
-                      ? 'bg-white text-black border-white'
-                      : 'bg-transparent text-zinc-300 border-zinc-600 hover:border-zinc-400 hover:text-white'
-                  }`}
-                >
-                  {choice}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      ))}
+        return (
+          <motion.div
+            key={key}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: cardIdx * 0.12, duration: 0.45, ease: 'easeOut' }}
+            className="rounded-2xl p-5"
+            style={{
+              background: 'var(--surface-1)',
+              border: '1px solid var(--border)',
+            }}
+          >
+            {/* Card header */}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[var(--text-primary)] font-semibold text-sm tracking-wide">
+                {label}
+              </h2>
+              <motion.button
+                key={shuffleKeys[key]}
+                onClick={() => reshuffle(key, pool)}
+                aria-label={`${label}をシャッフル`}
+                type="button"
+                className="w-10 h-10 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors rounded-full hover:bg-white/5"
+                initial={{ rotate: 0 }}
+                animate={{ rotate: shuffleKeys[key] * 180 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+              >
+                ↻
+              </motion.button>
+            </div>
 
-      <button
+            {/* Chips */}
+            <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={label}>
+              {choices[key].map(choice => {
+                const isSel = selected[key] === choice
+                return (
+                  <motion.button
+                    key={choice}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSel}
+                    onClick={() => handleChipSelect(key, choice, isSel)}
+                    whileTap={{ scale: 0.96 }}
+                    animate={isSel ? { scale: 1.04 } : { scale: 1 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="px-4 py-3 rounded-full text-sm font-medium transition-colors duration-200"
+                    style={isSel ? {
+                      background: `${accentColor}18`,
+                      border: `1px solid ${accentColor}`,
+                      color: accentColor,
+                      boxShadow: `0 0 18px ${accentColor}30, 0 0 4px ${accentColor}18`,
+                    } : {
+                      background: 'transparent',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text-muted)',
+                    }}
+                  >
+                    {choice}
+                  </motion.button>
+                )
+              })}
+            </div>
+          </motion.div>
+        )
+      })}
+
+      {/* Submit */}
+      <motion.button
         type="button"
-        onClick={handleSubmit}
+        onClick={() => !isLoading && allAnswered && onSubmit(selected)}
         disabled={!allAnswered || isLoading}
-        className={`mt-2 w-full py-4 rounded-xl font-semibold text-base transition-all duration-200 ${
-          allAnswered && !isLoading
-            ? 'bg-white text-black hover:bg-zinc-200 cursor-pointer'
-            : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-        }`}
+        className="mt-3 w-full py-4 rounded-2xl font-semibold text-base transition-all duration-300"
+        animate={allAnswered && !isLoading ? {
+          boxShadow: ['0 0 0px rgba(0,245,212,0)', '0 0 30px rgba(0,245,212,0.25)', '0 0 0px rgba(0,245,212,0)'],
+        } : {}}
+        transition={allAnswered && !isLoading ? { duration: 2, repeat: Infinity } : {}}
+        style={allAnswered && !isLoading ? {
+          background: 'var(--accent-teal)',
+          color: '#000',
+          cursor: 'pointer',
+        } : {
+          background: 'var(--surface-2)',
+          color: 'var(--text-muted)',
+          cursor: 'not-allowed',
+        }}
       >
-        {isLoading ? 'Composing your moment...' : 'Generate My Track'}
-      </button>
+        {isLoading ? 'Composing your moment...' : 'Generate My Track →'}
+      </motion.button>
     </div>
   )
 }
