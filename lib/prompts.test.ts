@@ -14,6 +14,26 @@ describe('parseClaudeResponse', () => {
     expect(result.copy).toBe('A piece born from transformation.')
   })
 
+  it('parses JSON wrapped in markdown code fences', () => {
+    const json = JSON.stringify({
+      musicPrompt: 'melancholic ambient piano, 60bpm, 20 seconds',
+      title: '霧と光の間で',
+      copy: 'A piece born from transformation.',
+    })
+    const result = parseClaudeResponse('```json\n' + json + '\n```')
+    expect(result.musicPrompt).toBe('melancholic ambient piano, 60bpm, 20 seconds')
+  })
+
+  it('parses JSON wrapped in plain code fences', () => {
+    const json = JSON.stringify({
+      musicPrompt: 'melancholic ambient piano, 60bpm, 20 seconds',
+      title: '霧と光の間で',
+      copy: 'A piece born from transformation.',
+    })
+    const result = parseClaudeResponse('```\n' + json + '\n```')
+    expect(result.musicPrompt).toBe('melancholic ambient piano, 60bpm, 20 seconds')
+  })
+
   it('throws PARSE_FAILED on invalid JSON', () => {
     expect(() => parseClaudeResponse('not json')).toThrow('PARSE_FAILED')
   })

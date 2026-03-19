@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       system,
       prompt: user,
     })
+    console.log('[generate] Claude raw response:', JSON.stringify(result.text))
     return parseClaudeResponse(result.text)
   }
 

@@ -27,7 +27,9 @@ export function parseClaudeResponse(raw: string): {
   copy: string
 } {
   try {
-    const parsed = JSON.parse(raw)
+    // Strip markdown code fences (```json ... ``` or ``` ... ```)
+    const stripped = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim()
+    const parsed = JSON.parse(stripped)
     if (
       typeof parsed.musicPrompt !== 'string' || !parsed.musicPrompt ||
       typeof parsed.title !== 'string' || !parsed.title ||
