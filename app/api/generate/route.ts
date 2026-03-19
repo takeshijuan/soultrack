@@ -9,6 +9,9 @@ import { EMOTION_COLORS } from '@/lib/emotions'
 
 const gateway = createGateway()
 
+const BYPASS_IPS = (process.env.RATE_LIMIT_BYPASS_IPS ?? '')
+  .split(',').map(s => s.trim()).filter(Boolean)
+
 export async function POST(request: NextRequest) {
   // 1. Parse body
   let body: { q1?: string; q2?: string; q3?: string }
@@ -27,7 +30,7 @@ export async function POST(request: NextRequest) {
   // 3. Rate limiting
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
   // Skip rate limiting when IP cannot be determined (e.g., local dev)
-  if (ip !== 'unknown') {
+  if (ip !== 'unknown' && !BYPASS_IPS.includes(ip)) {
     const count = await getRateLimitCount(ip)
     if (count > 3) {
       return Response.json({ error: 'Daily limit reached' }, { status: 429 })
