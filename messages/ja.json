@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "title": "Soultrack — 今この瞬間の音楽",
+    "description": "3つの質問。ひとつのメロディー。あなただけの。"
+  },
+  "lp": {
+    "emotionShowcase": {
+      "heading": "あなたは今、何を感じていますか",
+      "subtext": "タップして背景が変わるのを感じてみてください。"
+    }
+  },
+  "quiz": {
+    "q1Label": "今直面していること",
+    "q2Label": "今の感情",
+    "q3Label": "欲しいサウンド",
+    "tryAriaLabel": "{name}を試す"
+  },
+  "player": {
+    "play": "再生",
+    "pause": "一時停止"
+  },
+  "share": {
+    "createCta": "自分のトラックを作る →",
+    "createSubtext": "あなたの感情から、あなただけの音楽を"
+  },
+  "emotions": {
+    "calm": "穏やか", "anxiety": "不安", "gratitude": "感謝", "anger": "怒り",
+    "excitement": "興奮", "fatigue": "疲労", "emptiness": "虚無", "hope": "希望",
+    "sadness": "悲しみ", "joy": "喜び", "confusion": "迷い", "resolve": "決意",
+    "solitude": "孤独", "love": "愛", "fear": "恐れ", "pride": "誇り",
+    "urgency": "焦り", "liberation": "解放感", "nostalgia": "懐かしさ",
+    "anticipation": "期待", "loneliness": "寂しさ", "wonder": "驚き",
+    "relief": "安堵", "envy": "羨望", "contentment": "満足", "regret": "後悔",
+    "courage": "勇気", "chaos": "混乱", "peace": "平和", "longing": "渇望"
+  },
+  "pool": {
+    "q1": ["再出発","嵐の中","静水面","霧の中","炎の如く","夜明け前","別れ","新しい扉","重い沈黙","揺れる大地","待ちの季節","解けない問い","内なる戦い","流れに逆らう","壊れかけ","信頼の危機","創造の苦しみ","孤独な戦い","予期せぬ転換","光の見えない道","決断の岐路","手放すとき","守るべきもの","変えられないもの","自分との対話","根を張るとき","羽ばたく前夜","静かな限界","再び歩き出す","何かの終わり"],
+    "q2": ["calm","anxiety","gratitude","anger","excitement","fatigue","emptiness","hope","sadness","joy","confusion","resolve","solitude","love","fear","pride","urgency","liberation","nostalgia","anticipation","loneliness","wonder","relief","envy","contentment","regret","courage","chaos","peace","longing"],
+    "q3": ["背中を押す曲","寄り添う曲","解放する曲","没入できる曲","涙を誘う曲","踊りたくなる曲","瞑想できる曲","前を向ける曲","今を刻む曲","静かに燃える曲","宇宙に溶ける曲","夜明けの曲","嵐の中の曲","終わりを飾る曲","また始める曲","自分を許す曲","強くなれる曲","柔らかくなれる曲","記憶を呼ぶ曲","今夜だけの曲","光の中の曲","霧の中の曲","沈黙を纏う曲","高みへ向かう曲","地に足をつける曲","揺さぶる曲","包み込む曲","問いを立てる曲","答えを手放す曲","自分に還る曲"]
+  }
+}

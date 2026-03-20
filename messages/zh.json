@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "title": "Soultrack — 此刻的音乐",
+    "description": "三个问题。一段旋律。你的。"
+  },
+  "hero": {
+    "eyebrow": "AI · Music · Daily Ritual",
+    "tagline": "你此刻的音乐",
+    "cta": "生成今天的曲目",
+    "hint": "3个问题 · 1段旋律 · 你的"
+  },
+  "lp": {
+    "emotionShowcase": {
+      "heading": "你现在的感受是什么？",
+      "subtext": "轻点一下，感受背景随你的情绪变化。"
+    },
+    "footerCta": "生成今天的曲目",
+    "footerNote": "免费 · 无需注册 · 每天3次"
+  },
+  "create": {
+    "back": "← Soultrack",
+    "header": "你的时刻",
+    "subtext": "3个问题 · 然后开始你的旋律",
+    "limitError": "每天3首。明天再来。",
+    "genericError": "出错了。再试一次。"
+  },
+  "quiz": {
+    "q1Label": "你正在面对的",
+    "q2Label": "你的情绪",
+    "q3Label": "你想要的声音",
+    "shuffleLabel": "换一批",
+    "generateButton": "生成我的曲目 →",
+    "generatingButton": "正在谱写你的时刻...",
+    "tryAriaLabel": "试试 {name}"
+  },
+  "player": {
+    "generationFailed": "生成失败。",
+    "generationTimeout": "生成超时。",
+    "tryAgain": "再试一次 →",
+    "generatingStatus": "大约需要30-60秒",
+    "play": "播放",
+    "pause": "暂停"
+  },
+  "share": {
+    "copyLink": "复制链接",
+    "copied": "已复制！",
+    "shareOnX": "在 X 上分享",
+    "xTemplate": "\"{title}\" — 我此刻的音乐 🎵 #Soultrack",
+    "createCta": "创建你自己的曲目 →",
+    "createSubtext": "你的情感。你的旋律。"
+  },
+  "emotions": {
+    "calm": "平静",
+    "anxiety": "焦虑",
+    "gratitude": "感恩",
+    "anger": "愤怒",
+    "excitement": "兴奋",
+    "fatigue": "疲劳",
+    "emptiness": "空虚",
+    "hope": "希望",
+    "sadness": "悲伤",
+    "joy": "喜悦",
+    "confusion": "困惑",
+    "resolve": "决心",
+    "solitude": "孤独",
+    "love": "爱",
+    "fear": "恐惧",
+    "pride": "骄傲",
+    "urgency": "紧迫感",
+    "liberation": "解放",
+    "nostalgia": "怀旧",
+    "anticipation": "期待",
+    "loneliness": "寂寞",
+    "wonder": "惊奇",
+    "relief": "解脱",
+    "envy": "羡慕",
+    "contentment": "满足",
+    "regret": "遗憾",
+    "courage": "勇气",
+    "chaos": "混乱",
+    "peace": "和平",
+    "longing": "憧憬"
+  },
+  "pool": {
+    "q1": [
+      "新的开始", "暴风雨中", "静水", "雾中", "如火", "黎明之前",
+      "离别", "一扇新门", "沉重的沉默", "颤抖的大地", "等待的季节",
+      "未解之谜", "内心之战", "逆流而上", "分崩离析",
+      "信任危机", "创造性的斗争", "孤军奋战", "意外转折",
+      "无光之路", "十字路口", "放手的时刻", "保护什么",
+      "无法改变的", "与自我对话", "生根发芽", "飞行前夜",
+      "安静的界限", "重走", "某物的终结"
+    ],
+    "q2": [
+      "calm", "anxiety", "gratitude", "anger", "excitement", "fatigue", "emptiness", "hope",
+      "sadness", "joy", "confusion", "resolve", "solitude", "love", "fear", "pride",
+      "urgency", "liberation", "nostalgia", "anticipation", "loneliness", "wonder", "relief",
+      "envy", "contentment", "regret", "courage", "chaos", "peace", "longing"
+    ],
+    "q3": [
+      "一首催人奋进的歌", "一首让你留恋的歌", "让你自由的歌",
+      "让人迷失的歌", "一首让你流泪的歌", "一首舞曲",
+      "冥想之歌", "面向未来之歌", "此刻之歌",
+      "静静燃烧的歌", "溶入之歌", "黎明之歌",
+      "风雨中的歌", "结束之歌", "重新开始之歌",
+      "原谅自己之歌", "变强之歌", "柔软之歌",
+      "一首唤起回忆的歌", "只为今夜的歌",
+      "光明之歌", "雾中之歌", "沉默中的歌",
+      "更高的歌", "脚踏实地之歌", "感动你的歌",
+      "拥抱你的歌", "提问之歌", "释放答案之歌",
+      "回归自我之歌"
+    ]
+  }
+}

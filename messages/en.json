@@ -1,0 +1,114 @@
+{
+  "metadata": {
+    "title": "Soultrack — the music of your moment",
+    "description": "3 questions. One melody. Yours."
+  },
+  "hero": {
+    "eyebrow": "AI · Music · Daily Ritual",
+    "tagline": "the music of your moment",
+    "cta": "Generate Today's Track",
+    "hint": "3 questions · 1 melody · yours"
+  },
+  "lp": {
+    "emotionShowcase": {
+      "heading": "What are you feeling right now?",
+      "subtext": "Tap to feel the background shift with your emotion."
+    },
+    "footerCta": "Generate Today's Track",
+    "footerNote": "Free · No signup · 3 per day"
+  },
+  "create": {
+    "back": "← Soultrack",
+    "header": "Your Moment",
+    "subtext": "3 questions · then your melody begins",
+    "limitError": "3 tracks per day. Come back tomorrow.",
+    "genericError": "Something went wrong. Try again."
+  },
+  "quiz": {
+    "q1Label": "What you're facing",
+    "q2Label": "Your emotion",
+    "q3Label": "The sound you want",
+    "shuffleLabel": "Shuffle",
+    "generateButton": "Generate My Track →",
+    "generatingButton": "Composing your moment...",
+    "tryAriaLabel": "Try {name}"
+  },
+  "player": {
+    "generationFailed": "Generation failed.",
+    "generationTimeout": "Generation timed out.",
+    "tryAgain": "Try again →",
+    "generatingStatus": "This takes about 30–60 seconds",
+    "play": "Play",
+    "pause": "Pause"
+  },
+  "share": {
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "shareOnX": "Share on X",
+    "xTemplate": "\"{title}\" — the music of my moment 🎵 #Soultrack",
+    "createCta": "Create your own track →",
+    "createSubtext": "Your emotion. Your melody."
+  },
+  "emotions": {
+    "calm": "Calm",
+    "anxiety": "Anxiety",
+    "gratitude": "Gratitude",
+    "anger": "Anger",
+    "excitement": "Excitement",
+    "fatigue": "Fatigue",
+    "emptiness": "Emptiness",
+    "hope": "Hope",
+    "sadness": "Sadness",
+    "joy": "Joy",
+    "confusion": "Confusion",
+    "resolve": "Resolve",
+    "solitude": "Solitude",
+    "love": "Love",
+    "fear": "Fear",
+    "pride": "Pride",
+    "urgency": "Urgency",
+    "liberation": "Liberation",
+    "nostalgia": "Nostalgia",
+    "anticipation": "Anticipation",
+    "loneliness": "Loneliness",
+    "wonder": "Wonder",
+    "relief": "Relief",
+    "envy": "Envy",
+    "contentment": "Contentment",
+    "regret": "Regret",
+    "courage": "Courage",
+    "chaos": "Chaos",
+    "peace": "Peace",
+    "longing": "Longing"
+  },
+  "pool": {
+    "q1": [
+      "Fresh Start", "In the Storm", "Still Waters", "In the Fog", "Like Fire", "Before Dawn",
+      "A Parting", "A New Door", "Heavy Silence", "Trembling Ground", "Season of Waiting",
+      "Unanswered Question", "Inner Battle", "Against the Current", "Breaking Apart",
+      "Crisis of Trust", "Creative Struggle", "Fighting Alone", "Unexpected Turn",
+      "Road Without Light", "At the Crossroads", "Time to Let Go", "What to Protect",
+      "What Cannot Change", "Dialogue with Self", "Taking Root", "Eve of Flight",
+      "Quiet Limit", "Walking Again", "End of Something"
+    ],
+    "q2": [
+      "calm", "anxiety", "gratitude", "anger", "excitement", "fatigue", "emptiness", "hope",
+      "sadness", "joy", "confusion", "resolve", "solitude", "love", "fear", "pride",
+      "urgency", "liberation", "nostalgia", "anticipation", "loneliness", "wonder", "relief",
+      "envy", "contentment", "regret", "courage", "chaos", "peace", "longing"
+    ],
+    "q3": [
+      "A Song to Push You Forward", "A Song That Stays With You", "A Song That Sets You Free",
+      "A Song to Get Lost In", "A Song That Makes You Cry", "A Song to Dance To",
+      "A Song for Meditation", "A Song to Face Forward", "A Song for This Moment",
+      "A Song That Burns Quietly", "A Song to Dissolve Into", "A Song at Dawn",
+      "A Song in the Storm", "A Song to End With", "A Song to Begin Again",
+      "A Song to Forgive Yourself", "A Song to Get Stronger", "A Song to Soften",
+      "A Song That Brings Back Memories", "A Song Just for Tonight",
+      "A Song in the Light", "A Song in the Fog", "A Song Wrapped in Silence",
+      "A Song Rising Higher", "A Song to Stay Grounded", "A Song That Moves You",
+      "A Song That Holds You", "A Song to Question", "A Song to Release the Answers",
+      "A Song to Come Back to Yourself"
+    ]
+  }
+}
