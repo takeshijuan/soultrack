@@ -38,6 +38,7 @@
 - **Page enter:** 450ms stagger, 120ms delay per card (framer-motion)
 - **Play button pulse:** 1.5s infinite glow (framer-motion)
 - **Celebration burst:** 700ms particle scatter on processing→done (framer-motion)
+- **LP scroll reveal:** 700ms fade/slide, 0.03s chip stagger, Apple ease `[0.25,0.46,0.45,0.94]`
 
 ## Emotion Color Map (`lib/emotions.ts`)
 30 emotions, each mapped to a hex color that drives `--emotion-hue` when selected.

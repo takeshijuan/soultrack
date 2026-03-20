@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3.0] - 2026-03-20
+
+### Added
+- Apple-style scroll animations on the LP: Hero elements blur-in with stagger on page load (eyebrow → title → tagline → CTA → hint); EmotionShowcase heading and chip grid cascade in on scroll; Footer CTA slides up on scroll
+- `HeroContent` client component — hero content extracted to enable framer-motion animations on an otherwise server-rendered page
+- `ScrollReveal` reusable component — generic `whileInView` wrapper with Apple ease curve `[0.25, 0.46, 0.45, 0.94]`
+
+### Changed
+- EmotionShowcase chips rendered as `motion.button` with `scale 0.85→1` entrance animation on scroll
+- DESIGN.md Motion section updated: `LP scroll reveal: 700ms fade, 0.03s chip stagger`
+
+### For contributors
+- `vitest.setup.ts`: Added `IntersectionObserver` mock so framer-motion `whileInView` works in jsdom test environment
+
 ## [0.1.2.0] - 2026-03-20
 
 ### Added
