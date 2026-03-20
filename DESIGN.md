@@ -26,7 +26,7 @@
 - **Surface-2:**    #17171F — hover/elevated
 - **Accent Teal:**  #00F5D4 — energy, Q1 selection glow, CTA
 - **Accent Amber:** #FF9A3C — warmth, Q3 selection glow, ambient
-- **Emotion Hue:**  CSS var `--emotion-hue` — dynamically set by Q2 selection
+- **Emotion Hue:**  CSS var `--emotion-hue` — dynamically set by Q2 selection (create flow) or EmotionShowcase chip tap (LP)
 - **Text Primary:** #F0F0F8 — cool white
 - **Text Muted:**   #8080A0 — purple-gray (WCAG AA 5.72:1)
 
@@ -52,3 +52,5 @@ See `lib/emotions.ts` for full map.
 | 2026-03-18 | Teal+Amber (no purple) | Deliberate anti-slop: electric teal is fresh in this category |
 | 2026-03-19 | Vercel Blob audio persistence | Replicate temp URLs expire; Blob keeps audio available long-term |
 | 2026-03-19 | emotionColor XSS validation | Hex regex guard before injecting into `<style>` tag |
+| 2026-03-20 | EmotionShowcase on LP | Interactive chip grid lets visitors feel the synesthetic concept before committing to /create |
+| 2026-03-20 | useEffect cleanup for --emotion-hue | LP chip selection sets CSS var; cleanup on unmount prevents color leak to other pages |
