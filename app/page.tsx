@@ -2,8 +2,11 @@ import Link from 'next/link'
 import EmotionShowcase from '@/components/EmotionShowcase'
 import HeroContent from '@/components/HeroContent'
 import ScrollReveal from '@/components/ScrollReveal'
+import { getTranslations } from 'next-intl/server'
 
-export default function Home() {
+export default async function Home() {
+  const t = await getTranslations('lp')
+
   return (
     <main className="ambient-bg flex flex-col items-center px-6">
       {/* Hero — independent min-h-screen section so justify-center works correctly */}
@@ -60,10 +63,10 @@ export default function Home() {
                        transition-all duration-300
                        hover:bg-white hover:shadow-[0_0_50px_rgba(0,245,212,0.5)]"
           >
-            <span>Generate Today&apos;s Track</span>
+            <span>{t('footerCta')}</span>
             <span className="group-hover:translate-x-1.5 transition-transform duration-200 text-lg">→</span>
           </Link>
-          <p className="mt-4 text-[var(--text-muted)] text-xs tracking-widest">Free · No signup · 3 per day</p>
+          <p className="mt-4 text-[var(--text-muted)] text-xs tracking-widest">{t('footerNote')}</p>
         </ScrollReveal>
       </section>
     </main>

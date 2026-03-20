@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
 interface ShareButtonsProps {
   trackId: string
@@ -10,11 +11,12 @@ interface ShareButtonsProps {
 }
 
 export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
+  const t = useTranslations('share')
   const [copied, setCopied] = useState(false)
 
   const shareOnX = () => {
     const url  = `${window.location.origin}/track/${trackId}`
-    const text = encodeURIComponent(`"${title}" — the music of my moment 🎵 #Soultrack`)
+    const text = encodeURIComponent(t('xTemplate', { title }))
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`, '_blank')
   }
 
@@ -25,8 +27,8 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
   }
 
   const buttons = [
-    { label: copied ? 'Copied!' : 'Copy Link', icon: copied ? '✓' : '🔗', onClick: copyLink, accent: copied ? '#60A040' : undefined },
-    { label: 'Share on X',                     icon: '𝕏',                  onClick: shareOnX, accent: undefined },
+    { label: copied ? t('copied') : t('copyLink'), icon: copied ? '✓' : '🔗', onClick: copyLink, accent: copied ? '#60A040' : undefined },
+    { label: t('shareOnX'), icon: '𝕏', onClick: shareOnX, accent: undefined },
   ]
 
   return (
@@ -34,7 +36,7 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
       <div className="flex flex-col sm:flex-row gap-2 w-full">
         {buttons.map(({ label, icon, onClick, accent }) => (
           <motion.button
-            key={label}
+            key={icon}
             type="button"
             onClick={onClick}
             whileTap={{ scale: 0.97 }}
@@ -51,14 +53,14 @@ export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
         ))}
       </div>
       <div className="mt-4 pt-4 border-t border-[var(--border)] text-center">
-        <p className="text-[var(--text-muted)] text-xs mb-3">あなたの感情から、あなただけの音楽を</p>
+        <p className="text-[var(--text-muted)] text-xs mb-3">{t('createSubtext')}</p>
         <Link
           href="/create"
           className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold
                      bg-[var(--accent-teal)] text-black
                      hover:bg-white transition-all duration-300"
         >
-          自分のトラックを作る →
+          {t('createCta')}
         </Link>
       </div>
     </div>

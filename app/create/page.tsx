@@ -4,9 +4,11 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import GachaQuiz from '@/components/GachaQuiz'
+import { useTranslations } from 'next-intl'
 
 export default function CreatePage() {
   const router = useRouter()
+  const t = useTranslations('create')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -20,19 +22,19 @@ export default function CreatePage() {
         body: JSON.stringify(answers),
       })
       if (res.status === 429) {
-        setError('3 tracks per day. Come back tomorrow.')
+        setError(t('limitError'))
         setIsLoading(false)
         return
       }
       if (!res.ok) {
-        setError('Something went wrong. Try again.')
+        setError(t('genericError'))
         setIsLoading(false)
         return
       }
       const { trackId } = await res.json()
       router.push(`/track/${trackId}`)
     } catch {
-      setError('Something went wrong. Try again.')
+      setError(t('genericError'))
       setIsLoading(false)
     }
   }
@@ -44,17 +46,17 @@ export default function CreatePage() {
         {/* Nav */}
         <div className="mb-10">
           <Link href="/" className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-sm transition-colors">
-            ← Soultrack
+            {t('back')}
           </Link>
         </div>
 
         {/* Header */}
         <div className="mb-10">
           <h1 className="font-display font-bold text-4xl sm:text-5xl text-[var(--text-primary)] leading-tight mb-2">
-            Your Moment
+            {t('header')}
           </h1>
           <p className="text-[var(--text-muted)] text-sm">
-            3 questions · then your melody begins
+            {t('subtext')}
           </p>
         </div>
 

@@ -4,13 +4,29 @@ import { createGateway } from '@ai-sdk/gateway'
 import { getRateLimitCount, saveTrack, generateTrackId } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 import { buildClaudePrompt, parseClaudeResponse } from '@/lib/prompts'
-import { Q1_SET, Q2_SET, Q3_SET } from '@/lib/pool'
 import { EMOTION_COLORS } from '@/lib/emotions'
+import enMessages from '@/messages/en.json'
+import jaMessages from '@/messages/ja.json'
+import koMessages from '@/messages/ko.json'
+import zhMessages from '@/messages/zh.json'
+import zhTWMessages from '@/messages/zh-TW.json'
 
 const gateway = createGateway()
 
 const BYPASS_IPS = (process.env.RATE_LIMIT_BYPASS_IPS ?? '')
   .split(',').map(s => s.trim()).filter(Boolean)
+
+// Q2 uses English slugs (locale-independent enum)
+const Q2_SLUGS = new Set(Object.keys(EMOTION_COLORS))
+// Q1/Q3 accept any value from any locale's pool
+const Q1_ALL = new Set([
+  ...enMessages.pool.q1, ...jaMessages.pool.q1,
+  ...koMessages.pool.q1, ...zhMessages.pool.q1, ...zhTWMessages.pool.q1,
+])
+const Q3_ALL = new Set([
+  ...enMessages.pool.q3, ...jaMessages.pool.q3,
+  ...koMessages.pool.q3, ...zhMessages.pool.q3, ...zhTWMessages.pool.q3,
+])
 
 export async function POST(request: NextRequest) {
   // 1. Parse body
@@ -23,7 +39,7 @@ export async function POST(request: NextRequest) {
   const { q1, q2, q3 } = body
 
   // 2. Allowlist validation (also rejects missing/undefined fields)
-  if (!q1 || !q2 || !q3 || !Q1_SET.has(q1) || !Q2_SET.has(q2) || !Q3_SET.has(q3)) {
+  if (!q1 || !q2 || !q3 || !Q1_ALL.has(q1) || !Q2_SLUGS.has(q2) || !Q3_ALL.has(q3)) {
     return Response.json({ error: 'Invalid selection' }, { status: 400 })
   }
 

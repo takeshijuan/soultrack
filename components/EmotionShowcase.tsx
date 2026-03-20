@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { EMOTION_COLORS } from '@/lib/emotions'
+import { useTranslations } from 'next-intl'
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -19,6 +20,7 @@ const chipVariants = {
 export default function EmotionShowcase() {
   const [active, setActive] = useState<string | null>(null)
   const shouldReduceMotion = useReducedMotion()
+  const t = useTranslations()
 
   // Reset CSS variable on unmount to prevent color leak to other pages
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function EmotionShowcase() {
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: EASE }}
       >
-        あなたは今、何を感じていますか
+        {t('lp.emotionShowcase.heading')}
       </motion.p>
       <motion.p
         className="text-[var(--text-muted)] text-sm text-center mb-10"
@@ -52,7 +54,7 @@ export default function EmotionShowcase() {
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
       >
-        タップして背景が変わるのを感じてみてください。
+        {t('lp.emotionShowcase.subtext')}
       </motion.p>
       <motion.div
         className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 justify-items-center"
@@ -68,7 +70,7 @@ export default function EmotionShowcase() {
               key={emotion}
               variants={chipVariants}
               type="button"
-              aria-label={`${emotion}を試す`}
+              aria-label={t('quiz.tryAriaLabel', { name: t(`emotions.${emotion}`) })}
               aria-pressed={isActive}
               onClick={() => handleClick(emotion, color)}
               className="px-3 py-2.5 rounded-full text-sm font-medium transition-all duration-200 min-w-[72px] text-center"
@@ -83,7 +85,7 @@ export default function EmotionShowcase() {
                 color: 'var(--text-muted)',
               }}
             >
-              {emotion}
+              {t(`emotions.${emotion}`)}
             </motion.button>
           )
         })}

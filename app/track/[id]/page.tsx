@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getTrack } from '@/lib/kv'
 import TrackPlayer from '@/components/TrackPlayer'
+import { getTranslations } from 'next-intl/server'
 
 const HEX_RE = /^#[0-9A-Fa-f]{6}$/
 
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function TrackPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const t = await getTranslations('emotions')
   let track
   try {
     track = await getTrack(id)
@@ -52,7 +54,7 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
                 color: safeEmotionColor,
               }}
             >
-              {track.emotion}
+              {track.emotion && t.has(track.emotion) ? t(track.emotion) : track.emotion}
             </span>
           </div>
         )}

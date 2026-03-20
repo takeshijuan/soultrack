@@ -1,6 +1,7 @@
 'use client'
 import { motion, useReducedMotion } from 'framer-motion'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const
 
@@ -21,6 +22,7 @@ const titleVariant = {
 
 export default function HeroContent() {
   const shouldReduceMotion = useReducedMotion()
+  const t = useTranslations('hero')
 
   return (
     <motion.div
@@ -33,7 +35,7 @@ export default function HeroContent() {
         variants={fadeBlur}
         className="text-xs tracking-[0.3em] text-[var(--text-muted)] uppercase mb-8 font-medium"
       >
-        AI · Music · Daily Ritual
+        {t('eyebrow')}
       </motion.p>
 
       <motion.h1
@@ -48,7 +50,7 @@ export default function HeroContent() {
         variants={fadeBlur}
         className="text-[var(--text-muted)] text-xl font-light mb-14 tracking-wide"
       >
-        the music of your moment
+        {t('tagline')}
       </motion.p>
 
       <motion.div variants={fadeBlur}>
@@ -59,7 +61,7 @@ export default function HeroContent() {
                      transition-all duration-300
                      hover:bg-white hover:shadow-[0_0_50px_rgba(0,245,212,0.5)]"
         >
-          <span>Generate Today&apos;s Track</span>
+          <span>{t('cta')}</span>
           <span className="group-hover:translate-x-1.5 transition-transform duration-200 text-lg">→</span>
         </Link>
       </motion.div>
@@ -68,7 +70,7 @@ export default function HeroContent() {
         variants={fadeBlur}
         className="mt-6 text-[var(--text-muted)] text-sm tracking-widest"
       >
-        3 questions &nbsp;·&nbsp; 1 melody &nbsp;·&nbsp; yours
+        {t('hint')}
       </motion.p>
     </motion.div>
   )
