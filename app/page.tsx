@@ -1,45 +1,59 @@
 import Link from 'next/link'
+import EmotionShowcase from '@/components/EmotionShowcase'
 
 export default function Home() {
   return (
-    <main className="ambient-bg min-h-screen flex flex-col items-center justify-center px-6">
-      <div className="ambient-content text-center w-full max-w-2xl mx-auto">
+    <main className="ambient-bg flex flex-col items-center px-6">
+      {/* Hero — independent min-h-screen section so justify-center works correctly */}
+      <section className="min-h-screen w-full flex flex-col items-center justify-center relative">
+        <div className="ambient-content text-center w-full max-w-2xl mx-auto">
 
-        {/* Eyebrow */}
-        <p className="text-xs tracking-[0.3em] text-[var(--text-muted)] uppercase mb-8 font-medium">
-          AI · Music · Daily Ritual
-        </p>
+          {/* Eyebrow */}
+          <p className="text-xs tracking-[0.3em] text-[var(--text-muted)] uppercase mb-8 font-medium">
+            AI · Music · Daily Ritual
+          </p>
 
-        {/* Hero title */}
-        <h1
-          className="font-display font-bold leading-[0.88] tracking-tight text-[var(--text-primary)] mb-8"
-          style={{ fontSize: 'clamp(5rem, 16vw, 10rem)' }}
+          {/* Hero title */}
+          <h1
+            className="font-display font-bold leading-[0.88] tracking-tight text-[var(--text-primary)] mb-8"
+            style={{ fontSize: 'clamp(5rem, 16vw, 10rem)' }}
+          >
+            SOUL<br />TRACK
+          </h1>
+
+          {/* Tagline */}
+          <p className="text-[var(--text-muted)] text-xl font-light mb-14 tracking-wide">
+            the music of your moment
+          </p>
+
+          {/* CTA */}
+          <Link
+            href="/create"
+            className="group inline-flex items-center gap-3 px-10 py-4 rounded-full font-semibold text-base
+                       bg-[var(--accent-teal)] text-black
+                       transition-all duration-300
+                       hover:bg-white hover:shadow-[0_0_50px_rgba(0,245,212,0.5)]"
+          >
+            <span>Generate Today&apos;s Track</span>
+            <span className="group-hover:translate-x-1.5 transition-transform duration-200 text-lg">→</span>
+          </Link>
+
+          {/* Hint */}
+          <p className="mt-6 text-[var(--text-muted)] text-sm tracking-widest">
+            3 questions &nbsp;·&nbsp; 1 melody &nbsp;·&nbsp; yours
+          </p>
+        </div>
+
+        {/* Scroll indicator — absolute bottom-8 correctly anchored to hero section */}
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[var(--text-muted)] animate-bounce"
+          aria-hidden="true"
         >
-          SOUL<br />TRACK
-        </h1>
-
-        {/* Tagline */}
-        <p className="text-[var(--text-muted)] text-xl font-light mb-14 tracking-wide">
-          the music of your moment
-        </p>
-
-        {/* CTA */}
-        <Link
-          href="/create"
-          className="group inline-flex items-center gap-3 px-10 py-4 rounded-full font-semibold text-base
-                     bg-[var(--accent-teal)] text-black
-                     transition-all duration-300
-                     hover:bg-white hover:shadow-[0_0_50px_rgba(0,245,212,0.5)]"
-        >
-          <span>Generate Today&apos;s Track</span>
-          <span className="group-hover:translate-x-1.5 transition-transform duration-200 text-lg">→</span>
-        </Link>
-
-        {/* Hint */}
-        <p className="mt-6 text-[var(--text-muted)] text-sm tracking-widest">
-          3 questions &nbsp;·&nbsp; 1 melody &nbsp;·&nbsp; yours
-        </p>
-      </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+        </div>
+      </section>
 
       {/* Floating ambient particles */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden>
@@ -66,6 +80,25 @@ export default function Home() {
           />
         ))}
       </div>
+
+      {/* Interactive emotion demo */}
+      <EmotionShowcase />
+
+      {/* Footer CTA */}
+      <section className="w-full max-w-xl mx-auto px-6 pb-24 text-center">
+        <Link
+          href="/create"
+          className="group inline-flex items-center gap-3 px-10 py-4 rounded-full font-semibold text-base
+                     bg-[var(--accent-teal)] text-black
+                     transition-all duration-300
+                     hover:bg-white hover:shadow-[0_0_50px_rgba(0,245,212,0.5)]"
+        >
+          <span>Generate Today&apos;s Track</span>
+          <span className="group-hover:translate-x-1.5 transition-transform duration-200 text-lg">→</span>
+        </Link>
+        <p className="mt-4 text-[var(--text-muted)] text-xs tracking-widest">Free · No signup · 3 per day</p>
+      </section>
     </main>
+
   )
 }

@@ -227,7 +227,15 @@ export default function TrackPlayer({
             transition={isPlaying ? { duration: 1.5, repeat: Infinity } : {}}
             aria-label={isPlaying ? '一時停止' : '再生'}
           >
-            {isPlaying ? '⏸' : '▶'}
+            {isPlaying
+              ? <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6" aria-hidden="true">
+                  <rect x="6" y="4" width="4" height="16"/>
+                  <rect x="14" y="4" width="4" height="16"/>
+                </svg>
+              : <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 translate-x-0.5" aria-hidden="true">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+            }
           </motion.button>
         </div>
 
