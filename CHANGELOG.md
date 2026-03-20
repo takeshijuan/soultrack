@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4.0] - 2026-03-20
+
+### Added
+- Full i18n support via next-intl: English default with 5 locales (en, ja, ko, zh, zh-TW)
+- `messages/en.json` — all English strings: hero, LP, create, quiz, player, share, emotions, pool (q1/q2/q3)
+- `messages/ja.json` — hand-crafted partial Japanese overrides (emotion names, quiz labels, pool words)
+- `messages/ko.json`, `messages/zh.json`, `messages/zh-TW.json` — DeepL-generated translations
+- `middleware.ts` — locale detection: `?lang=` query → `NEXT_LOCALE` cookie → `Accept-Language` → `en` fallback; exports `detectLocale()` for unit tests
+- `i18n/request.ts` — next-intl `getRequestConfig` reads `x-locale` header set by middleware
+- `components/LocaleSwitcher.tsx` — EN/JA/KO/ZH/TW pill switcher, fixed top-right; sets cookie + `router.refresh()`
+- `__tests__/middleware.test.ts` — 6 branch tests for `detectLocale()`
+
+### Changed
+- `lib/emotions.ts` — **REKEY**: `EMOTION_COLORS` and `EMOTION_LOADING_COPY` rekeyed from Japanese string keys ('穏やか') → English slug keys ('calm'); English slugs are now the single source of truth for the 30-emotion system
+- `app/api/generate/route.ts` — Q1/Q3 validation now accepts values from all 5 locale pools; Q2 validates against English slug keys (locale-independent)
+- All components (`HeroContent`, `EmotionShowcase`, `GachaQuiz`, `TrackPlayer`, `ShareButtons`) use `useTranslations()` — no hardcoded strings remain
+- `app/layout.tsx` — `NextIntlClientProvider` wraps app, `generateMetadata()` returns localized title/description
+- `app/page.tsx`, `app/create/page.tsx`, `app/track/[id]/page.tsx` — i18n-aware; track page handles legacy Japanese emotion keys with `t.has()` backward compat
+- `__tests__/EmotionShowcase.test.tsx` — wrapped with `NextIntlClientProvider`, queries updated to English labels
+- `app/api/generate/generate.test.ts` — rewritten to test combined locale sets and 30-slug EMOTION_COLORS
+
+### Removed
+- `lib/pool.ts` and `lib/pool.test.ts` — superseded by `messages/[locale].json`
+
 ## [0.1.3.0] - 2026-03-20
 
 ### Added
