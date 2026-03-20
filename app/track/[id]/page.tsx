@@ -42,6 +42,20 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
             ← Soultrack
           </Link>
         </div>
+        {track.emotion && (
+          <div className="mb-6 flex items-center gap-2">
+            <span
+              className="px-3 py-1 rounded-full text-xs font-medium"
+              style={{
+                background: `${safeEmotionColor}18`,
+                border: `1px solid ${safeEmotionColor}`,
+                color: safeEmotionColor,
+              }}
+            >
+              {track.emotion}
+            </span>
+          </div>
+        )}
         <TrackPlayer
           trackId={id}
           initialStatus={track.status as 'processing' | 'done' | 'failed' | 'timeout'}
