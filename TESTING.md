@@ -17,7 +17,11 @@ npm run test:watch  # watch mode
 
 ```
 __tests__/
-  EmotionShowcase.test.tsx   # UI interaction tests for emotion chip component
+  EmotionShowcase.test.tsx    # UI interaction tests for emotion chip component
+  middleware.test.ts          # Unit tests for detectLocale() — 6 branch coverage
+
+app/api/generate/
+  generate.test.ts            # Allowlist validation: combined locale Q1/Q2/Q3 sets
 ```
 
 ## Test Layers

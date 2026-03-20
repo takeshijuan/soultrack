@@ -42,6 +42,8 @@
 
 ## Emotion Color Map (`lib/emotions.ts`)
 30 emotions, each mapped to a hex color that drives `--emotion-hue` when selected.
+Keys are English slugs (`calm`, `anxiety`, ...) — locale-independent single source of truth.
+Translated display names live in `messages/[locale].json` under `emotions.*`.
 See `lib/emotions.ts` for full map.
 
 ## Decisions Log
@@ -55,3 +57,6 @@ See `lib/emotions.ts` for full map.
 | 2026-03-19 | emotionColor XSS validation | Hex regex guard before injecting into `<style>` tag |
 | 2026-03-20 | EmotionShowcase on LP | Interactive chip grid lets visitors feel the synesthetic concept before committing to /create |
 | 2026-03-20 | useEffect cleanup for --emotion-hue | LP chip selection sets CSS var; cleanup on unmount prevents color leak to other pages |
+| 2026-03-20 | i18n via next-intl (no URL prefix) | Clean URLs (/track/[id] stays as-is); locale via ?lang= → cookie → Accept-Language → en |
+| 2026-03-20 | EMOTION_COLORS rekeyed to English slugs | Locale-independent Q2 validation; translated names in messages/[locale].json |
+| 2026-03-20 | Language switcher pill (top-right fixed) | Non-intrusive; sets NEXT_LOCALE cookie + router.refresh() for immediate re-render |
