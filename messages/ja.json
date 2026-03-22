@@ -3,23 +3,47 @@
     "title": "Soultrack — 今この瞬間の音楽",
     "description": "3つの質問。ひとつのメロディー。あなただけの。"
   },
+  "hero": {
+    "tagline": "今この瞬間の音楽",
+    "cta": "今日のトラックを作る",
+    "hint": "3つの質問 · 1つのメロディー · あなただけの"
+  },
   "lp": {
     "emotionShowcase": {
       "heading": "あなたは今、何を感じていますか",
       "subtext": "タップして背景が変わるのを感じてみてください。"
-    }
+    },
+    "footerCta": "今日のトラックを作る",
+    "footerNote": "無料 · 登録不要 · 1日3回"
+  },
+  "create": {
+    "back": "← Soultrack",
+    "header": "あなたの瞬間",
+    "subtext": "3つの質問 · そしてあなたのメロディーが始まる",
+    "limitError": "1日3トラックまで。明日また来てください。",
+    "genericError": "エラーが発生しました。もう一度お試しください。"
   },
   "quiz": {
     "q1Label": "今直面していること",
     "q2Label": "今の感情",
     "q3Label": "欲しいサウンド",
+    "shuffleLabel": "シャッフル",
+    "generateButton": "トラックを生成する →",
+    "generatingButton": "あなたの瞬間を作曲中...",
     "tryAriaLabel": "{name}を試す"
   },
   "player": {
+    "generationFailed": "生成に失敗しました。",
+    "generationTimeout": "生成がタイムアウトしました。",
+    "tryAgain": "もう一度試す →",
+    "generatingStatus": "約30〜60秒かかります",
     "play": "再生",
     "pause": "一時停止"
   },
   "share": {
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました！",
+    "shareOnX": "Xで共有する",
     "createCta": "自分のトラックを作る →",
     "createSubtext": "あなたの感情から、あなただけの音楽を"
   },
