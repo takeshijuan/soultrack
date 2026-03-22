@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4.1] - 2026-03-22
+
+### Fixed
+- `i18n/request.ts` — deep-merge `en.json` as base so partial locale files (e.g. `ja.json`) fall back to English for any missing key; previously missing keys were rendered as raw key names
+- `messages/ja.json` — added complete Japanese translations for `hero`, `lp`, `create`, `quiz`, `player`, and `share` sections that were absent in the initial release
+- `package.json` — added `@swc/helpers@^0.5.19` as explicit dependency to satisfy `next-intl@4.8.3 → @swc/core@1.15.18` peer requirement and fix CI build failure
+
 ## [0.1.4.0] - 2026-03-20
 
 ### Added
