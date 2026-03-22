@@ -22,6 +22,9 @@ __tests__/
 
 app/api/generate/
   generate.test.ts            # Allowlist validation: combined locale Q1/Q2/Q3 sets
+
+lib/
+  prompts.test.ts             # Unit tests for parseClaudeResponse() and buildClaudePrompt()
 ```
 
 ## Test Layers
