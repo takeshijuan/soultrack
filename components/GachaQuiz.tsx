@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Q1_POOL, Q2_POOL, Q3_POOL } from '@/lib/pool'
+import { useTranslations } from 'next-intl'
 import { EMOTION_COLORS } from '@/lib/emotions'
 
 interface GachaQuizProps {
@@ -21,18 +21,22 @@ const QUESTION_ACCENT: Record<'q1' | 'q2' | 'q3', string> = {
   q3: '#FF9A3C',
 }
 
-const QUESTIONS = [
-  { key: 'q1' as const, label: '今直面していること', pool: Q1_POOL },
-  { key: 'q2' as const, label: '今の感情',           pool: Q2_POOL },
-  { key: 'q3' as const, label: '欲しいサウンド',     pool: Q3_POOL },
-]
-
 export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
-  const [choices, setChoices] = useState<Record<'q1' | 'q2' | 'q3', string[]>>({
-    q1: pickRandom(Q1_POOL, 5),
-    q2: pickRandom(Q2_POOL, 5),
-    q3: pickRandom(Q3_POOL, 5),
-  })
+  const t = useTranslations()
+  const q1Pool = t.raw('pool.q1') as string[]
+  const q2Pool = t.raw('pool.q2') as string[]
+  const q3Pool = t.raw('pool.q3') as string[]
+  const QUESTIONS = [
+    { key: 'q1' as const, label: t('quiz.q1Label'), pool: q1Pool },
+    { key: 'q2' as const, label: t('quiz.q2Label'), pool: q2Pool },
+    { key: 'q3' as const, label: t('quiz.q3Label'), pool: q3Pool },
+  ]
+
+  const [choices, setChoices] = useState<Record<'q1' | 'q2' | 'q3', string[]>>(() => ({
+    q1: pickRandom(q1Pool, 5),
+    q2: pickRandom(q2Pool, 5),
+    q3: pickRandom(q3Pool, 5),
+  }))
   const [selected, setSelected] = useState<{ q1: string; q2: string; q3: string }>({
     q1: '', q2: '', q3: '',
   })
@@ -92,7 +96,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
               <motion.button
                 key={shuffleKeys[key]}
                 onClick={() => reshuffle(key, pool)}
-                aria-label={`${label}をシャッフル`}
+                aria-label={`${t('quiz.shuffleLabel')} ${label}`}
                 type="button"
                 className="w-10 h-10 flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors rounded-full hover:bg-white/5"
                 initial={{ rotate: 0 }}
@@ -107,6 +111,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
             <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={label}>
               {choices[key].map(choice => {
                 const isSel = selected[key] === choice
+                const chipLabel = key === 'q2' ? t(`emotions.${choice}`) : choice
                 return (
                   <motion.button
                     key={choice}
@@ -129,7 +134,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
                       color: 'var(--text-muted)',
                     }}
                   >
-                    {choice}
+                    {chipLabel}
                   </motion.button>
                 )
               })}
@@ -158,7 +163,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
           cursor: 'not-allowed',
         }}
       >
-        {isLoading ? 'Composing your moment...' : 'Generate My Track →'}
+        {isLoading ? t('quiz.generatingButton') : t('quiz.generateButton')}
       </motion.button>
     </div>
   )

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import ShareButtons from '@/components/ShareButtons'
 import { EMOTION_LOADING_COPY } from '@/lib/emotions'
 
@@ -56,6 +57,7 @@ export default function TrackPlayer({
   copy,
   emotion,
 }: TrackPlayerProps) {
+  const t = useTranslations('player')
   const [status, setStatus]     = useState<Status>(initialStatus)
   const [audioUrl, setAudioUrl] = useState<string | undefined>(initialAudioUrl)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -105,14 +107,14 @@ export default function TrackPlayer({
 
   // ── Error states ──
   if (status === 'failed' || status === 'timeout') {
-    const msg = status === 'failed' ? 'Generation failed.' : 'Generation timed out.'
+    const msg = status === 'failed' ? t('generationFailed') : t('generationTimeout')
     return (
       <div
         className="rounded-2xl p-8 text-center"
         style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}
       >
         <p className="text-[var(--text-muted)] mb-2">{msg}</p>
-        <a href="/create" className="text-[var(--accent-teal)] text-sm hover:underline">Try again →</a>
+        <a href="/create" className="text-[var(--accent-teal)] text-sm hover:underline">{t('tryAgain')}</a>
       </div>
     )
   }
@@ -134,7 +136,7 @@ export default function TrackPlayer({
           >
             {loadingText}
           </motion.p>
-          <p className="text-[var(--text-muted)] text-sm">This takes about 30–60 seconds</p>
+          <p className="text-[var(--text-muted)] text-sm">{t('generatingStatus')}</p>
         </div>
 
         {/* Animated waveform */}
@@ -225,7 +227,7 @@ export default function TrackPlayer({
               ],
             } : {}}
             transition={isPlaying ? { duration: 1.5, repeat: Infinity } : {}}
-            aria-label={isPlaying ? '一時停止' : '再生'}
+            aria-label={isPlaying ? t('pause') : t('play')}
           >
             {isPlaying
               ? <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6" aria-hidden="true">

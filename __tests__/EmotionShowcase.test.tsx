@@ -1,6 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { NextIntlClientProvider } from 'next-intl'
 import EmotionShowcase from '@/components/EmotionShowcase'
+import enMessages from '../messages/en.json'
+
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <NextIntlClientProvider locale="en" messages={enMessages}>
+    {children}
+  </NextIntlClientProvider>
+)
 
 describe('EmotionShowcase', () => {
   beforeEach(() => {
@@ -12,22 +20,22 @@ describe('EmotionShowcase', () => {
   })
 
   it('renders emotion chips for all emotions', () => {
-    render(<EmotionShowcase />)
-    expect(screen.getByRole('button', { name: '穏やかを試す' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '喜びを試す' })).toBeInTheDocument()
+    render(<EmotionShowcase />, { wrapper })
+    expect(screen.getByRole('button', { name: 'Try Calm' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Try Joy' })).toBeInTheDocument()
   })
 
   it('activates chip on click and sets --emotion-hue CSS variable', () => {
-    render(<EmotionShowcase />)
-    const btn = screen.getByRole('button', { name: '穏やかを試す' })
+    render(<EmotionShowcase />, { wrapper })
+    const btn = screen.getByRole('button', { name: 'Try Calm' })
     fireEvent.click(btn)
     expect(btn).toHaveAttribute('aria-pressed', 'true')
     expect(document.documentElement.style.getPropertyValue('--emotion-hue')).toBeTruthy()
   })
 
   it('deactivates chip on second click and resets --emotion-hue to teal', () => {
-    render(<EmotionShowcase />)
-    const btn = screen.getByRole('button', { name: '穏やかを試す' })
+    render(<EmotionShowcase />, { wrapper })
+    const btn = screen.getByRole('button', { name: 'Try Calm' })
     fireEvent.click(btn)
     fireEvent.click(btn)
     expect(btn).toHaveAttribute('aria-pressed', 'false')
@@ -35,8 +43,8 @@ describe('EmotionShowcase', () => {
   })
 
   it('removes --emotion-hue on unmount', () => {
-    const { unmount } = render(<EmotionShowcase />)
-    const btn = screen.getByRole('button', { name: '喜びを試す' })
+    const { unmount } = render(<EmotionShowcase />, { wrapper })
+    const btn = screen.getByRole('button', { name: 'Try Joy' })
     fireEvent.click(btn)
     unmount()
     expect(document.documentElement.style.getPropertyValue('--emotion-hue')).toBe('')
