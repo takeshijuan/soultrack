@@ -30,10 +30,8 @@ export default function EmotionShowcase() {
   const handleClick = (emotion: string, color: string) => {
     const next = active === emotion ? null : emotion
     setActive(next)
-    document.documentElement.style.setProperty(
-      '--emotion-hue',
-      next ? color : '#00F5D4'
-    )
+    if (next) document.documentElement.style.setProperty('--emotion-hue', color)
+    else document.documentElement.style.removeProperty('--emotion-hue')
   }
 
   return (

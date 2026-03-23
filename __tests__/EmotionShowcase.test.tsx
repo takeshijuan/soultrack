@@ -33,13 +33,13 @@ describe('EmotionShowcase', () => {
     expect(document.documentElement.style.getPropertyValue('--emotion-hue')).toBeTruthy()
   })
 
-  it('deactivates chip on second click and resets --emotion-hue to teal', () => {
+  it('deactivates chip on second click and removes --emotion-hue inline style', () => {
     render(<EmotionShowcase />, { wrapper })
     const btn = screen.getByRole('button', { name: 'Try Calm' })
     fireEvent.click(btn)
     fireEvent.click(btn)
     expect(btn).toHaveAttribute('aria-pressed', 'false')
-    expect(document.documentElement.style.getPropertyValue('--emotion-hue')).toBe('#00F5D4')
+    expect(document.documentElement.style.getPropertyValue('--emotion-hue')).toBe('')
   })
 
   it('removes --emotion-hue on unmount', () => {
