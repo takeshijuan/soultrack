@@ -36,12 +36,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang={locale}>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@600,700&display=swap"
-        />
-      </head>
       <body className={`${dmSans.variable} font-sans bg-[#0A0A0F] min-h-screen`}>
         <NextIntlClientProvider locale={locale} messages={clientMessages}>
           <div className="fixed top-4 right-4 z-50">
