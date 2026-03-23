@@ -5,15 +5,19 @@ import { getTrack } from '@/lib/kv'
 export const runtime = 'edge'
 
 const ULID_REGEX = /^[0-9A-HJKMNP-TV-Z]{26}$/
+const HEX_RE = /^#[0-9A-Fa-f]{6}$/
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
 
   let title = 'Soultrack'
+  let emotionColor = '#00F5D4'
   if (id && ULID_REGEX.test(id)) {
     const track = await getTrack(id)
     if (track?.title) title = track.title
+    const ec = track?.emotionColor
+    if (ec && HEX_RE.test(ec)) emotionColor = ec
   }
 
   return new ImageResponse(
@@ -30,7 +34,7 @@ export async function GET(request: NextRequest) {
           fontFamily: 'sans-serif',
         }}
       >
-        {/* Ambient teal orb */}
+        {/* Ambient emotion orb — color follows track's emotion */}
         <div
           style={{
             position: 'absolute',
@@ -39,7 +43,7 @@ export async function GET(request: NextRequest) {
             width: 500,
             height: 500,
             borderRadius: '50%',
-            background: '#00F5D4',
+            background: emotionColor,
             opacity: 0.08,
             filter: 'blur(80px)',
           }}
@@ -58,6 +62,24 @@ export async function GET(request: NextRequest) {
             filter: 'blur(80px)',
           }}
         />
+        {/* Brand icon — sibling above title, color matches emotion orb */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '24px',
+            position: 'relative',
+          }}
+        >
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M 17 6 C 17 3, 8 3, 7 7 C 6 11, 16 13, 16 17 C 16 21, 7 21, 7 18"
+              stroke={emotionColor}
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
         <div
           style={{
             fontSize: '72px',
