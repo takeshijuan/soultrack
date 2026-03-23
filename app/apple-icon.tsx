@@ -3,6 +3,7 @@ import { ImageResponse } from 'next/og'
 export const size = { width: 180, height: 180 }
 export const contentType = 'image/png'
 export const runtime = 'edge'
+export const revalidate = 86400
 
 export default function AppleIcon() {
   return new ImageResponse(
