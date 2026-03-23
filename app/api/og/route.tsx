@@ -14,10 +14,14 @@ export async function GET(request: NextRequest) {
   let title = 'Soultrack'
   let emotionColor = '#00F5D4'
   if (id && ULID_REGEX.test(id)) {
-    const track = await getTrack(id)
-    if (track?.title) title = track.title
-    const ec = track?.emotionColor
-    if (ec && HEX_RE.test(ec)) emotionColor = ec
+    try {
+      const track = await getTrack(id)
+      if (track?.title) title = track.title
+      const ec = track?.emotionColor
+      if (ec && HEX_RE.test(ec)) emotionColor = ec
+    } catch {
+      // KV unavailable — fall back to defaults
+    }
   }
 
   return new ImageResponse(
@@ -98,7 +102,7 @@ export async function GET(request: NextRequest) {
         <div
           style={{
             fontSize: '28px',
-            color: '#00F5D4',
+            color: emotionColor,
             textAlign: 'center',
             letterSpacing: '0.05em',
             position: 'relative',
