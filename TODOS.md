@@ -25,27 +25,16 @@
 
 ---
 
-### EmotionShowcase テーマカラー単一ソース化
-
-**Priority:** P4
-
-**What:** `EmotionShowcase.tsx:14` の reset 値 `'#00F5D4'` を `globals.css` の `:root` と共有する
-
-**Why:** 現在 teal カラーが `globals.css` と `EmotionShowcase.tsx` の2箇所に重複。テーマ変更時の二重管理リスク。
-
-**Pros:** テーマカラーの単一ソース化（DRY）
-
-**Cons:** JS から CSS 変数値を読む処理が必要（`getComputedStyle` か定数ファイルへの抽出）
-
-**Context:** 現状は両方 `#00F5D4` で整合しているため実害なし。将来テーマ変更時に踏むバグの予防的修正。
-
-**Depends on:** なし
-
----
 
 ## Completed
 
 <!-- Items completed in PRs are moved here -->
+
+### EmotionShowcase テーマカラー単一ソース化
+
+**Completed:** v0.1.6.0 (2026-03-23)
+
+`handleClick` のdeselect時に `setProperty('--emotion-hue', '#00F5D4')` していたハードコードを削除。`removeProperty` を使いCSS `:root` の `--emotion-hue: #00F5D4` に委譲するよう変更。unmount cleanup と同パターンに統一。テストも対応更新。
 
 ### 連絡先メールアドレスを環境変数化
 
