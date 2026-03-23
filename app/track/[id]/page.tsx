@@ -13,6 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: 'Soultrack',
     openGraph: {
+      url: `/track/${id}`,
       images: [`/api/og?id=${id}`],
     },
   }

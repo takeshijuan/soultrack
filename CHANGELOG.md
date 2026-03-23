@@ -43,6 +43,17 @@ All notable changes to this project will be documented in this file.
 - `app/api/og/route.tsx` — wrapped `getTrack()` in try/catch; KV failure falls back to defaults
 - `app/icon.tsx`, `app/apple-icon.tsx` — added `revalidate = 86400` to avoid per-request Edge invocations
 
+## [0.1.6.2] - 2026-03-23
+
+### Fixed
+- `app/layout.tsx` — added `openGraph.url` and `openGraph.siteName` to resolve `og:site_name` and `og:url` not provided warnings
+- `app/track/[id]/page.tsx` — added `openGraph.url: /track/${id}` for per-track canonical OG URL
+
+## [0.1.6.1] - 2026-03-23
+
+### Fixed
+- `app/layout.tsx` — `metadataBase` fallback changed from `http://localhost:3000` to production URL (`VERCEL_URL` → `https://soultrack.io`); prevents `twitter:image` and OG tags from referencing localhost when `NEXT_PUBLIC_SITE_URL` is not set
+
 ## [0.1.4.1] - 2026-03-22
 
 ### Fixed
