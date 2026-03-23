@@ -185,5 +185,32 @@
     "myTracks": "我的曲目",
     "logout": "退出",
     "switchLanguage": "切换语言"
+  },
+  "auth": {
+    "signInSubtitle": "输入您的邮箱以接收登录链接",
+    "emailLabel": "电子邮件地址",
+    "submitButton": "发送登录链接",
+    "redirectHint": "保存曲目需要先登录",
+    "verifyHeading": "请查看您的邮件",
+    "verifyBody1": "我们已发送登录链接。",
+    "verifyBody2": "点击邮件中的链接即可登录。",
+    "verifySpam": "如未收到邮件，请检查垃圾邮件文件夹。",
+    "verifyChangeEmail": "← 更改邮箱地址",
+    "errorHeading": "登录失败",
+    "errorBody": "链接已过期或无效。",
+    "errorRetry": "重新登录"
+  },
+  "library": {
+    "heading": "我的曲目",
+    "newTrack": "+ 新曲目",
+    "emptyMessage": "还没有曲目",
+    "emptyAction": "创建第一首曲目",
+    "saveButton": "保存这首曲子",
+    "saving": "保存中...",
+    "saved": "✓ 已保存到曲库",
+    "saveError": "保存失败，请再试一次。",
+    "deleteLabel": "删除",
+    "undoDelete": "撤销",
+    "deleteError": "无法删除"
   }
 }

@@ -185,5 +185,32 @@
     "myTracks": "내 트랙",
     "logout": "로그아웃",
     "switchLanguage": "언어 변경"
+  },
+  "auth": {
+    "signInSubtitle": "이메일을 입력하면 로그인 링크를 보내드립니다",
+    "emailLabel": "이메일 주소",
+    "submitButton": "로그인 링크 보내기",
+    "redirectHint": "트랙을 저장하려면 로그인이 필요합니다",
+    "verifyHeading": "이메일을 확인해주세요",
+    "verifyBody1": "로그인 링크를 보냈습니다.",
+    "verifyBody2": "이메일의 링크를 클릭하여 로그인하세요.",
+    "verifySpam": "이메일이 오지 않으면 스팸 폴더를 확인해주세요.",
+    "verifyChangeEmail": "← 이메일 주소 변경",
+    "errorHeading": "로그인 실패",
+    "errorBody": "링크가 만료되었거나 유효하지 않습니다.",
+    "errorRetry": "다시 로그인하기"
+  },
+  "library": {
+    "heading": "내 트랙",
+    "newTrack": "+ 새 트랙",
+    "emptyMessage": "아직 트랙이 없습니다",
+    "emptyAction": "첫 번째 트랙 만들기",
+    "saveButton": "이 곡 저장하기",
+    "saving": "저장 중...",
+    "saved": "✓ 라이브러리에 저장됨",
+    "saveError": "저장할 수 없습니다. 다시 시도해주세요.",
+    "deleteLabel": "삭제",
+    "undoDelete": "취소",
+    "deleteError": "삭제할 수 없습니다"
   }
 }

@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { useTranslations } from 'next-intl'
 
 const KV_UNDO_MS = 3000
 
 export default function DeleteTrackButton({ trackId }: { trackId: string }) {
   const [state, setState] = useState<'idle' | 'deleting' | 'deleted' | 'undoVisible' | 'error'>('idle')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const t = useTranslations('library')
 
   if (state === 'deleted') return null
 
@@ -23,7 +25,7 @@ export default function DeleteTrackButton({ trackId }: { trackId: string }) {
             timerRef.current = setTimeout(() => setState('deleted'), KV_UNDO_MS)
           }}
           className="p-3 min-h-[44px] min-w-[44px] text-[var(--text-muted)] hover:text-red-400 transition-colors text-xs flex items-center justify-center disabled:opacity-40"
-          aria-label="削除"
+          aria-label={t('deleteLabel')}
         >
           ✕
         </button>
@@ -37,11 +39,11 @@ export default function DeleteTrackButton({ trackId }: { trackId: string }) {
           }}
           className="text-xs text-amber-400 hover:text-amber-300 px-2 py-1 transition-colors"
         >
-          取り消す
+          {t('undoDelete')}
         </button>
       )}
       {state === 'error' && (
-        <span className="text-xs text-red-400">削除できませんでした</span>
+        <span className="text-xs text-red-400">{t('deleteError')}</span>
       )}
     </div>
   )

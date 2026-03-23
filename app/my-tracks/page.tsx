@@ -3,27 +3,31 @@ import { getUserTracks } from "@/lib/kv"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import DeleteTrackButton from "@/components/DeleteTrackButton"
+import { getTranslations } from 'next-intl/server'
 
 export default async function MyTracksPage() {
   const session = await auth()
   if (!session?.user?.id) redirect("/auth/signin")
 
-  const tracks = await getUserTracks(session.user.id)
+  const [tracks, t] = await Promise.all([
+    getUserTracks(session.user.id),
+    getTranslations('library'),
+  ])
 
   return (
     <main className="ambient-bg min-h-screen text-[var(--text-primary)] px-4 py-12">
       <div className="max-w-2xl mx-auto">
         <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-white">マイトラック</h1>
+          <h1 className="text-2xl font-bold text-white">{t('heading')}</h1>
           <Link href="/" className="text-sm text-[var(--text-muted)] hover:text-white transition-colors">
-            + 新しいトラック
+            {t('newTrack')}
           </Link>
         </div>
 
         {tracks.length === 0 ? (
           <div className="text-center py-20 text-[var(--text-muted)]">
-            <p className="mb-4">まだトラックがありません</p>
-            <Link href="/" className="text-white underline">最初のトラックを作る</Link>
+            <p className="mb-4">{t('emptyMessage')}</p>
+            <Link href="/" className="text-white underline">{t('emptyAction')}</Link>
           </div>
         ) : (
           <div className="space-y-3">

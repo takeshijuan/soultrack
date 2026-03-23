@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from 'next-intl'
 
 interface Props {
   trackId: string
@@ -14,6 +15,7 @@ export default function SaveToLibraryButton({ trackId, isAuthenticated, initialS
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(false)
   const router = useRouter()
+  const t = useTranslations('library')
 
   const handleSave = async () => {
     if (!isAuthenticated) {
@@ -33,7 +35,7 @@ export default function SaveToLibraryButton({ trackId, isAuthenticated, initialS
 
   if (saved) {
     return (
-      <span className="text-sm text-[#00F5D4] font-medium">✓ ライブラリに保存済み</span>
+      <span className="text-sm text-[#00F5D4] font-medium">{t('saved')}</span>
     )
   }
 
@@ -44,9 +46,9 @@ export default function SaveToLibraryButton({ trackId, isAuthenticated, initialS
         disabled={saving}
         className="text-sm px-5 py-3 rounded-full bg-[#00F5D4] text-black font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
       >
-        {saving ? "保存中..." : "この曲を手元に残す"}
+        {saving ? t('saving') : t('saveButton')}
       </button>
-      {error && <span className="text-xs text-red-400">保存できませんでした。もう一度お試しください。</span>}
+      {error && <span className="text-xs text-red-400">{t('saveError')}</span>}
     </div>
   )
 }
