@@ -25,6 +25,8 @@ app/api/generate/
 
 lib/
   prompts.test.ts             # Unit tests for parseClaudeResponse() and buildClaudePrompt()
+  kv.test.ts                  # Unit tests for KV library: saveTrack, updateTrack, saveTrackToLibrary,
+                              #   getUserTrackIds (dedup), getUserTracks (expiry filter), isTrackInLibrary
 ```
 
 ## Test Layers
