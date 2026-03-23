@@ -32,7 +32,12 @@ export async function generateMetadata() {
       siteName: 'Soultrack',
       images: ['/api/og'],
     },
-    twitter: { card: 'summary_large_image' },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('title'),
+      description: t('description'),
+      images: ['/api/og'],
+    },
   }
 }
 

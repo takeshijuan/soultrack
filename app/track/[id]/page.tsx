@@ -16,6 +16,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       url: `/track/${id}`,
       images: [`/api/og?id=${id}`],
     },
+    twitter: {
+      images: [`/api/og?id=${id}`],
+    },
   }
 }
 
