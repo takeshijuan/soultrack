@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5.0] - 2026-03-23
+
+### Added
+- Auth.js v5 (next-auth@beta) magic link authentication via Resend — password-free email login
+- `auth.config.ts` — Edge-compatible Auth.js config (no adapter) for middleware
+- `auth.ts` — Full Auth.js setup with UpstashRedisAdapter (Vercel KV) + JWT session strategy
+- `app/api/auth/[...nextauth]/route.ts` — Auth.js route handlers
+- `app/api/save-track/[trackId]/route.ts` — POST to add track to library, DELETE to remove with undo-toast support
+- `app/auth/signin/page.tsx` — Magic link email input page with sr-only label and redirect context
+- `app/auth/verify/page.tsx` — Post-email check page with spam folder guidance and back link
+- `app/auth/error/page.tsx` — Auth error page (expired/invalid link) with retry link
+- `app/my-tracks/page.tsx` — Authenticated track library with emotionColor left-border accent and delete UX
+- `components/UserButton.tsx` — Server Component header auth UI (マイトラック / ログアウト links)
+- `components/SaveToLibraryButton.tsx` — Teal CTA to save track with error state
+- `components/DeleteTrackButton.tsx` — Optimistic delete with 3s undo toast and double-click guard
+- `lib/kv.ts` — `saveTrackToLibrary`, `getUserTrackIds` (dedup'd, 50-item cap), `getUserTracks`, `isTrackInLibrary`; `userId` field on `TrackRecord` for permanent storage
+- `lib/kv.test.ts` — 14 unit tests for all KV library functions including TTL branching, dedup, and expiry filtering
+
+### Changed
+- `middleware.ts` — Wrapped with Auth.js `auth()` from `auth.config.ts` for Edge-safe session propagation alongside existing locale detection
+- `app/api/generate/route.ts` — Authenticated users skip rate limit; auto-save to library via `kv.lpush`; `remainingToday` in response for unauthenticated CTAs
+- `app/layout.tsx` — `UserButton` added to fixed header alongside `LocaleSwitcher`
+- `app/track/[id]/page.tsx` — `auth()` + `getTrack()` parallelized via `Promise.all`; `SaveToLibraryButton` with `initialSaved` state
+- `__tests__/middleware.test.ts` — Added `vi.mock('next-auth')` for Edge runtime compatibility in test environment
+
+### Fixed
+- `lib/kv.ts` — `saveTrackToLibrary` guards against overwriting existing track ownership (cross-user protection)
+- `components/DeleteTrackButton.tsx` — Added `'deleting'` intermediate state with `disabled` prop to prevent double-click race on DELETE
+
 ## [0.1.4.1] - 2026-03-22
 
 ### Fixed
