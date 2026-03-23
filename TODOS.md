@@ -43,6 +43,26 @@
 
 ---
 
+## Legal
+
+### 連絡先メールアドレスを置換する（公開前ブロッカー）
+
+**Priority:** P0
+
+**What:** `messages/legal-en.json` と `messages/legal-ja.json` の `contactBody` フィールドの `[YOUR_EMAIL@DOMAIN.com]` プレースホルダーを実際の連絡先メールアドレスに置換する
+
+**Why:** 個人情報保護法の問い合わせ窓口開示は法的義務。プレースホルダーのまま公開すると法令違反となる可能性がある。
+
+**Pros:** 法的コンプライアンス達成
+
+**Cons:** なし
+
+**Context:** v0.1.5.0 でlegal JSONを生成した際にプレースホルダーとして挿入。SNS公開（または /privacy, /terms ページを公開）する前に必ず置換すること。
+
+**Depends on:** なし（ブロッカー）
+
+---
+
 ## Completed
 
 <!-- Items completed in PRs are moved here -->
