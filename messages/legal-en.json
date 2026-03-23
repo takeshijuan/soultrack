@@ -19,7 +19,7 @@
       "userRightsTitle": "Your Rights",
       "userRightsBody": "Under the Act on the Protection of Personal Information (個人情報保護法), you have the right to request disclosure, correction, addition, deletion, or suspension of use of your personal information held by us. Because we do not collect or retain personally identifiable information beyond transient IP-based rate limiting, there is generally no personal data on file to disclose or delete. If you have questions or concerns about your personal information, please contact us using the details provided in the Contact section below.",
       "contactTitle": "Contact",
-      "contactBody": "For any privacy-related inquiries, requests regarding your personal information, or questions about this Privacy Policy, you may contact us at [YOUR_EMAIL@DOMAIN.com]. We will endeavor to respond to your inquiry within a reasonable time."
+      "contactBody": "For any privacy-related inquiries, requests regarding your personal information, or questions about this Privacy Policy, you may contact us at {contactEmail}. We will endeavor to respond to your inquiry within a reasonable time."
     },
     "terms": {
       "title": "Terms of Service",
@@ -38,7 +38,7 @@
       "governingLawTitle": "Governing Law",
       "governingLawBody": "These Terms of Service are governed by and construed in accordance with the laws of Japan, without regard to its conflict of law provisions. Any disputes arising out of or relating to these Terms or the use of SoulTrack shall be subject to the exclusive jurisdiction of the Japanese courts, with the Tokyo District Court serving as the court of first instance.",
       "contactTitle": "Contact",
-      "contactBody": "If you have any questions about these Terms of Service or the SoulTrack service, please contact us at [YOUR_EMAIL@DOMAIN.com]."
+      "contactBody": "If you have any questions about these Terms of Service or the SoulTrack service, please contact us at {contactEmail}."
     }
   }
 }

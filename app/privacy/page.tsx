@@ -11,6 +11,8 @@ export async function generateMetadata() {
   }
 }
 
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL ?? 'contact@soultrack.io'
+
 export default async function PrivacyPage() {
   const t = await getTranslations('legal.privacy')
   return (
@@ -29,7 +31,7 @@ export default async function PrivacyPage() {
       <LegalSection title={t('thirdPartiesTitle')} body={t('thirdPartiesBody')} />
       <LegalSection title={t('retentionTitle')} body={t('retentionBody')} />
       <LegalSection title={t('userRightsTitle')} body={t('userRightsBody')} />
-      <LegalSection title={t('contactTitle')} body={t('contactBody')} />
+      <LegalSection title={t('contactTitle')} body={t('contactBody', { contactEmail: CONTACT_EMAIL })} />
     </main>
   )
 }

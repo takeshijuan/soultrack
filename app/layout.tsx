@@ -31,6 +31,8 @@ export async function generateMetadata() {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  // Legal pages are server-only — exclude from client bundle to avoid payload inflation (~8KB/request)
+  const { legal: _legal, ...clientMessages } = messages as Record<string, unknown>
 
   return (
     <html lang={locale}>
@@ -41,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
       </head>
       <body className={`${dmSans.variable} font-sans bg-[#0A0A0F] min-h-screen`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={clientMessages}>
           <div className="fixed top-4 right-4 z-50">
             <LocaleSwitcher />
           </div>

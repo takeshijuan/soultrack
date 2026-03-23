@@ -11,6 +11,8 @@ export async function generateMetadata() {
   }
 }
 
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL ?? 'contact@soultrack.io'
+
 export default async function TermsPage() {
   const t = await getTranslations('legal.terms')
   return (
@@ -30,7 +32,7 @@ export default async function TermsPage() {
       <LegalSection title={t('limitationsTitle')} body={t('limitationsBody')} />
       <LegalSection title={t('disclaimerTitle')} body={t('disclaimerBody')} />
       <LegalSection title={t('governingLawTitle')} body={t('governingLawBody')} />
-      <LegalSection title={t('contactTitle')} body={t('contactBody')} />
+      <LegalSection title={t('contactTitle')} body={t('contactBody', { contactEmail: CONTACT_EMAIL })} />
     </main>
   )
 }
