@@ -180,6 +180,10 @@
     ]
   },
   "navigation": {
-    "homeLabel": "前往 Soultrack 首頁"
+    "homeLabel": "前往 Soultrack 首頁",
+    "login": "登入",
+    "myTracks": "我的曲目",
+    "logout": "登出",
+    "switchLanguage": "切換語言"
   }
 }

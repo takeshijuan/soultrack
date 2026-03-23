@@ -72,9 +72,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <SoultrackIcon size={24} />
             </Link>
           </div>
-          <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+          <div className="fixed top-4 right-4 z-50 flex items-center gap-1">
             <UserButton />
-            <div className="w-px h-3.5 bg-white/10" aria-hidden="true" />
             <LocaleSwitcher />
           </div>
           {children}

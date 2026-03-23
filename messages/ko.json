@@ -180,6 +180,10 @@
     ]
   },
   "navigation": {
-    "homeLabel": "Soultrack 홈으로"
+    "homeLabel": "Soultrack 홈으로",
+    "login": "로그인",
+    "myTracks": "내 트랙",
+    "logout": "로그아웃",
+    "switchLanguage": "언어 변경"
   }
 }

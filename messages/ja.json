@@ -178,6 +178,10 @@
     ]
   },
   "navigation": {
-    "homeLabel": "Soultrack ホームへ"
+    "homeLabel": "Soultrack ホームへ",
+    "login": "ログイン",
+    "myTracks": "マイトラック",
+    "logout": "ログアウト",
+    "switchLanguage": "言語を変更"
   }
 }

@@ -180,6 +180,10 @@
     ]
   },
   "navigation": {
-    "homeLabel": "Go to Soultrack home"
+    "homeLabel": "Go to Soultrack home",
+    "login": "Sign in",
+    "myTracks": "My Tracks",
+    "logout": "Sign out",
+    "switchLanguage": "Switch language"
   }
 }
