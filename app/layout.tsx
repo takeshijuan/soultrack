@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/react'
 import LocaleSwitcher from '@/components/LocaleSwitcher'
 import Link from 'next/link'
 import { SoultrackIcon } from '@/components/SoultrackLogo'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -33,17 +34,13 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const locale = await getLocale()
   const messages = await getMessages()
   const t = await getTranslations('navigation')
+  // Legal pages are server-only — exclude from client bundle to avoid payload inflation (~8KB/request)
+  const { legal: _legal, ...clientMessages } = messages as Record<string, unknown>
 
   return (
     <html lang={locale}>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@600,700&display=swap"
-        />
-      </head>
       <body className={`${dmSans.variable} font-sans bg-[#0A0A0F] min-h-screen`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={clientMessages}>
           {/* ブランドアイコン: 左上固定、感情反応カラー、ambient と同じ 800ms transition */}
           <div className="fixed top-4 left-4 z-50">
             <Link
@@ -62,6 +59,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <LocaleSwitcher />
           </div>
           {children}
+          <Footer />
           <Analytics />
         </NextIntlClientProvider>
       </body>

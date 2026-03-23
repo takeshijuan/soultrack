@@ -77,3 +77,7 @@ See `lib/emotions.ts` for full map.
 | 2026-03-20 | i18n via next-intl (no URL prefix) | Clean URLs (/track/[id] stays as-is); locale via ?lang= → cookie → Accept-Language → en |
 | 2026-03-20 | EMOTION_COLORS rekeyed to English slugs | Locale-independent Q2 validation; translated names in messages/[locale].json |
 | 2026-03-20 | Language switcher pill (top-right fixed) | Non-intrusive; sets NEXT_LOCALE cookie + router.refresh() for immediate re-render |
+| 2026-03-23 | Global footer (Privacy Policy + ToS links) | Legal disclosure requirement under 個人情報保護法 and Vercel Analytics data collection |
+| 2026-03-23 | Legal body text: text-white/70 (not text-muted) | WCAG AA compliance (4.5:1 contrast) for long-form legal reading |
+| 2026-03-23 | robots: noindex on /privacy, /terms, /legal | Legal pages excluded from search engine indexing |
+| 2026-03-23 | Legal JSON separated from UI JSON (legal-en.json, legal-ja.json) | Isolates legal content for easier human review and compliance audit |
