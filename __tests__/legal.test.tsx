@@ -16,10 +16,6 @@ describe('LegalSection', () => {
   })
 })
 
-describe('Footer', () => {
-  // Footer is an async Server Component using getTranslations (server-only).
-  // Integration test: verify footer appears in full page render via dev server.
-  it('should be covered by integration test via npm run dev', () => {
-    expect(true).toBe(true)
-  })
-})
+// Footer is an async Server Component using getTranslations (server-only).
+// Unit testing requires mocking next-intl internals.
+// Integration verification: npm run build + open http://localhost:3000
