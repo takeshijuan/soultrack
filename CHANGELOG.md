@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6.3] - 2026-03-23
+
+### Changed
+- `components/EmotionShowcase.tsx` — on emotion chip deselect, `--emotion-hue` inline style is now removed via `removeProperty()` rather than reset to hardcoded `#00F5D4`; CSS `:root` default takes effect via cascade (single source of truth)
+
+### Fixed
+- `__tests__/EmotionShowcase.test.tsx` — updated deselect assertion from `.toBe('#00F5D4')` to `.toBe('')` to match new `removeProperty` behavior; aligns with existing unmount test pattern
+
 ## [0.1.6.2] - 2026-03-23
 
 ### Fixed
