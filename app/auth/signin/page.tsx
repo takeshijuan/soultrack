@@ -40,6 +40,7 @@ export default async function SignInPage({
             type="email"
             placeholder="your@email.com"
             required
+            suppressHydrationWarning
             className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-white/30 text-sm"
           />
           <button
