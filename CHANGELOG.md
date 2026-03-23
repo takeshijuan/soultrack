@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5.0] - 2026-03-23
+
+### Added
+- **Soultrack brand logo** — `SoultrackIcon` SVG component (S-wave mark: S letterform flowing as sine wave) in `components/SoultrackLogo.tsx`; exports both `SoultrackIcon` and `SoultrackLogo` (with optional wordmark)
+- **Emotion-reactive header logo** — fixed top-left icon in `app/layout.tsx` using `color: var(--emotion-hue, #00F5D4)` with 800ms transition; automatically reacts to emotion selection via existing CSS variable infrastructure (zero additional JS)
+- **Browser favicon** — `app/icon.tsx` (32×32 Edge ImageResponse, transparent background, teal S-wave); replaces deleted `app/favicon.ico`
+- **Apple Touch Icon** — `app/apple-icon.tsx` (180×180, dark background `#0A0A0F`, rounded corners); for iOS home screen
+- **Emotion-reactive OG images** — `/api/og?id=[ulid]` now extracts `emotionColor` from the track record and applies it to the ambient orb, brand icon, and tagline; default OG falls back to teal
+- `navigation.homeLabel` i18n key added to all 6 locale files (`en`, `ja`, `ko`, `zh`, `zh-TW`)
+
+### Changed
+- OG route brand icon added as sibling div above title (not nested inside)
+- OG tagline color now follows `emotionColor` instead of hardcoded `#00F5D4`
+
+### Fixed
+- `app/api/og/route.tsx` — wrapped `getTrack()` in try/catch; KV failure now gracefully falls back to defaults instead of returning HTTP 500
+- `app/icon.tsx`, `app/apple-icon.tsx` — added `revalidate = 86400` to avoid per-request Edge Function invocations
+- `app/layout.tsx` — `aria-label` now uses `getTranslations('navigation')` instead of hardcoded Japanese string
+
 ## [0.1.4.1] - 2026-03-22
 
 ### Fixed
