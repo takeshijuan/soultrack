@@ -3,6 +3,7 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { Analytics } from '@vercel/analytics/react'
 import LocaleSwitcher from '@/components/LocaleSwitcher'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -30,21 +31,18 @@ export async function generateMetadata() {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  // Legal pages are server-only — exclude from client bundle to avoid payload inflation (~8KB/request)
+  const { legal: _legal, ...clientMessages } = messages as Record<string, unknown>
 
   return (
     <html lang={locale}>
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@600,700&display=swap"
-        />
-      </head>
       <body className={`${dmSans.variable} font-sans bg-[#0A0A0F] min-h-screen`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={clientMessages}>
           <div className="fixed top-4 right-4 z-50">
             <LocaleSwitcher />
           </div>
           {children}
+          <Footer />
           <Analytics />
         </NextIntlClientProvider>
       </body>

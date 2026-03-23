@@ -23,10 +23,21 @@ export default getRequestConfig(async () => {
   const locale = headerStore.get('x-locale') ?? 'en'
 
   const enMessages = (await import('../messages/en.json')).default
-  const messages =
-    locale === 'en'
-      ? enMessages
-      : deepMerge(enMessages, (await import(`../messages/${locale}.json`)).default)
+  const enLegal = (await import('../messages/legal-en.json')).default
+  const baseMessages = deepMerge(enMessages, enLegal)
+
+  if (locale === 'en') {
+    return { locale, messages: baseMessages }
+  }
+
+  let messages = deepMerge(baseMessages, (await import(`../messages/${locale}.json`)).default)
+
+  // Only ja has a dedicated legal translation; ko/zh-TW/zh fall back to English legal text.
+  // This is intentional — automated translation quality for legal documents is limited.
+  if (locale === 'ja') {
+    const jaLegal = (await import('../messages/legal-ja.json')).default
+    messages = deepMerge(messages, jaLegal)
+  }
 
   return { locale, messages }
 })
