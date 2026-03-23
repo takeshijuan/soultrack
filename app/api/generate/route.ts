@@ -1,10 +1,12 @@
 import { NextRequest } from 'next/server'
 import { generateText } from 'ai'
 import { createGateway } from '@ai-sdk/gateway'
+import { kv } from '@vercel/kv'
 import { getRateLimitCount, saveTrack, generateTrackId } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 import { buildClaudePrompt, parseClaudeResponse } from '@/lib/prompts'
 import { EMOTION_COLORS } from '@/lib/emotions'
+import { auth } from '@/auth'
 import enMessages from '@/messages/en.json'
 import jaMessages from '@/messages/ja.json'
 import koMessages from '@/messages/ko.json'
@@ -29,6 +31,10 @@ const Q3_ALL = new Set([
 ])
 
 export async function POST(request: NextRequest) {
+  // 0. 認証状態確認（認証済みはレート制限スキップ + 自動ライブラリ保存）
+  const session = await auth()
+  const userId = session?.user?.id ?? undefined
+
   // 1. Parse body
   let body: { q1?: string; q2?: string; q3?: string }
   try {
@@ -43,12 +49,13 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: 'Invalid selection' }, { status: 400 })
   }
 
-  // 3. Rate limiting
+  // 3. Rate limiting（認証済みはスキップ）
+  // 既知の制限: 同一IP（NAT/オフィス）で複数ユーザーが制限を共有する。認証済みはスキップ。
+  let rateLimitCount = 0
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
-  // Skip rate limiting when IP cannot be determined (e.g., local dev)
-  if (ip !== 'unknown' && !BYPASS_IPS.includes(ip)) {
-    const count = await getRateLimitCount(ip)
-    if (count > 3) {
+  if (!userId && ip !== 'unknown' && !BYPASS_IPS.includes(ip)) {
+    rateLimitCount = await getRateLimitCount(ip)
+    if (rateLimitCount > 3) {
       return Response.json({ error: 'Daily limit reached' }, { status: 429 })
     }
   }
@@ -116,12 +123,23 @@ export async function POST(request: NextRequest) {
       createdAt: Date.now(),
       emotion: q2,
       emotionColor,
+      userId,  // あれば永続保存・なければTTL 24h
     })
+    if (userId) {
+      // 新規生成トラックは重複なし確定 → isTrackInLibrary チェック不要
+      // saveTrackToLibrary は lpush + set(上書き)するが、set は saveTrack済みのため不要
+      await kv.lpush(`user:${userId}:tracks`, trackId)
+    }
   } catch (err) {
     console.error('[generate] KV save error:', err)
     return Response.json({ error: 'Failed to save track' }, { status: 500 })
   }
 
-  // 7. Return trackId
-  return Response.json({ trackId }, { status: 200 })
+  // 7. Return trackId + remainingToday
+  // 未認証 かつ IP が判明している場合のみ残り回数を返す
+  // - userId あり → null（無制限）
+  // - ip='unknown' → null（IP不明のためカウント不正確、情報を出さない）
+  // - rateLimitCount を再利用してカウンターの二重インクリメントを防ぐ
+  const remainingToday = (userId || ip === 'unknown') ? null : Math.max(0, 3 - rateLimitCount)
+  return Response.json({ trackId, remainingToday }, { status: 200 })
 }
