@@ -46,3 +46,9 @@
 ## Completed
 
 <!-- Items completed in PRs are moved here -->
+
+### 連絡先メールアドレスを環境変数化
+
+**Completed:** v0.1.5.0 (2026-03-23)
+
+`CONTACT_EMAIL` 環境変数（デフォルト: `contact@soultrack.io`）で設定可能。`messages/legal-*.json` は `{contactEmail}` プレースホルダーを使用し、各ページでサーバーサイドでインジェクト。
