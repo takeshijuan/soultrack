@@ -1,0 +1,44 @@
+{
+  "legal": {
+    "footer": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: March 2026",
+      "intro": "SoulTrack (https://soultrack.app) is operated by an individual operator based in Japan. This Privacy Policy explains what information we collect when you use our AI music generation service, how we use it, and your rights regarding that information. By using SoulTrack, you agree to the practices described in this policy. This policy is prepared in compliance with the Act on the Protection of Personal Information (個人情報保護法) of Japan.",
+      "dataCollectionTitle": "Information We Collect",
+      "dataCollectionBody": "We collect your IP address solely for the purpose of enforcing rate limits (3 tracks per day per IP address); this data is not stored long-term and is not linked to any personal profile. We use Vercel Analytics, a privacy-friendly analytics service that collects only aggregate page view statistics without cookies, without tracking individual users, and without collecting any personally identifiable information (PII). We do not require user registration, and we do not collect names, email addresses, or any other personal information.",
+      "dataUseTitle": "How We Use Your Information",
+      "dataUseBody": "Your IP address is used exclusively to enforce the daily rate limit of 3 generated tracks per IP address and is not used for advertising, profiling, or any other purpose. Aggregate analytics data from Vercel Analytics is used solely to understand overall usage patterns and improve the service. The text prompts you submit to generate music are transmitted to Replicate's API to process your request and are subject to Replicate's own privacy practices.",
+      "thirdPartiesTitle": "Third-Party Services",
+      "thirdPartiesBody": "SoulTrack relies on the following third-party services: (1) Vercel, which provides hosting infrastructure and privacy-friendly analytics (no cookies, no PII, aggregate data only) — see Vercel's privacy policy at https://vercel.com/legal/privacy-policy; (2) Replicate, which powers the MusicGen AI model — your text prompts are sent to Replicate's API to generate audio, and Replicate's privacy policy applies to that data processing (https://replicate.com/privacy). We do not sell or share your information with any other third parties.",
+      "retentionTitle": "Data Retention",
+      "retentionBody": "AI-generated audio tracks are stored in Vercel KV with a 24-hour time-to-live (TTL) and are automatically deleted after that period. IP addresses used for rate limiting are held only transiently during the rate-limit evaluation window and are not persisted to long-term storage. Aggregate analytics data retained by Vercel Analytics does not contain personally identifiable information.",
+      "userRightsTitle": "Your Rights",
+      "userRightsBody": "Under the Act on the Protection of Personal Information (個人情報保護法), you have the right to request disclosure, correction, addition, deletion, or suspension of use of your personal information held by us. Because we do not collect or retain personally identifiable information beyond transient IP-based rate limiting, there is generally no personal data on file to disclose or delete. If you have questions or concerns about your personal information, please contact us using the details provided in the Contact section below.",
+      "contactTitle": "Contact",
+      "contactBody": "For any privacy-related inquiries, requests regarding your personal information, or questions about this Privacy Policy, you may contact us at [YOUR_EMAIL@DOMAIN.com]. We will endeavor to respond to your inquiry within a reasonable time."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last updated: March 2026",
+      "intro": "These Terms of Service govern your access to and use of SoulTrack (https://soultrack.app), an AI-powered music generation web application operated by an individual operator based in Japan. By accessing or using SoulTrack, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use the service.",
+      "serviceTitle": "Service Description",
+      "serviceBody": "SoulTrack is a free, registration-free web application that allows users to generate original audio tracks using the MusicGen AI model via Replicate's API. Users submit a text prompt describing the desired music, and the service returns an AI-generated audio track accessible via a public URL for 24 hours. No user account or email address is required to use the service.",
+      "usageTitle": "Acceptable Use",
+      "usageBody": "Use of SoulTrack is subject to a rate limit of 3 generated tracks per day per IP address to ensure fair access for all users. You agree not to use SoulTrack to generate content that is harmful, illegal, defamatory, obscene, infringing of third-party intellectual property rights, or otherwise in violation of applicable law. You must not attempt to circumvent rate limits, reverse-engineer the service, or use automated means to abuse or overload the platform. We reserve the right to block IP addresses or take other measures against users who violate these terms.",
+      "contentTitle": "AI-Generated Content",
+      "contentBody": "All audio tracks produced through SoulTrack are generated by an AI model (MusicGen) and do not represent the creative expression of a human author. We grant you a non-exclusive, worldwide, royalty-free license to use, download, share, and adapt the audio tracks you generate through SoulTrack for personal and commercial purposes, subject to these Terms. You acknowledge that AI-generated content may be similar to outputs generated for other users and that we make no representation that generated tracks are free from third-party intellectual property claims. Generated tracks are available via a public URL for 24 hours and are permanently deleted thereafter; you are responsible for saving any tracks you wish to retain.",
+      "limitationsTitle": "Service Limitations",
+      "limitationsBody": "SoulTrack is provided on a best-effort basis and may be subject to downtime, rate limiting, or changes without prior notice. Generated tracks are stored for a maximum of 24 hours and cannot be recovered after deletion. We do not guarantee the quality, originality, or fitness for any particular purpose of AI-generated audio. The service may be modified, suspended, or discontinued at any time at our sole discretion.",
+      "disclaimerTitle": "Disclaimer",
+      "disclaimerBody": "SoulTrack is provided 'as is' and 'as available' without warranties of any kind, whether express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement. To the fullest extent permitted by applicable law, the operator of SoulTrack shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of, or inability to use, the service. Your use of SoulTrack is entirely at your own risk.",
+      "governingLawTitle": "Governing Law",
+      "governingLawBody": "These Terms of Service are governed by and construed in accordance with the laws of Japan, without regard to its conflict of law provisions. Any disputes arising out of or relating to these Terms or the use of SoulTrack shall be subject to the exclusive jurisdiction of the Japanese courts, with the Tokyo District Court serving as the court of first instance.",
+      "contactTitle": "Contact",
+      "contactBody": "If you have any questions about these Terms of Service or the SoulTrack service, please contact us at [YOUR_EMAIL@DOMAIN.com]."
+    }
+  }
+}

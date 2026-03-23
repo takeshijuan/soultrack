@@ -3,6 +3,7 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { Analytics } from '@vercel/analytics/react'
 import LocaleSwitcher from '@/components/LocaleSwitcher'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -45,6 +46,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <LocaleSwitcher />
           </div>
           {children}
+          <Footer />
           <Analytics />
         </NextIntlClientProvider>
       </body>
