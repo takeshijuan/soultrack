@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0.1] - 2026-03-23
+
+### Changed
+- `app/layout.tsx` — added vertical divider (`w-px h-3.5 bg-white/10`) between `UserButton` and `LocaleSwitcher`; tightened gap from `gap-4` to `gap-3`
+- `components/UserButton.tsx` — unauthenticated login link styled as bordered ghost pill (`border border-white/20`, hover teal); authenticated state uses `|` separator with `gap-1` for compact grouping
+- `components/LocaleSwitcher.tsx` — active locale pill gains `bg-[#00F5D4]/10` fill for clearer selected state; border softened to `#00F5D4]/40`; inactive hover adds `hover:border-white/15`; padding enlarged to `px-2 py-1` for better tap targets
+
 ## [0.2.0.0] - 2026-03-23
 
 ### Added
