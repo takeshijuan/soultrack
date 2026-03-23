@@ -3,7 +3,7 @@ import type { NextAuthConfig } from "next-auth"
 
 export default {
   providers: [
-    Resend({ from: "Soultrack <noreply@soultrack.app>" }),
+    Resend({ from: "Soultrack <noreply@soultrack.io>" }),
   ],
   pages: {
     signIn: "/auth/signin",

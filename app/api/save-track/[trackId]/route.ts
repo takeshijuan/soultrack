@@ -13,19 +13,24 @@ export async function POST(
   }
 
   const { trackId } = await params
-  const track = await getTrack(trackId)
-  if (!track) {
-    return Response.json({ error: 'Track not found' }, { status: 404 })
-  }
+  try {
+    const track = await getTrack(trackId)
+    if (!track) {
+      return Response.json({ error: 'Track not found' }, { status: 404 })
+    }
 
-  const alreadySaved = await isTrackInLibrary(session.user.id, trackId)
-  if (alreadySaved) {
-    return Response.json({ saved: true, alreadySaved: true })
-  }
+    const alreadySaved = await isTrackInLibrary(session.user.id, trackId)
+    if (alreadySaved) {
+      return Response.json({ saved: true, alreadySaved: true })
+    }
 
-  await saveTrackToLibrary(session.user.id, trackId)
-  console.log(`[save-track] saved trackId=${trackId} for userId=${session.user.id}`)
-  return Response.json({ saved: true })
+    await saveTrackToLibrary(session.user.id, trackId)
+    console.log(`[save-track] saved trackId=${trackId} for userId=${session.user.id}`)
+    return Response.json({ saved: true })
+  } catch (err) {
+    console.error('[save-track] POST kv operation failed:', err)
+    return Response.json({ error: 'Failed to save track' }, { status: 500 })
+  }
 }
 
 export async function DELETE(
