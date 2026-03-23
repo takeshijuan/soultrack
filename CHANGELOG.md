@@ -43,9 +43,6 @@ All notable changes to this project will be documented in this file.
 - `app/api/og/route.tsx` — wrapped `getTrack()` in try/catch; KV failure falls back to defaults
 - `app/icon.tsx`, `app/apple-icon.tsx` — added `revalidate = 86400` to avoid per-request Edge invocations
 
-### Notes
-- ⚠️ Contact email placeholder `[YOUR_EMAIL@DOMAIN.com]` must be replaced before publishing (legal requirement under 個人情報保護法)
-
 ## [0.1.4.1] - 2026-03-22
 
 ### Fixed
