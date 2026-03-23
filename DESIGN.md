@@ -46,9 +46,26 @@ Keys are English slugs (`calm`, `anxiety`, ...) — locale-independent single so
 Translated display names live in `messages/[locale].json` under `emotions.*`.
 See `lib/emotions.ts` for full map.
 
+## Brand Icon
+
+- **Mark:** S-wave — S letterform flowing as a sine wave
+  - SVG path: `M 17 6 C 17 3, 8 3, 7 7 C 6 11, 16 13, 16 17 C 16 21, 7 21, 7 18` (viewBox 0 0 24 24)
+  - `strokeWidth="2.5"`, `strokeLinecap="round"`, `fill="none"`
+  - Uses `stroke="currentColor"` → inherits color from parent CSS
+- **Color:** `var(--emotion-hue, #00F5D4)` — automatically follows emotion selection with 800ms transition
+- **Component:** `components/SoultrackLogo.tsx` — exports `SoultrackIcon` (SVG only) and `SoultrackLogo` (with optional wordmark)
+- **Usage:**
+  - Header: `<SoultrackIcon size={24} />` in fixed top-left Link (44px touch target)
+  - Favicon: `app/icon.tsx` (32×32, transparent bg, Edge Runtime, 1-day cache)
+  - Apple Touch Icon: `app/apple-icon.tsx` (180×180, `#0A0A0F` bg, 36px border-radius, 1-day cache)
+  - OG image: inline SVG at 56×56 in `/api/og` (direct `stroke={emotionColor}` — Satori doesn't inherit `currentColor`)
+
 ## Decisions Log
 | Date       | Decision | Rationale |
 |------------|----------|-----------|
+| 2026-03-23 | S-wave mark (not soundwave/note) | Competitors (Suno/Udio) all use waveform logos; S-wave expresses "S for Soul" + wave simultaneously |
+| 2026-03-23 | Emotion-reactive icon color | Zero JS cost — reuses `--emotion-hue` CSS var already set by GachaQuiz + track page |
+| 2026-03-23 | favicon.ico deleted, icon.tsx used | Next.js App Router prioritizes `favicon.ico` over `icon.tsx`; deletion required for branded favicon |
 | 2026-03-18 | Chromatic Emotion direction | Differentiates from Suno/Udio purple-gradient convergence |
 | 2026-03-18 | Clash Grotesk + DM Sans | Strong display + clean body; nobody in AI music uses this combo |
 | 2026-03-18 | Emotion-reactive background | Synesthesia concept perfectly mirrors "music of your moment" |
