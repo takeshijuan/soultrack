@@ -6,20 +6,21 @@ export default async function UserButton() {
 
   if (session?.user) {
     return (
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1">
         <Link
           href="/my-tracks"
-          className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+          className="text-xs px-2 py-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors whitespace-nowrap"
         >
           マイトラック
         </Link>
+        <span className="text-white/15 text-xs select-none">|</span>
         <form
           action={async () => {
             "use server"
             await signOut({ redirectTo: "/" })
           }}
         >
-          <button className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
+          <button className="text-xs px-2 py-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
             ログアウト
           </button>
         </form>
@@ -30,7 +31,7 @@ export default async function UserButton() {
   return (
     <Link
       href="/auth/signin"
-      className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+      className="text-xs px-3 py-1.5 rounded-full border border-white/20 text-[var(--text-muted)] hover:border-[var(--accent-teal)] hover:text-[var(--accent-teal)] transition-all duration-200 whitespace-nowrap"
     >
       ログイン
     </Link>

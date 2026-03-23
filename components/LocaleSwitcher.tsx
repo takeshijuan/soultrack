@@ -26,10 +26,10 @@ export default function LocaleSwitcher() {
         <button
           key={code}
           onClick={() => handleChange(code)}
-          className={`text-[10px] px-1.5 py-0.5 rounded tracking-wider transition-colors duration-150 ${
+          className={`text-[10px] px-2 py-1 rounded-sm tracking-wider transition-all duration-150 ${
             code === locale
-              ? 'text-[var(--accent-teal)] border border-[var(--accent-teal)]'
-              : 'text-[var(--text-muted)] border border-transparent hover:text-[var(--text-primary)]'
+              ? 'text-[var(--accent-teal)] bg-[#00F5D4]/10 border border-[#00F5D4]/40'
+              : 'text-[var(--text-muted)] border border-transparent hover:text-[var(--text-primary)] hover:border-white/15'
           }`}
         >
           {label}
