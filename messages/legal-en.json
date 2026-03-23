@@ -7,7 +7,7 @@
     "privacy": {
       "title": "Privacy Policy",
       "lastUpdated": "Last updated: March 2026",
-      "intro": "SoulTrack (https://soultrack.app) is operated by an individual operator based in Japan. This Privacy Policy explains what information we collect when you use our AI music generation service, how we use it, and your rights regarding that information. By using SoulTrack, you agree to the practices described in this policy. This policy is prepared in compliance with the Act on the Protection of Personal Information (個人情報保護法) of Japan.",
+      "intro": "SoulTrack (https://soultrack.io) is operated by an individual operator based in Japan. This Privacy Policy explains what information we collect when you use our AI music generation service, how we use it, and your rights regarding that information. By using SoulTrack, you agree to the practices described in this policy. This policy is prepared in compliance with the Act on the Protection of Personal Information (個人情報保護法) of Japan.",
       "dataCollectionTitle": "Information We Collect",
       "dataCollectionBody": "We collect your IP address solely for the purpose of enforcing rate limits (3 tracks per day per IP address); this data is not stored long-term and is not linked to any personal profile. We use Vercel Analytics, a privacy-friendly analytics service that collects only aggregate page view statistics without cookies, without tracking individual users, and without collecting any personally identifiable information (PII). We do not require user registration, and we do not collect names, email addresses, or any other personal information.",
       "dataUseTitle": "How We Use Your Information",
@@ -24,7 +24,7 @@
     "terms": {
       "title": "Terms of Service",
       "lastUpdated": "Last updated: March 2026",
-      "intro": "These Terms of Service govern your access to and use of SoulTrack (https://soultrack.app), an AI-powered music generation web application operated by an individual operator based in Japan. By accessing or using SoulTrack, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use the service.",
+      "intro": "These Terms of Service govern your access to and use of SoulTrack (https://soultrack.io), an AI-powered music generation web application operated by an individual operator based in Japan. By accessing or using SoulTrack, you agree to be bound by these Terms. If you do not agree to these Terms, please do not use the service.",
       "serviceTitle": "Service Description",
       "serviceBody": "SoulTrack is a free, registration-free web application that allows users to generate original audio tracks using the MusicGen AI model via Replicate's API. Users submit a text prompt describing the desired music, and the service returns an AI-generated audio track accessible via a public URL for 24 hours. No user account or email address is required to use the service.",
       "usageTitle": "Acceptable Use",
