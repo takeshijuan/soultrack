@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6.2] - 2026-03-23
+
+### Fixed
+- `app/layout.tsx` — added `openGraph.url` and `openGraph.siteName` to resolve `og:site_name` and `og:url` not provided warnings
+- `app/track/[id]/page.tsx` — added `openGraph.url: /track/${id}` for per-track canonical OG URL
+
 ## [0.1.6.1] - 2026-03-23
 
 ### Fixed

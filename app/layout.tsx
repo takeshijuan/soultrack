@@ -27,6 +27,8 @@ export async function generateMetadata() {
     openGraph: {
       title: t('title'),
       description: t('description'),
+      url: '/',
+      siteName: 'Soultrack',
       images: ['/api/og'],
     },
     twitter: { card: 'summary_large_image' },
