@@ -31,6 +31,7 @@ export default async function TermsPage() {
       <LegalSection title={t('contentTitle')} body={t('contentBody')} />
       <LegalSection title={t('limitationsTitle')} body={t('limitationsBody')} />
       <LegalSection title={t('disclaimerTitle')} body={t('disclaimerBody')} />
+      <LegalSection title={t('changesTitle')} body={t('changesBody')} />
       <LegalSection title={t('governingLawTitle')} body={t('governingLawBody')} />
       <LegalSection title={t('contactTitle')} body={t('contactBody', { contactEmail: CONTACT_EMAIL })} />
     </main>
