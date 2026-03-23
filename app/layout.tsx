@@ -32,6 +32,7 @@ export async function generateMetadata() {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale()
   const messages = await getMessages()
+  const t = await getTranslations('navigation')
 
   return (
     <html lang={locale}>
@@ -47,7 +48,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <div className="fixed top-4 left-4 z-50">
             <Link
               href="/"
-              aria-label="Soultrack ホームへ"
+              aria-label={t('homeLabel')}
               className="flex items-center justify-center p-2 -m-2"
               style={{
                 color: 'var(--emotion-hue, #00F5D4)',
