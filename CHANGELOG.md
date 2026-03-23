@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6.3] - 2026-03-23
+
+### Fixed
+- `app/layout.tsx` — expanded `twitter` object to include `title`, `description`, and `images`; fixes X (Twitter) card not displaying correctly due to reliance on broken Next.js fallback inheritance across layout/page hierarchy
+- `app/track/[id]/page.tsx` — added `twitter.images` explicitly to ensure per-track OG image is used in X card (not root layout's default)
+
 ## [0.1.6.2] - 2026-03-23
 
 ### Fixed
