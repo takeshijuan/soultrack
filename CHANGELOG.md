@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.6.1] - 2026-03-23
+
+### Fixed
+- `app/layout.tsx` — `metadataBase` fallback changed from `http://localhost:3000` to production URL (`VERCEL_URL` → `https://soultrack.io`); prevents `twitter:image` and OG tags from referencing localhost when `NEXT_PUBLIC_SITE_URL` is not set
+
 ## [0.1.6.0] - 2026-03-23
 
 ### Added
