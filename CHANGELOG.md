@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0.2] - 2026-03-23
+
+### Changed
+- `components/UserButton.tsx` — icon-only redesign: replaced text/pill UI with SVG icons + `getTranslations('navigation')` aria-labels; unauthed → user silhouette, authed → music note (my-tracks) + logout arrow
+- `components/LocaleSwitcher.tsx` — replaced 5-pill language selector with single globe SVG icon; click cycles en → ja → ko → zh → zh-TW; `aria-label` includes current locale code
+- `app/layout.tsx` — removed `w-px` divider between UserButton and LocaleSwitcher; `gap-3` → `gap-1` for icon-only density
+- `messages/{en,ja,ko,zh,zh-TW}.json` — added `navigation.login`, `navigation.myTracks`, `navigation.logout`, `navigation.switchLanguage` i18n keys
+
 ## [0.2.0.1] - 2026-03-23
 
 ### Changed
