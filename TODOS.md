@@ -49,6 +49,52 @@
 
 ---
 
+## SEO (追加分)
+
+### 動的サイトマップ（トラックページ含む）
+
+**Priority:** P2
+
+**What:** public track を集約する KV インデックス (`public:tracks`) を追加し、`sitemap.ts` から動的に全トラック URL を生成する
+
+**Why:** 現状はトラックページが `sitemap.xml` に含まれないため Googlebot の発見が SNS シェアリンク経由のみに限定される
+
+**Depends on:** TTL 問題の解決（未ログイントラックの永続化 or 認証必須化）
+
+---
+
+### 感情別ランディングページ
+
+**Priority:** P3
+
+**What:** `/emotion/[slug]` の静的 SEO ページ（calm, anxiety, hope 等 30 感情）
+
+**Why:** コンテンツ SEO なしでは検索流入が見込めない
+
+**Depends on:** SEO 流入の実績確認後に優先度判断
+
+---
+
+### ULID_REGEX の共有ユーティリティ化
+
+**Priority:** P2
+
+**What:** `app/api/og/route.tsx`・`app/api/status/[trackId]/route.ts`・`app/track/[id]/page.tsx` の3箇所に重複する `ULID_REGEX` を `lib/ulid.ts` 等に一元化する
+
+**Why:** 正規表現の修正時に3箇所の変更が必要になる。コードレビューで Important として指摘（cadf8a0）
+
+---
+
+### `getSiteUrl()` ユーティリティ化
+
+**Priority:** P2
+
+**What:** `app/layout.tsx`・`app/robots.ts`・`app/sitemap.ts`・`app/track/[id]/page.tsx` の4箇所に重複する siteUrl 解決ロジックを `lib/site-url.ts` 等に一元化する
+
+**Why:** フォールバック URL 変更時に4箇所の修正が必要になる。コードレビューで Important として指摘（cadf8a0）
+
+---
+
 
 ## Completed
 
