@@ -56,7 +56,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
 
         if (!response.ok) {
-          const errorBody = await response.text()
+          let errorBody: string
+          try {
+            const json = await response.json()
+            errorBody = JSON.stringify(json)
+          } catch {
+            errorBody = await response.text()
+          }
           console.error(`[auth] Resend API error: ${response.status}`, errorBody)
           throw new Error(`Resend API error: ${response.status}`)
         }
