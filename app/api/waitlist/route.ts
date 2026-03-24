@@ -17,12 +17,13 @@ export async function POST(req: NextRequest) {
   if (!email || typeof email !== 'string') {
     return Response.json({ error: 'email required' }, { status: 400 })
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+  const normalized = email.trim().toLowerCase()
+  if (normalized.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(normalized)) {
     return Response.json({ error: 'invalid email' }, { status: 400 })
   }
 
   try {
-    await addToWaitlist(email.toLowerCase().trim())
+    await addToWaitlist(normalized)
     return Response.json({ ok: true })
   } catch (e) {
     console.error('[waitlist] failed to save email:', e)

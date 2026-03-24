@@ -55,11 +55,25 @@ export default async function Home() {
       <EmotionShowcase />
 
       {/* Waitlist capture — early access */}
-      <section className="w-full max-w-xl mx-auto px-6 pb-8 text-center">
-        <p className="text-[var(--text-muted)] text-xs tracking-[0.3em] uppercase mb-4">
-          Early Access
-        </p>
-        <WaitlistForm />
+      <section className="w-full max-w-xl mx-auto px-6 pb-16 text-center">
+        {/* Subtle gradient separator from EmotionShowcase */}
+        <div
+          className="w-24 h-px mx-auto mb-10"
+          style={{ background: 'linear-gradient(90deg, transparent, var(--border-hover), transparent)' }}
+          aria-hidden="true"
+        />
+        <ScrollReveal delay={0.1}>
+          <p
+            className="text-xs tracking-[0.3em] uppercase mb-3 transition-colors duration-[800ms]"
+            style={{ color: 'var(--emotion-hue, #00F5D4)' }}
+          >
+            Early Access
+          </p>
+          <p className="text-[var(--text-muted)] text-sm mb-8 font-light tracking-wide">
+            Your emotions. Your soundtrack. First to know.
+          </p>
+          <WaitlistForm />
+        </ScrollReveal>
       </section>
 
       {/* Footer CTA */}
