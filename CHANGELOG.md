@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2.1] - 2026-03-24
+
+### Docs
+- `TODOS.md` — added "サインインメールのデザインポリッシュ" (Auth, P2) and "My Tracksページのデザインポリッシュ" (My Tracks, P2)
+
 ## [0.2.2.0] - 2026-03-24
 
 ### Added

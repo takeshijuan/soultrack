@@ -1,5 +1,29 @@
 # TODOs
 
+## My Tracks
+
+### My Tracksページのデザインポリッシュ
+
+**Priority:** P2
+
+**What:** `/my-tracks` ページのUIをSoultarck "Chromatic Emotion" デザインシステムに合わせてポリッシュする
+
+**Why:** 現在は機能実装優先で最低限のUIになっており、他ページ（LP・create・track）との一体感に欠ける。
+
+---
+
+## Auth
+
+### サインインメールのデザインポリッシュ
+
+**Priority:** P2
+
+**What:** Resend から送信されるマジックリンクメールのデザインをブランドに合わせてポリッシュする
+
+**Why:** 現在はResendのデフォルトテンプレートで送信されており、Soultarckのブランド（Chromatic Emotion）と統一感がない。メールが最初のブランド接点になるため、印象を揃えたい。
+
+---
+
 ## LP / EmotionShowcase
 
 ### LP 音声プレビュー機能
