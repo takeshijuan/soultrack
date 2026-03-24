@@ -46,6 +46,11 @@ export async function updateTrack(
   await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
 }
 
+// Waitlist: add email to persistent set (no TTL — intentional, leads must not expire)
+export async function addToWaitlist(email: string): Promise<void> {
+  await kv.sadd('waitlist:emails', email)
+}
+
 // Rate limiting: increment daily counter for IP, return current count
 export async function getRateLimitCount(ip: string): Promise<number> {
   try {
