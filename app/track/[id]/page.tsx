@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const title = track.title ? `${track.title} — Soultrack` : 'Soultrack'
   const description =
-    track.copy ??
+    track.copy ||
     (track.emotion ? `An AI-generated melody for ${track.emotion}` : 'Discover the music of your moment on Soultrack.')
 
   return {
@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     openGraph: {
       title,
       description,
+      siteName: 'Soultrack',
       url: `/track/${id}`,
       images: [`/api/og?id=${id}`],
     },
@@ -50,6 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function TrackPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  if (!ULID_REGEX.test(id)) notFound()
 
   // auth() と getTrack() を並列化（R6）
   const [session, track] = await Promise.all([
@@ -74,10 +76,10 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'AudioObject',
-    name: track.title ?? 'Soultrack',
+    name: track.title || 'Soultrack',
     description:
-      track.copy ??
-      (track.emotion ? `AI-generated music for ${track.emotion}` : undefined),
+      track.copy ||
+      (track.emotion ? `An AI-generated melody for ${track.emotion}` : undefined),
     url: `${siteUrl}/track/${id}`,
     // contentUrl は意図的に除外:
     //   - audioUrl は Replicate の署名付きURL (有効期限あり)
