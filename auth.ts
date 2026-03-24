@@ -9,5 +9,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   // strategy: "database" はEdge/middlewareでクラッシュする可能性があるため使用しない
   adapter: UpstashRedisAdapter(kv),
   session: { strategy: "jwt" },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user?.id) token.id = user.id
+      return token
+    },
+    session({ session, token }) {
+      if (token.id) session.user.id = token.id as string
+      return session
+    },
+  },
   ...authConfig,
 })
