@@ -58,12 +58,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
 
         if (!response.ok) {
+          // text() で先に読み、JSON パースを試みる（body 二重消費を回避）
+          const raw = await response.text()
           let errorBody: string
           try {
-            const json = await response.json()
-            errorBody = JSON.stringify(json)
+            errorBody = JSON.stringify(JSON.parse(raw))
           } catch {
-            errorBody = await response.text()
+            errorBody = raw
           }
           console.error(`[auth] Resend API error: ${response.status}`, errorBody)
           throw new Error(`Resend API error: ${response.status} — ${errorBody}`)
