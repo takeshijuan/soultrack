@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2.0] - 2026-03-24
+
+### Added
+- **SubmitButton client component** (`app/auth/_components/SubmitButton.tsx`) — `useFormStatus`-powered submit button with teal CTA (`#00F5D4`), animated spinner, and "Sending…" loading state; fully disabled while form is submitting
+
+### Changed
+- **Sign-in page** — teal envelope SVG icon, Clash Grotesk heading (`signInTitle`), glass-card form (`bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8`), teal focus ring on email input, `SubmitButton` replaces plain `<button>`
+- **Verify-email page** — float-animated teal envelope SVG replaces `✉️` emoji; heading upgraded to `font-display`
+- **Error page** — amber circle-X SVG icon, `font-display` heading, amber-styled dev error badge, teal "Try again" CTA matching the rest of the design system
+- `messages/{en,ja,ko,zh,zh-TW}.json` — added `auth.signInTitle` and `auth.submitLoading` i18n keys
+
+### Tests
+- `__tests__/SubmitButton.test.tsx` — new Vitest tests covering pending=false (submit text, enabled) and pending=true (loading text, disabled) states
+
 ## [0.2.1.0] - 2026-03-24
 
 ### Changed
