@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - **`AUTH_RESEND_KEY`** documented in `.env.local.example`
 
 ### Changed
-- **Custom `sendVerificationRequest`** (`auth.ts`) — overrides default Resend provider with branded email template via `@react-email/components` render; includes `AUTH_RESEND_KEY` guard, `https://` scheme validation (with `http://localhost` allowed in dev), hardcoded plaintext fallback, and structured error logging with JSON/text fallback
+- **Magic link emails now look like Soultrack** — the default Resend template has been replaced with a fully branded send; dark background, teal CTA, and DM Sans font match the app's Chromatic Emotion aesthetic end-to-end
 
 ## [0.2.3.0] - 2026-03-24
 
