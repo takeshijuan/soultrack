@@ -25,6 +25,39 @@
 
 ---
 
+## Waitlist / ウェイトリスト
+
+### ウェイトリストAPIのレートリミット
+
+**Priority:** P3
+
+**What:** `/api/waitlist` にIP単位のレートリミットを追加（`getRateLimitCount` パターンを再利用）
+
+**Why:** 現在は公開エンドポイントでレートリミットなし。スパムメールでKVが汚染されるリスク。
+`kv.sadd` の集合deduplicationで最悪ケースは限定的だが、将来的に修正が必要。
+
+**Depends on:** SNS公開後にスパムが問題になった場合に優先実装
+
+---
+
+### ウェイトリスト件数確認スクリプト
+
+**Priority:** P3
+
+**What:** `bun run waitlist:count`（または `tsx scripts/waitlist-count.ts`）で `kv.scard('waitlist:emails')` を叩き、登録件数をターミナルに表示するスクリプト
+
+**Why:** X ポスト後に「何人登録したか」をすぐ確認したい。Vercel KV ダッシュボードでも見られるが、CLI の方が速い
+
+**Pros:**
+- 実装 5 分（CC で 1 分）
+- KV 抽象レイヤーを使えば既存パターンに合致
+
+**Cons:**
+- `getWaitlistCount()` を `lib/kv.ts` に追加する必要がある
+
+**Depends on:** この PR マージ後、SNS 公開後すぐに欲しくなる可能性大
+
+---
 
 ## Completed
 

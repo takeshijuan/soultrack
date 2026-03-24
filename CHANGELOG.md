@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.7.0] - 2026-03-24
+
+### Added
+- `components/WaitlistForm.tsx` — 4-state email capture form (`idle | loading | success | error`) with double-submit prevention, loading disabled state, and "No spam · Unsubscribe anytime" note
+- `app/api/waitlist/route.ts` — POST endpoint that validates email format server-side (regex + null-body guard) and persists to Vercel KV via `kv.sadd` (Redis set, no TTL, deduplication built-in)
+- `lib/kv.ts` — `addToWaitlist(email)` abstraction to keep API routes from calling `@vercel/kv` directly
+- `app/page.tsx` — "Early Access" section below EmotionShowcase with WaitlistForm
+- `TODOS.md` — added waitlist rate limit (P3) and waitlist:count script (P3) to backlog
+
+### Fixed
+- `app/api/waitlist/route.ts` — separated JSON parse try/catch from KV try/catch so malformed body returns 400 (not 500); added null-body guard after successful parse
+
 ## [0.1.6.4] - 2026-03-23
 
 ### Changed
