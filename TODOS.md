@@ -51,15 +51,43 @@
 
 ## SEO (追加分)
 
-### 動的サイトマップ（トラックページ含む）
+### サイトマップ index 分割（50K URL 超過時）
+
+**Priority:** P3
+
+**What:** `sitemap:tracks` が 40,000 件を超えた場合に sitemap index に自動分割
+
+**Depends on:** トラック数の増加
+
+---
+
+### removeTrackFromSitemap（モデレーション対応）
+
+**Priority:** P3
+
+**What:** `zrem` でサイトマップから特定トラックを除外する関数追加
+
+**Depends on:** モデレーション/DMCA テイクダウン機能の必要性
+
+---
+
+### orphan processing トラックの検出・修復
+
+**Priority:** P3
+
+**What:** 認証済みユーザーの processing のまま放置されたトラックを定期検出し、done/failed に遷移
+
+**Depends on:** cron/background job インフラ
+
+---
+
+### トラックページのコンテンツ充実化
 
 **Priority:** P2
 
-**What:** public track を集約する KV インデックス (`public:tracks`) を追加し、`sitemap.ts` から動的に全トラック URL を生成する
+**What:** SEO 価値を高めるため、トラックページに感情説明文、関連トラック、音楽パラメータ等を追加
 
-**Why:** 現状はトラックページが `sitemap.xml` に含まれないため Googlebot の発見が SNS シェアリンク経由のみに限定される
-
-**Depends on:** TTL 問題の解決（未ログイントラックの永続化 or 認証必須化）
+**Why:** CEO レビュー: 現状は thin content（タイトル+コピー+プレイヤーのみ）で検索上位は困難
 
 ---
 
@@ -99,6 +127,12 @@
 ## Completed
 
 <!-- Items completed in PRs are moved here -->
+
+### 動的サイトマップ（トラックページ含む）
+
+**Completed:** v0.2.4.0 (2026-03-24)
+
+Redis sorted set `sitemap:tracks` で userId 付き + status=done のトラックをインデックス。`updateTrack(done)` と `saveTrackToLibrary(done)` にフック。`app/sitemap.ts` を ISR 動的生成に変更。backfill スクリプト付き。TTL 問題は userId フィルタで回避。
 
 ### EmotionShowcase テーマカラー単一ソース化
 
