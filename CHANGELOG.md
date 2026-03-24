@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3.0] - 2026-03-24
+
+### Added
+- **robots.txt** (`app/robots.ts`) — Next.js MetadataRoute-powered `/robots.txt` generation; disallows `/auth/`, `/api/`, `/my-tracks/`; references sitemap.xml
+- **sitemap.xml** (`app/sitemap.ts`) — static sitemap with 5 pages (`/`, `/create`, `/legal`, `/privacy`, `/terms`)
+- **JSON-LD AudioObject** on track pages — Schema.org structured data for Google Rich Results; XSS-safe via Unicode escaping; `contentUrl` excluded (Replicate signed URL risk)
+- **Create page metadata** (`app/create/layout.tsx`) — dedicated title/description for the create flow
+
+### Changed
+- **Track page SEO** (`app/track/[id]/page.tsx`) — dynamic title (`"Title — Soultrack"`), description (track copy → emotion fallback → default), OpenGraph with `siteName`, Twitter `summary_large_image` card
+- **React.cache deduplication** — `getTrack` wrapped with `React.cache` to prevent double KV fetch between `generateMetadata` and page render
+- **ULID validation** — `generateMetadata` and `TrackPage` now validate track ID format before KV lookup (matches `/api/og` guard)
+
+### Tests
+- `__tests__/track-page-metadata.test.ts` — 11 new tests covering ULID validation, title/description fallback chains, KV error handling
+
 ## [0.2.2.1] - 2026-03-24
 
 ### Docs
