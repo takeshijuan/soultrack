@@ -185,9 +185,11 @@
     "switchLanguage": "言語を変更"
   },
   "auth": {
+    "signInTitle": "Soultrackにサインイン",
     "signInSubtitle": "メールアドレスを入力するとログインリンクを送信します",
     "emailLabel": "メールアドレス",
     "submitButton": "ログインリンクを送信",
+    "submitLoading": "送信中...",
     "redirectHint": "トラックを保存するにはログインが必要です",
     "verifyHeading": "メールを確認してください",
     "verifyBody1": "ログインリンクを送信しました。",

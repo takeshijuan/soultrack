@@ -187,9 +187,11 @@
     "switchLanguage": "Switch language"
   },
   "auth": {
+    "signInTitle": "Sign in to Soultrack",
     "signInSubtitle": "Enter your email to receive a magic link",
     "emailLabel": "Email address",
     "submitButton": "Send login link",
+    "submitLoading": "Sending...",
     "redirectHint": "You need to sign in to save tracks",
     "verifyHeading": "Check your email",
     "verifyBody1": "We've sent you a login link.",

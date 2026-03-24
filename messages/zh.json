@@ -187,9 +187,11 @@
     "switchLanguage": "切换语言"
   },
   "auth": {
+    "signInTitle": "登录 Soultrack",
     "signInSubtitle": "输入您的邮箱以接收登录链接",
     "emailLabel": "电子邮件地址",
     "submitButton": "发送登录链接",
+    "submitLoading": "发送中...",
     "redirectHint": "保存曲目需要先登录",
     "verifyHeading": "请查看您的邮件",
     "verifyBody1": "我们已发送登录链接。",
