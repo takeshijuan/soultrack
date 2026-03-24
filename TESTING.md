@@ -18,6 +18,8 @@ npm run test:watch  # watch mode
 ```
 __tests__/
   EmotionShowcase.test.tsx    # UI interaction tests for emotion chip component
+  LocaleSwitcher.test.tsx     # Dropdown tests: open/close, 5 locale options, aria-selected, Escape/click-outside (9 tests)
+  SoultrackLogo.test.tsx      # SoultrackIcon SVG props, S-wave path, SoultrackLogo wordmark (8 tests)
   legal.test.tsx              # LegalSection component: renders title/body, heading level
   middleware.test.ts          # Unit tests for detectLocale() — 6 branch coverage
 

@@ -5,13 +5,13 @@ All notable changes to this project will be documented in this file.
 ## [0.2.1.0] - 2026-03-24
 
 ### Changed
-- `components/LocaleSwitcher.tsx` — replaced cycling globe icon with dropdown: globe + locale code trigger (`aria-haspopup="listbox"`, `aria-expanded`), framer-motion `AnimatePresence` 150ms fade+rise, listbox with `role="option"` + `aria-selected`, 44px touch targets, Escape key + click-outside to close, 5 locales (EN/JA/KO/ZH/ZH-TW) with teal accent on active
+- **Language switcher is now a dropdown** — clicking the globe + locale code opens a smooth framer-motion list of all 5 locales (EN/JA/KO/ZH/ZH-TW); teal accent on the active choice; Escape key and click-outside to dismiss; full keyboard/screen-reader accessible (`listbox` pattern)
 
 ### Fixed
-- `app/auth/signin/page.tsx`, `app/auth/verify/page.tsx`, `app/auth/error/page.tsx`, `app/my-tracks/page.tsx`, `components/DeleteTrackButton.tsx`, `components/SaveToLibraryButton.tsx` — all user-visible strings replaced with `useTranslations`/`getTranslations`; was hardcoded Japanese
+- Auth, library, and component pages now respect your language setting — sign-in, verify-email, error, my-tracks, save, and delete flows were previously hardcoded in Japanese
 
 ### Docs
-- `DESIGN.md` — added icon-only header decisions section documenting UserButton SVG icon choices and LocaleSwitcher globe-only rationale
+- `DESIGN.md` — added LocaleSwitcher dropdown decision to the decisions log
 
 ## [0.2.0.2] - 2026-03-23
 

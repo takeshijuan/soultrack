@@ -41,7 +41,7 @@ npm test         # run once
 npm run test:watch  # watch mode
 ```
 
-6 test files, 48 tests — see [TESTING.md](./TESTING.md) for details.
+8 test files, 57 tests — see [TESTING.md](./TESTING.md) for details.
 
 ## Tech Stack
 
