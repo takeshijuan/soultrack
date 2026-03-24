@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.8.0] - 2026-03-24
+
+### Changed
+- `components/WaitlistForm.tsx` — Early Access フォームにデザインポリッシュを適用: `AnimatePresence mode="wait"` による success/form 切替アニメーション、感情カラー連動の ambient glow ring、input focus 時の emotion-hue フォーカスリング (onFocus/onBlur)、ローディング中の 3点 bounce dot インジケーター、error メッセージの slide-in アニメーション
+- `app/page.tsx` — Early Access セクションに `ScrollReveal delay={0.1}` を追加、グラデーションセパレーター追加、"Early Access" ラベルを `--emotion-hue` 連動カラーに変更、サブテキスト "Your emotions. Your soundtrack. First to know." 追加
+- `app/globals.css` — `@keyframes dot-bounce` + `.dot-bounce` utility class 追加
+
+### Fixed
+- `app/api/waitlist/route.ts` — email バリデーションを正規化前に一本化 (`normalized` 変数)、TLD 最低2文字制約 (`\.[^\s@]{2,}`)、RFC 5321 の最大254文字上限を追加
+- `components/WaitlistForm.tsx` — fetch に 10秒 AbortController タイムアウトを追加（Vercel Function ハング時の UX デッドロック防止）
+
 ## [0.1.7.0] - 2026-03-24
 
 ### Added
