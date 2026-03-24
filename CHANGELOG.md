@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1.0] - 2026-03-24
+
+### Changed
+- `components/LocaleSwitcher.tsx` — replaced cycling globe icon with dropdown: globe + locale code trigger (`aria-haspopup="listbox"`, `aria-expanded`), framer-motion `AnimatePresence` 150ms fade+rise, listbox with `role="option"` + `aria-selected`, 44px touch targets, Escape key + click-outside to close, 5 locales (EN/JA/KO/ZH/ZH-TW) with teal accent on active
+
+### Fixed
+- `app/auth/signin/page.tsx`, `app/auth/verify/page.tsx`, `app/auth/error/page.tsx`, `app/my-tracks/page.tsx`, `components/DeleteTrackButton.tsx`, `components/SaveToLibraryButton.tsx` — all user-visible strings replaced with `useTranslations`/`getTranslations`; was hardcoded Japanese
+
+### Docs
+- `DESIGN.md` — added icon-only header decisions section documenting UserButton SVG icon choices and LocaleSwitcher globe-only rationale
+
 ## [0.2.0.2] - 2026-03-23
 
 ### Changed
