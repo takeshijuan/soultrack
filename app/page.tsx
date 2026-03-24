@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import EmotionShowcase from '@/components/EmotionShowcase'
+import WaitlistForm from '@/components/WaitlistForm'
 import HeroContent from '@/components/HeroContent'
 import ScrollReveal from '@/components/ScrollReveal'
 import { getTranslations } from 'next-intl/server'
@@ -52,6 +53,14 @@ export default async function Home() {
 
       {/* Interactive emotion demo */}
       <EmotionShowcase />
+
+      {/* Waitlist capture — early access */}
+      <section className="w-full max-w-xl mx-auto px-6 pb-8 text-center">
+        <p className="text-[var(--text-muted)] text-xs tracking-[0.3em] uppercase mb-4">
+          Early Access
+        </p>
+        <WaitlistForm />
+      </section>
 
       {/* Footer CTA */}
       <section className="w-full max-w-xl mx-auto px-6 pb-24 text-center">
