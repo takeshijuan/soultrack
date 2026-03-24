@@ -14,6 +14,7 @@ export interface TrackRecord {
   createdAt: number
   emotion?: string
   emotionColor?: string
+  userId?: string  // Auth.js user ID（存在する場合は永続保存）
 }
 
 // Generate a ULID-based track ID
@@ -21,12 +22,18 @@ export function generateTrackId(): string {
   return ulid()
 }
 
-// Save a new track record (TTL 24 hours = 86400 seconds)
+// Save a new track record
+// userId あり → 永続保存（TTLなし）
+// userId なし → TTL 24時間
 export async function saveTrack(
   trackId: string,
   record: TrackRecord,
 ): Promise<void> {
-  await kv.set(`track:${trackId}`, record, { ex: KV_TTL_24H })
+  if (record.userId) {
+    await kv.set(`track:${trackId}`, record)
+  } else {
+    await kv.set(`track:${trackId}`, record, { ex: KV_TTL_24H })
+  }
 }
 
 // Get a track record; returns null if not found
@@ -35,6 +42,7 @@ export async function getTrack(trackId: string): Promise<TrackRecord | null> {
 }
 
 // Update partial fields of an existing track record
+// userId 付きトラックは永続保存を維持する（TTL再付与しない）
 export async function updateTrack(
   trackId: string,
   updates: Partial<TrackRecord>,
@@ -42,8 +50,67 @@ export async function updateTrack(
   const existing = await getTrack(trackId)
   if (existing === null) return
   const updated: TrackRecord = { ...existing, ...updates }
-  const remainingTtl = Math.min(KV_TTL_24H, Math.max(1, KV_TTL_24H - Math.floor((Date.now() - existing.createdAt) / 1000)))
-  await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
+  if (updated.userId) {
+    await kv.set(`track:${trackId}`, updated)  // 永続（TTLなし）
+  } else {
+    const remainingTtl = Math.min(KV_TTL_24H, Math.max(1, KV_TTL_24H - Math.floor((Date.now() - existing.createdAt) / 1000)))
+    await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
+  }
+}
+
+// トラックをユーザーライブラリに保存
+// - kv.persist() は @vercel/kv に存在しないため kv.set で TTLなし上書き
+// - TrackRecord.userId を更新して永続化
+// - 重複保存を防ぐため既存チェックあり
+export async function saveTrackToLibrary(userId: string, trackId: string): Promise<void> {
+  const alreadySaved = await isTrackInLibrary(userId, trackId)
+  if (alreadySaved) return
+
+  const track = await getTrack(trackId)
+  if (!track) return
+
+  // 既存 userId がある場合は上書きしない（他ユーザーの所有権を保護）
+  // 複数ユーザーが同じトラックをライブラリに追加できるが、ownership は最初のユーザーに帰属
+  if (!track.userId) {
+    await kv.set(`track:${trackId}`, { ...track, userId })
+  }
+  try {
+    await kv.lpush(`user:${userId}:tracks`, trackId)
+  } catch (err) {
+    console.error('[saveTrackToLibrary] lpush failed, track saved but not indexed:', err)
+    // 部分的な失敗: trackレコードはuserId付きで永続化されているがリストには入っていない
+    // TODO: 定期的な整合性チェックでリカバリー
+  }
+}
+
+// ユーザーのライブラリにある trackId リスト取得（新しい順）
+// 上限50件。重複エントリ（TOCTOU競合時）を排除
+// TODO: スケール時は kv.lpos か Set型 (isTrackInLibrary O(1)化) を検討
+export async function getUserTrackIds(userId: string): Promise<string[]> {
+  const raw = (await kv.lrange(`user:${userId}:tracks`, 0, 49)) as string[]
+  return [...new Set(raw)]
+}
+
+// ユーザーのトラック一覧取得（trackId も返す — /my-tracks のリンクに必要）
+// TODO: スケール時は kv.mget でバッチ化してN+1解消
+export async function getUserTracks(
+  userId: string,
+): Promise<(TrackRecord & { trackId: string })[]> {
+  const ids = await getUserTrackIds(userId)
+  const records = await Promise.all(
+    ids.map(async (id) => {
+      const record = await getTrack(id)
+      return record ? { ...record, trackId: id } : null
+    }),
+  )
+  return records.filter((t): t is TrackRecord & { trackId: string } => t !== null)
+}
+
+// トラックがユーザーのライブラリにあるか確認
+// TODO: スケール時は kv.lpos でO(1)化を検討
+export async function isTrackInLibrary(userId: string, trackId: string): Promise<boolean> {
+  const ids = await getUserTrackIds(userId)
+  return ids.includes(trackId)
 }
 
 // Rate limiting: increment daily counter for IP, return current count

@@ -77,7 +77,15 @@ See `lib/emotions.ts` for full map.
 | 2026-03-20 | i18n via next-intl (no URL prefix) | Clean URLs (/track/[id] stays as-is); locale via ?lang= → cookie → Accept-Language → en |
 | 2026-03-20 | EMOTION_COLORS rekeyed to English slugs | Locale-independent Q2 validation; translated names in messages/[locale].json |
 | 2026-03-20 | Language switcher pill (top-right fixed) | Non-intrusive; sets NEXT_LOCALE cookie + router.refresh() for immediate re-render |
+| 2026-03-23 | Header icon-only redesign (UserButton + LocaleSwitcher → SVG icons) | Reduces visual noise; 3 icons replace text+pill cluster; aria-labels via i18n ensure full accessibility |
+| 2026-03-24 | LocaleSwitcher: globe + locale code trigger → framer-motion dropdown (listbox pattern) | Cycling was opaque — dropdown makes all 5 locales visible at once; `aria-haspopup="listbox"` + `aria-expanded` + `role="option"` gives full a11y; Escape + click-outside to close |
+| 2026-03-23 | UserButton: user silhouette (unauthed) / music note + logout arrow (authed) | Iconography matches product category (music); tap targets p-2 -m-1 for 40px effective area |
 | 2026-03-23 | Global footer (Privacy Policy + ToS links) | Legal disclosure requirement under 個人情報保護法 and Vercel Analytics data collection |
 | 2026-03-23 | Legal body text: text-white/70 (not text-muted) | WCAG AA compliance (4.5:1 contrast) for long-form legal reading |
 | 2026-03-23 | robots: noindex on /privacy, /terms, /legal | Legal pages excluded from search engine indexing |
 | 2026-03-23 | Legal JSON separated from UI JSON (legal-en.json, legal-ja.json) | Isolates legal content for easier human review and compliance audit |
+| 2026-03-23 | Magic link login via Auth.js v5 + Resend | Zero-friction registration — no password to remember or reset; Resend handles email deliverability |
+| 2026-03-23 | JWT session strategy (not database sessions) | Edge runtime compatibility: auth.config.ts (adapter-less) for middleware, auth.ts (full) for API routes |
+| 2026-03-23 | Unlimited tracks for authenticated users; 3/day for anonymous | Viral loop: users who hit the daily cap are motivated to register rather than abandon |
+| 2026-03-23 | TTL 24h for anonymous tracks; persistent for authenticated | Encourages account creation for track preservation while keeping KV storage bounded for anonymous users |
+| 2026-03-23 | CONTACT_EMAIL env var with contact@soultrack.io fallback | Complies with 個人情報保護法 without blocking deployment; override per environment in Vercel dashboard |

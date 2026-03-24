@@ -178,6 +178,42 @@
     ]
   },
   "navigation": {
-    "homeLabel": "Soultrack ホームへ"
+    "homeLabel": "Soultrack ホームへ",
+    "login": "ログイン",
+    "myTracks": "マイトラック",
+    "logout": "ログアウト",
+    "switchLanguage": "言語を変更"
+  },
+  "auth": {
+    "signInTitle": "Soultrackにサインイン",
+    "signInSubtitle": "メールアドレスを入力するとログインリンクを送信します",
+    "emailLabel": "メールアドレス",
+    "submitButton": "ログインリンクを送信",
+    "submitLoading": "送信中...",
+    "redirectHint": "トラックを保存するにはログインが必要です",
+    "verifyHeading": "メールを確認してください",
+    "verifyBody1": "ログインリンクを送信しました。",
+    "verifyBody2": "メールのリンクをクリックしてログインできます。",
+    "verifySpam": "メールが届かない場合はスパムフォルダを確認してください。",
+    "verifyChangeEmail": "← メールアドレスを変更する",
+    "errorHeading": "ログインに失敗しました",
+    "errorBody": "リンクの有効期限が切れているか、無効なリンクです。",
+    "errorRetry": "もう一度ログインする",
+    "errorBodyVerification": "リンクが期限切れか無効です。",
+    "errorBodyConfiguration": "サーバーの設定エラーです。サポートにお問い合わせください。",
+    "errorBodyAccessDenied": "アクセスが拒否されました。"
+  },
+  "library": {
+    "heading": "マイトラック",
+    "newTrack": "+ 新しいトラック",
+    "emptyMessage": "まだトラックがありません",
+    "emptyAction": "最初のトラックを作る",
+    "saveButton": "この曲を手元に残す",
+    "saving": "保存中...",
+    "saved": "✓ ライブラリに保存済み",
+    "saveError": "保存できませんでした。もう一度お試しください。",
+    "deleteLabel": "削除",
+    "undoDelete": "取り消す",
+    "deleteError": "削除できませんでした"
   }
 }

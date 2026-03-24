@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getTrack } from '@/lib/kv'
+import { getTrack, isTrackInLibrary } from '@/lib/kv'
 import TrackPlayer from '@/components/TrackPlayer'
+import SaveToLibraryButton from '@/components/SaveToLibraryButton'
 import { getTranslations } from 'next-intl/server'
+import { auth } from '@/auth'
 
 const HEX_RE = /^#[0-9A-Fa-f]{6}$/
 
@@ -22,14 +24,17 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function TrackPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+
+  // auth() と getTrack() を並列化（R6）
+  const [session, track] = await Promise.all([
+    auth(),
+    getTrack(id).catch(() => null),
+  ])
+  const userId = session?.user?.id
   const t = await getTranslations('emotions')
-  let track
-  try {
-    track = await getTrack(id)
-  } catch {
-    notFound()
-  }
   if (!track) notFound()
+
+  const alreadySaved = userId ? await isTrackInLibrary(userId, id) : false
 
   // XSS prevention: validate emotionColor before injecting into <style>
   const safeEmotionColor = HEX_RE.test(track.emotionColor ?? '')
@@ -70,6 +75,13 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
           copy={track.copy}
           emotion={track.emotion}
         />
+        <div className="mt-6 flex justify-center">
+          <SaveToLibraryButton
+            trackId={id}
+            isAuthenticated={!!userId}
+            initialSaved={alreadySaved}
+          />
+        </div>
       </div>
     </main>
   )

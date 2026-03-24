@@ -2,6 +2,87 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2.0] - 2026-03-24
+
+### Added
+- **SubmitButton client component** (`app/auth/_components/SubmitButton.tsx`) — `useFormStatus`-powered submit button with teal CTA (`#00F5D4`), animated spinner, and "Sending…" loading state; fully disabled while form is submitting
+
+### Changed
+- **Sign-in page** — teal envelope SVG icon, Clash Grotesk heading (`signInTitle`), glass-card form (`bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8`), teal focus ring on email input, `SubmitButton` replaces plain `<button>`
+- **Verify-email page** — float-animated teal envelope SVG replaces `✉️` emoji; heading upgraded to `font-display`
+- **Error page** — amber circle-X SVG icon, `font-display` heading, amber-styled dev error badge, teal "Try again" CTA matching the rest of the design system
+- `messages/{en,ja,ko,zh,zh-TW}.json` — added `auth.signInTitle` and `auth.submitLoading` i18n keys
+
+### Tests
+- `__tests__/SubmitButton.test.tsx` — new Vitest tests covering pending=false (submit text, enabled) and pending=true (loading text, disabled) states
+
+## [0.2.1.0] - 2026-03-24
+
+### Changed
+- **Language switcher is now a dropdown** — clicking the globe + locale code opens a smooth framer-motion list of all 5 locales (EN/JA/KO/ZH/ZH-TW); teal accent on the active choice; Escape key and click-outside to dismiss; full keyboard/screen-reader accessible (`listbox` pattern)
+
+### Fixed
+- Auth, library, and component pages now respect your language setting — sign-in, verify-email, error, my-tracks, save, and delete flows were previously hardcoded in Japanese
+
+### Docs
+- `DESIGN.md` — added LocaleSwitcher dropdown decision to the decisions log
+
+## [0.2.0.2] - 2026-03-23
+
+### Changed
+- `components/UserButton.tsx` — icon-only redesign: replaced text/pill UI with SVG icons + `getTranslations('navigation')` aria-labels; unauthed → user silhouette, authed → music note (my-tracks) + logout arrow
+- `components/LocaleSwitcher.tsx` — replaced 5-pill language selector with single globe SVG icon; click cycles en → ja → ko → zh → zh-TW; `aria-label` includes current locale code
+- `app/layout.tsx` — removed `w-px` divider between UserButton and LocaleSwitcher; `gap-3` → `gap-1` for icon-only density
+- `messages/{en,ja,ko,zh,zh-TW}.json` — added `navigation.login`, `navigation.myTracks`, `navigation.logout`, `navigation.switchLanguage` i18n keys
+
+## [0.2.0.1] - 2026-03-23
+
+### Changed
+- `app/layout.tsx` — added vertical divider (`w-px h-3.5 bg-white/10`) between `UserButton` and `LocaleSwitcher`; tightened gap from `gap-4` to `gap-3`
+- `components/UserButton.tsx` — unauthenticated login link styled as bordered ghost pill (`border border-white/20`, hover teal); authenticated state uses `|` separator with `gap-1` for compact grouping
+- `components/LocaleSwitcher.tsx` — active locale pill gains `bg-[#00F5D4]/10` fill for clearer selected state; border softened to `#00F5D4]/40`; inactive hover adds `hover:border-white/15`; padding enlarged to `px-2 py-1` for better tap targets
+
+## [0.2.0.0] - 2026-03-23
+
+### Added
+- **Auth.js v5 member system** — password-free magic link login via Resend; authenticated users get unlimited track generation and a persistent library
+- `auth.config.ts` — Edge-compatible Auth.js config (no adapter) for middleware
+- `auth.ts` — Full Auth.js setup with UpstashRedisAdapter (Vercel KV) + JWT session strategy
+- `app/api/auth/[...nextauth]/route.ts` — Auth.js route handlers
+- `app/api/save-track/[trackId]/route.ts` — POST to add track to library, DELETE to remove with undo-toast support; both handlers wrapped in try/catch
+- `app/auth/signin/page.tsx` — Magic link email input page with sr-only label and redirect context
+- `app/auth/verify/page.tsx` — Post-email check page with spam folder guidance and back link
+- `app/auth/error/page.tsx` — Auth error page (expired/invalid link) with retry link
+- `app/my-tracks/page.tsx` — Authenticated track library with emotionColor left-border accent and delete UX
+- `components/UserButton.tsx` — Server Component header auth UI (マイトラック / ログアウト links)
+- `components/SaveToLibraryButton.tsx` — Teal CTA to save track with error state
+- `components/DeleteTrackButton.tsx` — Optimistic delete with 3s undo toast and double-click guard
+- `lib/kv.ts` — `saveTrackToLibrary`, `getUserTrackIds` (dedup'd, 50-item cap), `getUserTracks`, `isTrackInLibrary`; `userId` field on `TrackRecord` for permanent storage
+- `lib/kv.test.ts` — 14 unit tests for all KV library functions including TTL branching, dedup, and expiry filtering
+- **Soultrack brand logo** — `SoultrackIcon` SVG component (S-wave mark) in `components/SoultrackLogo.tsx`
+- **Browser favicon** — `app/icon.tsx` (32×32 Edge ImageResponse, teal S-wave); replaces `app/favicon.ico`
+- **Apple Touch Icon** — `app/apple-icon.tsx` (180×180, dark background); for iOS home screen
+- **Emotion-reactive OG images** — `/api/og?id=[ulid]` applies track `emotionColor` to ambient orb and brand icon
+- **Privacy Policy page** (`/privacy`), **Terms of Service page** (`/terms`), **Legal hub** (`/legal`)
+- **Global footer** (`components/Footer.tsx`) — Privacy Policy / Terms of Service links + copyright
+- **`components/LegalSection.tsx`** — shared section component used by legal pages
+- **`messages/legal-en.json`** + **`messages/legal-ja.json`** — Japanese law compliant legal content
+- `navigation.homeLabel` i18n key added to all 6 locale files
+
+### Changed
+- `middleware.ts` — Wrapped with Auth.js `auth()` from `auth.config.ts` for Edge-safe session propagation
+- `app/api/generate/route.ts` — Authenticated users skip rate limit; auto-save to library via `kv.lpush`; `remainingToday` in response for unauthenticated CTAs
+- `app/layout.tsx` — Left-top `SoultrackIcon` + right-top `UserButton` + `LocaleSwitcher`; `clientMessages` excludes legal keys (~8KB/request saving); `suppressHydrationWarning` for Auth.js
+- `app/track/[id]/page.tsx` — `auth()` + `getTrack()` parallelized via `Promise.all`; `SaveToLibraryButton` with `initialSaved` state
+- `i18n/request.ts` — merge pipeline: `en.json + legal-en.json` → base; `ja` adds `legal-ja.json`; other locales use English legal fallback
+- `__tests__/middleware.test.ts` — Added `vi.mock('next-auth')` for Edge runtime compatibility
+
+### Fixed
+- `lib/kv.ts` — `saveTrackToLibrary` guards against overwriting existing track ownership (cross-user protection)
+- `components/DeleteTrackButton.tsx` — Added `'deleting'` state with `disabled` prop to prevent double-click race
+- `app/api/og/route.tsx` — wrapped `getTrack()` in try/catch; KV failure falls back to defaults
+- `app/icon.tsx`, `app/apple-icon.tsx` — added `revalidate = 86400` to avoid per-request Edge invocations
+
 ## [0.1.6.4] - 2026-03-23
 
 ### Changed
@@ -26,42 +107,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - `app/layout.tsx` — `metadataBase` fallback changed from `http://localhost:3000` to production URL (`VERCEL_URL` → `https://soultrack.io`); prevents `twitter:image` and OG tags from referencing localhost when `NEXT_PUBLIC_SITE_URL` is not set
-
-## [0.1.6.0] - 2026-03-23
-
-### Added
-- **Soultrack brand logo** — `SoultrackIcon` SVG component (S-wave mark: S letterform flowing as sine wave) in `components/SoultrackLogo.tsx`; exports both `SoultrackIcon` and `SoultrackLogo` (with optional wordmark)
-- **Emotion-reactive header logo** — fixed top-left icon in `app/layout.tsx` using `color: var(--emotion-hue, #00F5D4)` with 800ms transition; automatically reacts to emotion selection via existing CSS variable infrastructure (zero additional JS)
-- **Browser favicon** — `app/icon.tsx` (32×32 Edge ImageResponse, transparent background, teal S-wave); replaces deleted `app/favicon.ico`
-- **Apple Touch Icon** — `app/apple-icon.tsx` (180×180, dark background `#0A0A0F`, rounded corners); for iOS home screen
-- **Emotion-reactive OG images** — `/api/og?id=[ulid]` now extracts `emotionColor` from the track record and applies it to the ambient orb, brand icon, and tagline; default OG falls back to teal
-- `navigation.homeLabel` i18n key added to all 6 locale files (`en`, `ja`, `ko`, `zh`, `zh-TW`)
-
-### Changed
-- OG route brand icon added as sibling div above title (not nested inside)
-- OG tagline color now follows `emotionColor` instead of hardcoded `#00F5D4`
-
-### Fixed
-- `app/api/og/route.tsx` — wrapped `getTrack()` in try/catch; KV failure now gracefully falls back to defaults instead of returning HTTP 500
-- `app/icon.tsx`, `app/apple-icon.tsx` — added `revalidate = 86400` to avoid per-request Edge Function invocations
-- `app/layout.tsx` — `aria-label` now uses `getTranslations('navigation')` instead of hardcoded Japanese string
-
-## [0.1.5.0] - 2026-03-23
-
-### Added
-- **Privacy Policy page** (`/privacy`) — full English + Japanese legal text, robots noindex, `generateMetadata`
-- **Terms of Service page** (`/terms`) — full English + Japanese legal text, robots noindex, `generateMetadata`
-- **Legal hub page** (`/legal`) — navigation hub linking to Privacy and Terms pages
-- **Global footer** (`components/Footer.tsx`) — shows Privacy Policy / Terms of Service links + copyright on all pages via `app/layout.tsx`
-- **`components/LegalSection.tsx`** — shared section component (DRY) used by privacy and terms pages
-- **`messages/legal-en.json`** — English legal content (Privacy Policy + ToS) generated by legal-advisor agent; Japanese law compliant
-- **`messages/legal-ja.json`** — Japanese translation via DeepL; ko/zh-TW/zh fall back to English legal text
-
-### Changed
-- `i18n/request.ts` — updated merge pipeline: `en.json + legal-en.json` → `baseMessages`; `ja` locale additionally merges `legal-ja.json`; other locales receive English legal fallback
-
-### Notes
-- ⚠️ Contact email placeholder `[YOUR_EMAIL@DOMAIN.com]` must be replaced before publishing (legal requirement under 個人情報保護法)
 
 ## [0.1.4.1] - 2026-03-22
 

@@ -3,6 +3,7 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { Analytics } from '@vercel/analytics/react'
 import LocaleSwitcher from '@/components/LocaleSwitcher'
+import UserButton from '@/components/UserButton'
 import Link from 'next/link'
 import { SoultrackIcon } from '@/components/SoultrackLogo'
 import Footer from '@/components/Footer'
@@ -48,7 +49,13 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const { legal: _legal, ...clientMessages } = messages as Record<string, unknown>
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@600,700&display=swap"
+        />
+      </head>
       <body className={`${dmSans.variable} font-sans bg-[#0A0A0F] min-h-screen`}>
         <NextIntlClientProvider locale={locale} messages={clientMessages}>
           {/* ブランドアイコン: 左上固定、感情反応カラー、ambient と同じ 800ms transition */}
@@ -65,7 +72,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               <SoultrackIcon size={24} />
             </Link>
           </div>
-          <div className="fixed top-4 right-4 z-50">
+          <div className="fixed top-4 right-4 z-50 flex items-center gap-1">
+            <UserButton />
             <LocaleSwitcher />
           </div>
           {children}

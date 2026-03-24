@@ -180,6 +180,42 @@
     ]
   },
   "navigation": {
-    "homeLabel": "Go to Soultrack home"
+    "homeLabel": "Go to Soultrack home",
+    "login": "Sign in",
+    "myTracks": "My Tracks",
+    "logout": "Sign out",
+    "switchLanguage": "Switch language"
+  },
+  "auth": {
+    "signInTitle": "Sign in to Soultrack",
+    "signInSubtitle": "Enter your email to receive a magic link",
+    "emailLabel": "Email address",
+    "submitButton": "Send login link",
+    "submitLoading": "Sending...",
+    "redirectHint": "You need to sign in to save tracks",
+    "verifyHeading": "Check your email",
+    "verifyBody1": "We've sent you a login link.",
+    "verifyBody2": "Click the link in the email to log in.",
+    "verifySpam": "If you don't receive it, check your spam folder.",
+    "verifyChangeEmail": "← Change email address",
+    "errorHeading": "Login failed",
+    "errorBody": "The link has expired or is invalid.",
+    "errorRetry": "Try again",
+    "errorBodyVerification": "The link has expired or is invalid.",
+    "errorBodyConfiguration": "Server configuration error — please contact support.",
+    "errorBodyAccessDenied": "Access denied."
+  },
+  "library": {
+    "heading": "My Tracks",
+    "newTrack": "+ New Track",
+    "emptyMessage": "No tracks yet",
+    "emptyAction": "Create your first track",
+    "saveButton": "Keep this track",
+    "saving": "Saving...",
+    "saved": "✓ Saved to library",
+    "saveError": "Could not save. Please try again.",
+    "deleteLabel": "Delete",
+    "undoDelete": "Undo",
+    "deleteError": "Could not delete"
   }
 }

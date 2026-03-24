@@ -1,4 +1,10 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+
+// next-auth をモック（Edgeランタイム非互換のため）
+vi.mock('next-auth', () => ({
+  default: (_config: unknown) => ({ auth: vi.fn() }),
+}))
+
 import { detectLocale } from '@/middleware'
 
 const makeReq = (opts: { lang?: string; cookie?: string; acceptLang?: string }) => ({

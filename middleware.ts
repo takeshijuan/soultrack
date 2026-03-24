@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import NextAuth from 'next-auth'
+import authConfig from './auth.config'
+
+// auth.config.ts (adapterなし) を使うことでEdgeランタイムで安全に動作する
+const { auth } = NextAuth(authConfig)
 
 const LOCALES = ['en', 'ja', 'ko', 'zh', 'zh-TW'] as const
 type Locale = typeof LOCALES[number]
@@ -26,7 +31,7 @@ export function detectLocale(request: NextRequest): Locale {
   return 'en'
 }
 
-export function middleware(request: NextRequest) {
+export const middleware = auth((request) => {
   const locale = detectLocale(request)
   const response = NextResponse.next()
 
@@ -40,7 +45,7 @@ export function middleware(request: NextRequest) {
   }
 
   return response
-}
+})
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
