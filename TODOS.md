@@ -12,18 +12,6 @@
 
 ---
 
-## Auth
-
-### サインインメールのデザインポリッシュ
-
-**Priority:** P2
-
-**What:** Resend から送信されるマジックリンクメールのデザインをブランドに合わせてポリッシュする
-
-**Why:** 現在はResendのデフォルトテンプレートで送信されており、Soultarckのブランド（Chromatic Emotion）と統一感がない。メールが最初のブランド接点になるため、印象を揃えたい。
-
----
-
 ## LP / EmotionShowcase
 
 ### LP 音声プレビュー機能
@@ -105,6 +93,12 @@
 **Completed:** v0.1.6.0 (2026-03-23)
 
 `handleClick` のdeselect時に `setProperty('--emotion-hue', '#00F5D4')` していたハードコードを削除。`removeProperty` を使いCSS `:root` の `--emotion-hue: #00F5D4` に委譲するよう変更。unmount cleanup と同パターンに統一。テストも対応更新。
+
+### サインインメールのデザインポリッシュ
+
+**Completed:** v0.2.4.0 (2026-03-24)
+
+Resendデフォルトテンプレートを Chromatic Emotion ブランドのカスタム React Email テンプレートに置換。ダーク背景 `#0A0A0F`、teal CTA `#00F5D4`、DM Sans フォント。`sendVerificationRequest` をカスタム実装に切り替え。
 
 ### 連絡先メールアドレスを環境変数化
 
