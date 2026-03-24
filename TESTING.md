@@ -20,6 +20,8 @@ __tests__/
   EmotionShowcase.test.tsx    # UI interaction tests for emotion chip component
   legal.test.tsx              # LegalSection component: renders title/body, heading level
   middleware.test.ts          # Unit tests for detectLocale() — 6 branch coverage
+  WaitlistForm.test.tsx       # WaitlistForm: 4-state UX, double-submit prevention, fetch mocking
+  waitlist-api.test.ts        # POST /api/waitlist: email validation, normalization, KV error paths
 
 app/api/generate/
   generate.test.ts            # Allowlist validation: combined locale Q1/Q2/Q3 sets
