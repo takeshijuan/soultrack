@@ -8,7 +8,7 @@ export default async function SignInPage({
   searchParams: Promise<{ redirect?: string }>
 }) {
   const session = await auth()
-  if (session) redirect("/my-tracks")
+  if (session?.user?.id) redirect("/my-tracks")
 
   const { redirect: redirectTo } = await searchParams
   const t = await getTranslations('auth')
