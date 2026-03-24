@@ -34,7 +34,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!apiKey) throw new Error("AUTH_RESEND_KEY is not set")
 
         // セキュリティ: https:// のみ許可（javascript: scheme 等をブロック）
-        if (!url.startsWith("https://")) throw new Error("Invalid magic link URL scheme")
+        // ローカル開発では http://localhost を許可
+        const isLocalDev = process.env.NODE_ENV !== "production" && url.startsWith("http://localhost")
+        if (!url.startsWith("https://") && !isLocalDev) throw new Error("Invalid magic link URL scheme")
 
         const html = await render(React.createElement(MagicLinkEmail, { url }))
         // render() 2回呼び出しを避けるためプレーンテキストはハードコード
@@ -64,7 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             errorBody = await response.text()
           }
           console.error(`[auth] Resend API error: ${response.status}`, errorBody)
-          throw new Error(`Resend API error: ${response.status}`)
+          throw new Error(`Resend API error: ${response.status} — ${errorBody}`)
         }
       },
     },
