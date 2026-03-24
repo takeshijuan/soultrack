@@ -7,6 +7,8 @@ const mockKv = vi.hoisted(() => ({
   lrange: vi.fn(),
   lrem: vi.fn(),
   incr: vi.fn(),
+  zadd: vi.fn(),
+  zrange: vi.fn(),
 }))
 
 vi.mock('@vercel/kv', () => ({ kv: mockKv }))
@@ -19,6 +21,8 @@ import {
   getUserTrackIds,
   getUserTracks,
   isTrackInLibrary,
+  addTrackToSitemap,
+  getSitemapTrackIds,
 } from './kv'
 import type { TrackRecord } from './kv'
 
@@ -141,5 +145,68 @@ describe('isTrackInLibrary', () => {
   it('returns false when track not in list', async () => {
     mockKv.lrange.mockResolvedValue(['track-2'])
     expect(await isTrackInLibrary('user-1', 'track-1')).toBe(false)
+  })
+})
+
+describe('addTrackToSitemap', () => {
+  it('calls zadd with score=createdAt', async () => {
+    await addTrackToSitemap('track-1', 1700000000)
+    expect(mockKv.zadd).toHaveBeenCalledWith('sitemap:tracks', { score: 1700000000, member: 'track-1' })
+  })
+
+  it('swallows zadd errors (best-effort)', async () => {
+    mockKv.zadd.mockRejectedValue(new Error('KV error'))
+    await expect(addTrackToSitemap('track-1', 1700000000)).resolves.toBeUndefined()
+  })
+})
+
+describe('getSitemapTrackIds', () => {
+  it('returns track IDs from sorted set', async () => {
+    mockKv.zrange.mockResolvedValue(['track-a', 'track-b'])
+    const ids = await getSitemapTrackIds()
+    expect(ids).toEqual(['track-a', 'track-b'])
+    expect(mockKv.zrange).toHaveBeenCalledWith('sitemap:tracks', 0, -1)
+  })
+
+  it('returns empty array on error', async () => {
+    mockKv.zrange.mockRejectedValue(new Error('KV error'))
+    const ids = await getSitemapTrackIds()
+    expect(ids).toEqual([])
+  })
+})
+
+describe('updateTrack — sitemap hook', () => {
+  it('adds to sitemap when status=done and userId present', async () => {
+    mockKv.get.mockResolvedValue({ ...baseRecord, status: 'processing', userId: 'user-1' })
+    await updateTrack('track-1', { status: 'done' })
+    expect(mockKv.zadd).toHaveBeenCalledWith('sitemap:tracks', expect.objectContaining({ member: 'track-1' }))
+  })
+
+  it('does NOT add to sitemap when status=done but no userId', async () => {
+    mockKv.get.mockResolvedValue({ ...baseRecord, status: 'processing' })
+    await updateTrack('track-1', { status: 'done' })
+    expect(mockKv.zadd).not.toHaveBeenCalled()
+  })
+
+  it('does NOT add to sitemap when status=failed with userId', async () => {
+    mockKv.get.mockResolvedValue({ ...baseRecord, status: 'processing', userId: 'user-1' })
+    await updateTrack('track-1', { status: 'failed' })
+    expect(mockKv.zadd).not.toHaveBeenCalled()
+  })
+})
+
+describe('saveTrackToLibrary — sitemap hook', () => {
+  it('adds to sitemap when saving a done track without userId', async () => {
+    mockKv.lrange.mockResolvedValue([])
+    mockKv.get.mockResolvedValue({ ...baseRecord, status: 'done' })
+    await saveTrackToLibrary('user-1', 'track-1')
+    expect(mockKv.zadd).toHaveBeenCalledWith('sitemap:tracks', expect.objectContaining({ member: 'track-1' }))
+  })
+
+  it('does NOT add to sitemap when saving a processing track', async () => {
+    mockKv.lrange.mockResolvedValue([])
+    mockKv.get.mockResolvedValue({ ...baseRecord, status: 'processing' })
+    await saveTrackToLibrary('user-1', 'track-1')
+    expect(mockKv.zadd).not.toHaveBeenCalled()
   })
 })
