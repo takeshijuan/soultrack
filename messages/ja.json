@@ -196,7 +196,10 @@
     "verifyChangeEmail": "← メールアドレスを変更する",
     "errorHeading": "ログインに失敗しました",
     "errorBody": "リンクの有効期限が切れているか、無効なリンクです。",
-    "errorRetry": "もう一度ログインする"
+    "errorRetry": "もう一度ログインする",
+    "errorBodyVerification": "リンクが期限切れか無効です。",
+    "errorBodyConfiguration": "サーバーの設定エラーです。サポートにお問い合わせください。",
+    "errorBodyAccessDenied": "アクセスが拒否されました。"
   },
   "library": {
     "heading": "マイトラック",

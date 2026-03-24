@@ -198,7 +198,10 @@
     "verifyChangeEmail": "← Change email address",
     "errorHeading": "Login failed",
     "errorBody": "The link has expired or is invalid.",
-    "errorRetry": "Try again"
+    "errorRetry": "Try again",
+    "errorBodyVerification": "The link has expired or is invalid.",
+    "errorBodyConfiguration": "Server configuration error — please contact support.",
+    "errorBodyAccessDenied": "Access denied."
   },
   "library": {
     "heading": "My Tracks",

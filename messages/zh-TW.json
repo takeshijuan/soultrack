@@ -198,7 +198,10 @@
     "verifyChangeEmail": "← 更改電子郵件地址",
     "errorHeading": "登入失敗",
     "errorBody": "連結已過期或無效。",
-    "errorRetry": "重新登入"
+    "errorRetry": "重新登入",
+    "errorBodyVerification": "連結已過期或無效。",
+    "errorBodyConfiguration": "伺服器設定錯誤，請聯繫支援。",
+    "errorBodyAccessDenied": "存取遭拒。"
   },
   "library": {
     "heading": "我的曲目",

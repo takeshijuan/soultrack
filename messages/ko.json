@@ -198,7 +198,10 @@
     "verifyChangeEmail": "← 이메일 주소 변경",
     "errorHeading": "로그인 실패",
     "errorBody": "링크가 만료되었거나 유효하지 않습니다.",
-    "errorRetry": "다시 로그인하기"
+    "errorRetry": "다시 로그인하기",
+    "errorBodyVerification": "링크가 만료되었거나 유효하지 않습니다.",
+    "errorBodyConfiguration": "서버 구성 오류입니다. 지원팀에 문의하세요.",
+    "errorBodyAccessDenied": "접근이 거부되었습니다."
   },
   "library": {
     "heading": "내 트랙",
