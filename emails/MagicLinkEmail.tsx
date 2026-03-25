@@ -35,7 +35,6 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
         <meta name="color-scheme" content="light dark" />
         <meta name="supported-color-schemes" content="light dark" />
       </Head>
-      <Preview>Your Soultrack sign-in link is ready</Preview>
       <Body
         style={{
           backgroundColor: "#0A0A0F",
@@ -44,6 +43,7 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
           padding: 0,
         }}
       >
+        <Preview>Your Soultrack sign-in link is ready</Preview>
         <Container
           style={{
             maxWidth: "560px",
@@ -61,7 +61,7 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
                 color: "#00F5D4",
                 fontSize: "18px",
                 fontWeight: "700",
-                letterSpacing: "0.08em",
+                letterSpacing: "1px",
                 textTransform: "uppercase",
                 margin: 0,
               }}
@@ -96,7 +96,7 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
                 fontWeight: "700",
                 textAlign: "center",
                 margin: "0 0 12px 0",
-                lineHeight: "1.3",
+                lineHeight: "31px",
               }}
             >
               Sign in to Soultrack
@@ -137,7 +137,7 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
 
             <Hr
               style={{
-                borderColor: "rgba(255,255,255,0.07)",
+                borderColor: "#1E1E28",
                 borderStyle: "solid",
                 borderWidth: "1px",
                 margin: "28px 0",
@@ -154,18 +154,24 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
             >
               Or copy this link into your browser:
             </Text>
-            <Link
-              href={url}
+            <Text
               style={{
-                color: "#00F5D4",
-                fontSize: "11px",
-                display: "block",
                 textAlign: "center",
-                wordBreak: "break-all",
+                margin: 0,
               }}
             >
-              {url}
-            </Link>
+              <Link
+                href={url}
+                style={{
+                  color: "#00F5D4",
+                  fontSize: "11px",
+                  overflowWrap: "break-word",
+                  wordWrap: "break-word",
+                }}
+              >
+                {url}
+              </Link>
+            </Text>
 
             <Text
               style={{
