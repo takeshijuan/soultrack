@@ -2,6 +2,7 @@ import { kv } from '@vercel/kv'
 import { ulid } from 'ulid'
 
 const KV_TTL_24H = 86400
+const SITEMAP_TRACKS_KEY = 'sitemap:tracks'
 
 export type TrackStatus = 'processing' | 'done' | 'failed' | 'timeout'
 
@@ -56,6 +57,12 @@ export async function updateTrack(
     const remainingTtl = Math.min(KV_TTL_24H, Math.max(1, KV_TTL_24H - Math.floor((Date.now() - existing.createdAt) / 1000)))
     await kv.set(`track:${trackId}`, updated, { ex: remainingTtl })
   }
+
+  // status=done かつ userId 付きの場合のみサイトマップに追加
+  // （processing/failed/timeout のトラックをインデックスしない）
+  if (updated.status === 'done' && updated.userId) {
+    await addTrackToSitemap(trackId, updated.createdAt)
+  }
 }
 
 // トラックをユーザーライブラリに保存
@@ -73,6 +80,9 @@ export async function saveTrackToLibrary(userId: string, trackId: string): Promi
   // 複数ユーザーが同じトラックをライブラリに追加できるが、ownership は最初のユーザーに帰属
   if (!track.userId) {
     await kv.set(`track:${trackId}`, { ...track, userId })
+    if (track.status === 'done') {
+      await addTrackToSitemap(trackId, track.createdAt)
+    }
   }
   try {
     await kv.lpush(`user:${userId}:tracks`, trackId)
@@ -123,5 +133,29 @@ export async function getRateLimitCount(ip: string): Promise<number> {
     return count
   } catch {
     return Infinity
+  }
+}
+
+// ── Sitemap index ────────────────────────────────────────────
+
+/** サイトマップ sorted set にトラックを追加（冪等・best-effort） */
+export async function addTrackToSitemap(
+  trackId: string,
+  createdAt: number,
+): Promise<void> {
+  try {
+    await kv.zadd(SITEMAP_TRACKS_KEY, { score: createdAt, member: trackId })
+  } catch (err) {
+    console.error('[sitemap] zadd failed:', err)
+  }
+}
+
+/** サイトマップ用の全トラック ID を取得（createdAt 昇順） */
+export async function getSitemapTrackIds(): Promise<string[]> {
+  try {
+    return await kv.zrange<string[]>(SITEMAP_TRACKS_KEY, 0, -1)
+  } catch (err) {
+    console.error('[sitemap] zrange failed:', err)
+    return []
   }
 }

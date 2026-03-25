@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5.0] - 2026-03-25
+
+### Added
+- **Dynamic sitemap** (`app/sitemap.ts`) — track pages from KV sorted set `sitemap:tracks`; ISR with 1-hour revalidation; ULID `decodeTime` for `lastModified`; try/catch for invalid ULID resilience
+- **Sitemap KV index** (`lib/kv.ts`) — `addTrackToSitemap`/`getSitemapTrackIds` using Redis sorted set (`zadd`/`zrange`); hooks in `updateTrack` (status=done + userId) and `saveTrackToLibrary`
+- **Backfill script** (`scripts/backfill-sitemap.ts`) — one-off script to index existing permanent tracks (userId + status=done) with per-record error handling
+
+### Changed
+- **Sitemap scope** — removed `legal`, `privacy`, `terms` pages (already have `robots: { index: false }` metadata)
+
+### Tests
+- `lib/kv.test.ts` — 8 new tests for sitemap index functions (zadd/zrange), updateTrack hook conditions, saveTrackToLibrary hook conditions
+
 ## [0.2.4.0] - 2026-03-24
 
 ### Added
