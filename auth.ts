@@ -1,12 +1,13 @@
 import NextAuth from "next-auth"
+import ResendProvider from "next-auth/providers/resend"
+import { render } from "@react-email/components"
 import { UpstashRedisAdapter } from "@auth/upstash-redis-adapter"
 import { kv } from "@vercel/kv"
 import authConfig from "./auth.config"
+import { MagicLinkEmail } from "@/emails/MagicLinkEmail"
+import React from "react"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  // UpstashRedisAdapter uses @vercel/kv (Upstash Redis compatible client)
-  // strategy: "jwt" — JWTクッキーでセッション管理（Edge互換）
-  // strategy: "database" はEdge/middlewareでクラッシュする可能性があるため使用しない
   adapter: UpstashRedisAdapter(kv),
   session: { strategy: "jwt" },
   callbacks: {
@@ -20,4 +21,55 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   ...authConfig,
+  // providers を後に宣言して authConfig.providers を上書き
+  // ResendProvider() の返り値をスプレッドして sendVerificationRequest だけ差し替える
+  // → id, type, name, from, maxAge, options フィールドを正しく継承する安全なパターン
+  // （auth.config.ts はEdgeランタイム互換を維持するため変更しない）
+  providers: [
+    {
+      ...ResendProvider({ from: "Soultrack <noreply@soultrack.io>" }),
+      sendVerificationRequest: async ({ identifier, url }) => {
+        // AUTH_RESEND_KEY が正しい環境変数名（next-auth v5 の命名規則）
+        const apiKey = process.env.AUTH_RESEND_KEY
+        if (!apiKey) throw new Error("AUTH_RESEND_KEY is not set")
+
+        // セキュリティ: https:// のみ許可（javascript: scheme 等をブロック）
+        // ローカル開発では http://localhost を許可
+        const isLocalDev = process.env.NODE_ENV !== "production" && url.startsWith("http://localhost")
+        if (!url.startsWith("https://") && !isLocalDev) throw new Error("Invalid magic link URL scheme")
+
+        const html = await render(React.createElement(MagicLinkEmail, { url }))
+        // render() 2回呼び出しを避けるためプレーンテキストはハードコード
+        const text = `Sign in to Soultrack:\n\n${url}\n\nThis link expires in 24 hours.\n\nIf you did not request this email, you can safely ignore it.`
+
+        const response = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Soultrack <noreply@soultrack.io>",
+            to: identifier,
+            subject: "Sign in to Soultrack",
+            html,
+            text,
+          }),
+        })
+
+        if (!response.ok) {
+          // text() で先に読み、JSON パースを試みる（body 二重消費を回避）
+          const raw = await response.text()
+          let errorBody: string
+          try {
+            errorBody = JSON.stringify(JSON.parse(raw))
+          } catch {
+            errorBody = raw
+          }
+          console.error(`[auth] Resend API error: ${response.status}`, errorBody)
+          throw new Error(`Resend API error: ${response.status} — ${errorBody}`)
+        }
+      },
+    },
+  ],
 })

@@ -41,7 +41,15 @@ npm test         # run once
 npm run test:watch  # watch mode
 ```
 
-8 test files, 57 tests — see [TESTING.md](./TESTING.md) for details.
+11 test files, 74 tests — see [TESTING.md](./TESTING.md) for details.
+
+## Email Template Development
+
+```bash
+npm run email:dev  # local preview server for email templates (react-email)
+```
+
+Open [http://localhost:3001](http://localhost:3001) to preview and iterate on `emails/MagicLinkEmail.tsx`.
 
 ## Tech Stack
 
