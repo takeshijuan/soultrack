@@ -23,9 +23,13 @@ __tests__/
   SubmitButton.test.tsx       # SubmitButton: pending=false (submit text, enabled) + pending=true (loading, disabled)
   legal.test.tsx              # LegalSection component: renders title/body, heading level
   middleware.test.ts          # Unit tests for detectLocale() — 6 branch coverage
+  track-page-metadata.test.ts # ULID validation, title/description fallback chains, KV error handling (11 tests)
 
 app/api/generate/
   generate.test.ts            # Allowlist validation: combined locale Q1/Q2/Q3 sets
+
+emails/
+  MagicLinkEmail.test.tsx     # HTML render, plaintext render, brand color, CTA href correctness (4 tests)
 
 lib/
   prompts.test.ts             # Unit tests for parseClaudeResponse() and buildClaudePrompt()

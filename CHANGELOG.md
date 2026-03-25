@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.4.0] - 2026-03-24
+## [0.2.5.0] - 2026-03-25
 
 ### Added
 - **Dynamic sitemap** (`app/sitemap.ts`) — track pages from KV sorted set `sitemap:tracks`; ISR with 1-hour revalidation; ULID `decodeTime` for `lastModified`; try/catch for invalid ULID resilience
@@ -14,6 +14,17 @@ All notable changes to this project will be documented in this file.
 
 ### Tests
 - `lib/kv.test.ts` — 8 new tests for sitemap index functions (zadd/zrange), updateTrack hook conditions, saveTrackToLibrary hook conditions
+
+## [0.2.4.0] - 2026-03-24
+
+### Added
+- **Custom magic link email** (`emails/MagicLinkEmail.tsx`) — Chromatic Emotion branded React Email template with dark background (`#0A0A0F`), teal CTA button (`#00F5D4`), DM Sans web font, color-scheme dark mode meta, and fallback URL for email clients without button support
+- **Email template tests** (`emails/MagicLinkEmail.test.tsx`) — 4 Vitest tests covering HTML render, plaintext render, brand color, and CTA href correctness
+- **`email:dev` script** — `react-email` + `@react-email/preview-server` for local email template iteration (`npm run email:dev`)
+- **`AUTH_RESEND_KEY`** documented in `.env.local.example`
+
+### Changed
+- **Magic link emails now look like Soultrack** — the default Resend template has been replaced with a fully branded send; dark background, teal CTA, and DM Sans font match the app's Chromatic Emotion aesthetic end-to-end
 
 ## [0.2.3.0] - 2026-03-24
 
