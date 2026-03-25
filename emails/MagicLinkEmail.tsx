@@ -74,18 +74,17 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
           <Section
             style={{
               backgroundColor: "#111118",
-              borderRadius: "16px",
               border: "1px solid #1E1E28",
               padding: "40px",
             }}
           >
             {/* Teal アクセントライン */}
-            <Section
+            <Hr
               style={{
-                height: "2px",
-                backgroundColor: "#00F5D4",
-                borderRadius: "2px",
-                marginBottom: "32px",
+                borderColor: "#00F5D4",
+                borderStyle: "solid",
+                borderWidth: "1px",
+                margin: "0 0 32px 0",
               }}
             />
 
@@ -124,11 +123,9 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
                 fontWeight: "700",
                 fontSize: "15px",
                 padding: "14px 32px",
-                borderRadius: "12px",
                 display: "block",
                 textAlign: "center",
                 textDecoration: "none",
-                boxSizing: "border-box",
                 width: "100%",
               }}
             >
@@ -165,8 +162,6 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
                 style={{
                   color: "#00F5D4",
                   fontSize: "11px",
-                  overflowWrap: "break-word",
-                  wordWrap: "break-word",
                 }}
               >
                 {url}
