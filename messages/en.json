@@ -45,7 +45,7 @@
     "copyLink": "Copy Link",
     "copied": "Copied!",
     "shareOnX": "Share on X",
-    "xTemplate": "\"{title}\" — the music of my moment 🎵 #Soultrack",
+    "xTemplate": "I told AI how I feel ({emotion}) and it made me a song.\n\n\"{title}\"\n\n#AImusic #Soultrack",
     "createCta": "Create your own track →",
     "createSubtext": "Your emotion. Your melody."
   },

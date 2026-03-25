@@ -45,7 +45,7 @@
     "copyLink": "複製連結",
     "copied": "已複製！",
     "shareOnX": "在 X 上分享",
-    "xTemplate": "\"{title}\" — 我此刻的音樂 🎵 #Soultrack",
+    "xTemplate": "告訴AI我現在的心情（{emotion}），它幫我寫了一首歌。\n\n「{title}」\n\n#AI音樂 #Soultrack",
     "createCta": "創建你自己的曲目 →",
     "createSubtext": "你的情感。你的旋律。"
   },

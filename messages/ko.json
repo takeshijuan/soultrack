@@ -45,7 +45,7 @@
     "copyLink": "링크 복사",
     "copied": "복사 완료!",
     "shareOnX": "X에서 공유",
-    "xTemplate": "\"{title}\" — 내 순간의 음악 🎵 #Soultrack",
+    "xTemplate": "AI에게 지금 기분({emotion})을 말했더니 이런 노래가 나왔다.\n\n\"{title}\"\n\n#AI음악 #Soultrack",
     "createCta": "나만의 트랙 만들기 →",
     "createSubtext": "당신의 감정. 당신의 멜로디."
   },
