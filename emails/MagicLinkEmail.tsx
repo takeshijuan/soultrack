@@ -209,3 +209,5 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
 MagicLinkEmail.PreviewProps = {
   url: "https://soultrack.io/api/auth/callback/resend?token=preview&email=user%40example.com",
 } satisfies MagicLinkEmailProps
+
+export default MagicLinkEmail
