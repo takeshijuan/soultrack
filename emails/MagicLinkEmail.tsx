@@ -70,7 +70,8 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
             </Text>
           </Section>
 
-          {/* メインカード */}
+          {/* メインカード — borderRadius は Outlook 非対応だが他クライアントで有効 */}
+          {/* Outlook では角丸なしのフォールバック（許容範囲） */}
           <Section
             style={{
               backgroundColor: "#111118",
@@ -78,12 +79,12 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
               padding: "40px",
             }}
           >
-            {/* Teal アクセントライン */}
+            {/* Teal アクセントライン — height の代わりに border-top を使用（Yahoo! Mail 互換） */}
             <Hr
               style={{
-                borderColor: "#00F5D4",
                 borderStyle: "solid",
-                borderWidth: "1px",
+                borderColor: "#00F5D4",
+                borderWidth: "2px 0 0 0",
                 margin: "0 0 32px 0",
               }}
             />
@@ -126,7 +127,6 @@ export function MagicLinkEmail({ url }: MagicLinkEmailProps) {
                 display: "block",
                 textAlign: "center",
                 textDecoration: "none",
-                width: "100%",
               }}
             >
               Sign in to Soultrack
