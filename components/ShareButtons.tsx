@@ -8,15 +8,18 @@ import { useTranslations } from 'next-intl'
 interface ShareButtonsProps {
   trackId: string
   title: string
+  emotion?: string
 }
 
-export default function ShareButtons({ trackId, title }: ShareButtonsProps) {
+export default function ShareButtons({ trackId, title, emotion }: ShareButtonsProps) {
   const t = useTranslations('share')
+  const te = useTranslations('emotions')
   const [copied, setCopied] = useState(false)
 
   const shareOnX = () => {
     const url  = `${window.location.origin}/track/${trackId}`
-    const text = encodeURIComponent(t('xTemplate', { title }))
+    const emotionLabel = emotion && te.has(emotion) ? te(emotion) : emotion
+    const text = encodeURIComponent(t('xTemplate', { title, emotion: emotionLabel ?? '' }))
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`, '_blank')
   }
 

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.5.1] - 2026-03-26
+
+### Changed
+- **X share text** — emotion-aware storytelling template across all 5 locales; "I told AI how I feel (calm) and it made me a song" format replaces generic "the music of my moment"; added `#AImusic` / `#AI音楽` hashtags for discoverability
+- **Japanese share template** — added missing `xTemplate` key (previously fell back to English)
+- **ShareButtons** — now receives `emotion` prop from `TrackPlayer` and resolves localized emotion label via `useTranslations('emotions')`
+
 ## [0.2.5.0] - 2026-03-25
 
 ### Added

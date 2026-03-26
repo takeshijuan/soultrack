@@ -248,7 +248,7 @@ export default function TrackPlayer({
           className="hidden"
         />
 
-        <ShareButtons trackId={trackId} title={title} />
+        <ShareButtons trackId={trackId} title={title} emotion={emotion} />
       </motion.div>
     </>
   )

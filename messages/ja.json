@@ -44,6 +44,7 @@
     "copyLink": "リンクをコピー",
     "copied": "コピーしました！",
     "shareOnX": "Xで共有する",
+    "xTemplate": "AIに今の気持ち（{emotion}）を伝えたら、こんな曲ができた。\n\n「{title}」\n\n#AI音楽 #Soultrack",
     "createCta": "自分のトラックを作る →",
     "createSubtext": "あなたの感情から、あなただけの音楽を"
   },
