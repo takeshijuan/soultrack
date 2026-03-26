@@ -6,6 +6,7 @@ import { getRateLimitCount, saveTrack, generateTrackId } from '@/lib/kv'
 import { getMusicProvider } from '@/lib/music'
 import { buildClaudePrompt, parseClaudeResponse } from '@/lib/prompts'
 import { EMOTION_COLORS } from '@/lib/emotions'
+import { resolveLocale } from '@/lib/locale'
 import { auth } from '@/auth'
 import enMessages from '@/messages/en.json'
 import jaMessages from '@/messages/ja.json'
@@ -60,8 +61,15 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // 4. Claude: get musicPrompt, title, copy
-  const { system, user } = buildClaudePrompt(q1, q2, q3)
+  // 4. Resolve locale: NEXT_LOCALE cookie → Accept-Language → 'en'
+  // Middleware doesn't run on /api routes (excluded by matcher), so read directly
+  const locale = resolveLocale(
+    request.cookies.get('NEXT_LOCALE')?.value,
+    request.headers.get('accept-language') ?? undefined,
+  )
+
+  // 5. Claude: get musicPrompt, title, copy
+  const { system, user } = buildClaudePrompt(q1, q2, q3, locale)
 
   let musicPrompt: string
   let title: string

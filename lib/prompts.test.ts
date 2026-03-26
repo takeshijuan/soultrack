@@ -60,7 +60,7 @@ describe('parseClaudeResponse', () => {
 })
 
 describe('buildClaudePrompt', () => {
-  it('returns system and user strings', () => {
+  it('returns system and user strings with user inputs', () => {
     const { system, user } = buildClaudePrompt('再出発', '穏やか', '背中を押す曲')
     expect(typeof system).toBe('string')
     expect(system.length).toBeGreaterThan(0)
@@ -68,5 +68,43 @@ describe('buildClaudePrompt', () => {
     expect(user).toContain('再出発')
     expect(user).toContain('穏やか')
     expect(user).toContain('背中を押す曲')
+  })
+
+  it('defaults to English locale', () => {
+    const { system, user } = buildClaudePrompt('test', 'calm', 'soft')
+    expect(system).toContain('Generate the title and copy in English')
+    expect(system).toContain('musicPrompt must always be in English')
+    expect(user).toContain('Between Fog and Light')
+  })
+
+  it('generates Japanese prompt for ja locale', () => {
+    const { system, user } = buildClaudePrompt('test', 'calm', 'soft', 'ja')
+    expect(system).toContain('Generate the title and copy in Japanese')
+    expect(user).toContain('霧と光の間で')
+  })
+
+  it('generates Korean prompt for ko locale', () => {
+    const { system, user } = buildClaudePrompt('test', 'calm', 'soft', 'ko')
+    expect(system).toContain('Generate the title and copy in Korean')
+    expect(user).toContain('안개와 빛 사이에서')
+  })
+
+  it('generates Simplified Chinese prompt for zh locale', () => {
+    const { system, user } = buildClaudePrompt('test', 'calm', 'soft', 'zh')
+    expect(system).toContain('Generate the title and copy in Simplified Chinese')
+    expect(user).toContain('雾与光之间')
+  })
+
+  it('generates Traditional Chinese prompt for zh-TW locale', () => {
+    const { system, user } = buildClaudePrompt('test', 'calm', 'soft', 'zh-TW')
+    expect(system).toContain('Generate the title and copy in Traditional Chinese')
+    expect(user).toContain('霧與光之間')
+  })
+
+  it('always includes English musicPrompt example regardless of locale', () => {
+    for (const locale of ['en', 'ja', 'ko', 'zh', 'zh-TW'] as const) {
+      const { user } = buildClaudePrompt('test', 'calm', 'soft', locale)
+      expect(user).toContain('melancholic ambient piano')
+    }
   })
 })
