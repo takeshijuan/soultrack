@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.7.0] - 2026-03-26
+
+### Fixed
+- **OG meta tags** — comprehensive fix for X (Twitter) card display: added `og:image:width`, `og:image:height`, `og:image:type`, `og:image:alt`, and `og:type` to both track pages and root layout; images format changed from string array to object array with explicit dimensions (1200x630)
+- **OG image resilience** — added try-catch fallback in `/api/og` route so rendering failures return a simple branded image instead of 500
+- **OG cache strategy** — added `Cache-Control` headers with conditional caching: 24h for successfully loaded tracks, 60s for KV-failure fallback to prevent stale cache poisoning
+
+### Tests
+- **OG metadata regression tests** — 2 new tests verifying `og:image` dimensions/type and `twitter:image` dimensions in `generateMetadata` output
+
 ## [0.2.6.1] - 2026-03-26
 
 ### Added
