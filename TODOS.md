@@ -111,6 +111,25 @@
 
 ---
 
+### hreflang / alternate タグ追加
+
+**Priority:** P2
+
+**What:** 5ロケール（en, ja, ko, zh, zh-TW）に対応する hreflang タグと canonical URL を全ページに設定
+
+**Why:** autoplan CEOレビュー + Engレビューで指摘。多言語対応しているがhreflangがないため、Googleが適切なロケール版を返せない。法的ページのインデックス化に伴い影響が拡大。
+
+---
+
+### ホームページ / `/create` の JSON-LD 構造化データ
+
+**Priority:** P3
+
+**What:** トップページに MusicApplication、`/create` に WebApplication の JSON-LD を追加
+
+**Why:** autoplan レビューで指摘。`/track/[id]` には AudioObject JSON-LD があるが、主要ページにはない。
+
+---
 
 ## Completed
 

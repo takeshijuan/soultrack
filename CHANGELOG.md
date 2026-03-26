@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.6.0] - 2026-03-26
+
+### Added
+- **Custom 404 page** (`app/not-found.tsx`) — proper 404 response for all unknown URLs (`/$`, `/&`, etc.) instead of default Next.js fallback; fixes GSC "見つかりませんでした（404）" reports
+- **CreateForm client component** (`components/CreateForm.tsx`) — extracted interactive form/error/loading logic as client island for `/create` SSR
+
+### Changed
+- **Legal pages now indexable** — removed `robots: { index: false, follow: false }` from `/privacy` and `/terms`; added both to sitemap with yearly change frequency and 0.3 priority
+- **/create page SSR** — converted from full client component to Server Component with SSR heading/subtext; improves Googlebot content visibility and fixes GSC "クロール済み - インデックス未登録"
+
 ## [0.2.5.1] - 2026-03-26
 
 ### Changed

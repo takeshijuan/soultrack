@@ -7,7 +7,6 @@ export async function generateMetadata() {
   return {
     title: `${t('title')} — Soultrack`,
     description: 'Terms and conditions for using Soultrack.',
-    robots: { index: false, follow: false },
   }
 }
 
