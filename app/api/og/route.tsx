@@ -129,25 +129,33 @@ export async function GET(request: NextRequest) {
     )
   } catch {
     // Fallback: return a simple branded OG image instead of 500
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: '1200px',
-            height: '630px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: '#0A0A0F',
-            color: '#F0F0F8',
-            fontSize: '48px',
-            fontFamily: 'sans-serif',
-          }}
-        >
-          Soultrack
-        </div>
-      ),
-      { width: 1200, height: 630 },
-    )
+    try {
+      return new ImageResponse(
+        (
+          <div
+            style={{
+              width: '1200px',
+              height: '630px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#0A0A0F',
+              color: '#F0F0F8',
+              fontSize: '48px',
+              fontFamily: 'sans-serif',
+            }}
+          >
+            Soultrack
+          </div>
+        ),
+        {
+          width: 1200,
+          height: 630,
+          headers: { 'Cache-Control': 'public, max-age=60, s-maxage=60' },
+        },
+      )
+    } catch {
+      return new Response('OG image generation failed', { status: 500 })
+    }
   }
 }
