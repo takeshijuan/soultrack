@@ -2,33 +2,21 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import NextAuth from 'next-auth'
 import authConfig from './auth.config'
+import { resolveLocale, VALID_LOCALES, type Locale } from '@/lib/locale'
 
 // auth.config.ts (adapterなし) を使うことでEdgeランタイムで安全に動作する
 const { auth } = NextAuth(authConfig)
 
-const LOCALES = ['en', 'ja', 'ko', 'zh', 'zh-TW'] as const
-type Locale = typeof LOCALES[number]
-
 export function detectLocale(request: NextRequest): Locale {
-  // 1. ?lang= query param
+  // ?lang= query param takes highest priority (middleware-only, not available in API routes)
   const langParam = request.nextUrl.searchParams.get('lang')
-  if (langParam && (LOCALES as readonly string[]).includes(langParam)) return langParam as Locale
+  if (langParam && (VALID_LOCALES as readonly string[]).includes(langParam)) return langParam as Locale
 
-  // 2. NEXT_LOCALE cookie
-  const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value
-  if (cookieLocale && (LOCALES as readonly string[]).includes(cookieLocale)) return cookieLocale as Locale
-
-  // 3. Accept-Language header
-  const acceptLang = request.headers.get('accept-language') ?? ''
-  for (const raw of acceptLang.split(',')) {
-    const tag = raw.split(';')[0].trim().toLowerCase()
-    if (tag.startsWith('zh-tw') || tag.startsWith('zh-hant')) return 'zh-TW'
-    if (tag.startsWith('zh')) return 'zh'
-    if (tag.startsWith('ja')) return 'ja'
-    if (tag.startsWith('ko')) return 'ko'
-    if (tag.startsWith('en')) return 'en'
-  }
-  return 'en'
+  // Delegate to shared resolver for cookie + Accept-Language
+  return resolveLocale(
+    request.cookies.get('NEXT_LOCALE')?.value,
+    request.headers.get('accept-language') ?? undefined,
+  )
 }
 
 export const middleware = auth((request) => {
