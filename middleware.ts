@@ -28,7 +28,7 @@ export const middleware = auth((request) => {
 
   // Persist ?lang= choice as cookie
   const langParam = request.nextUrl.searchParams.get('lang')
-  if (langParam && (LOCALES as readonly string[]).includes(langParam)) {
+  if (langParam && (VALID_LOCALES as readonly string[]).includes(langParam)) {
     response.cookies.set('NEXT_LOCALE', langParam, { maxAge: 365 * 24 * 60 * 60, path: '/' })
   }
 
