@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.6.1] - 2026-03-26
+
+### Added
+- **Shared locale utility** (`lib/locale.ts`) — `resolveLocale()` extracted from middleware for reuse in API routes; `VALID_LOCALES` type and Set for validation
+- **Locale-aware prompt generation** (`lib/prompts.ts`) — `buildClaudePrompt()` now accepts locale parameter; system prompt instructs Claude to generate title/copy in the user's language; per-locale example title/copy for all 5 languages; `musicPrompt` always English (audio model requirement)
+- **Locale tests** (`lib/locale.test.ts`) — 6 test cases covering cookie priority, Accept-Language fallback, invalid/prototype-key rejection
+- **Prompt locale tests** (`lib/prompts.test.ts`) — 7 new tests verifying language instruction and example for each locale
+
+### Changed
+- **`/api/generate`** reads `NEXT_LOCALE` cookie + `Accept-Language` directly (middleware excludes `/api` routes from its matcher, so `x-locale` header was never available)
+- **`middleware.ts`** refactored to delegate cookie + Accept-Language resolution to shared `resolveLocale()` from `lib/locale.ts`; `?lang=` query param handling remains middleware-only
+- **X share text** — emotion-aware storytelling template across all 5 locales; added missing JA `xTemplate`; `#AImusic` hashtags
+
+### Fixed
+- **Song titles generated in wrong language** — titles/copy always came back in Japanese regardless of user locale because prompt had only a Japanese example and no language instruction
+
 ## [0.2.6.0] - 2026-03-26
 
 ### Added
