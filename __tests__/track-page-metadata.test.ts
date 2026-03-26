@@ -117,6 +117,38 @@ describe('track page generateMetadata', () => {
   })
 })
 
+describe('OG image metadata format', () => {
+  it('includes og:image dimensions and type in openGraph metadata', async () => {
+    mockGetTrack.mockResolvedValue({ title: 'My Track', copy: 'desc', emotion: 'calm' })
+    const result = await generateMetadata({
+      params: Promise.resolve({ id: '01HQJK5N7YVDPEM4GHSRX8Q2W3' }),
+    })
+    const ogImages = result.openGraph?.images as Array<Record<string, unknown>> | undefined
+    const ogImage = ogImages?.[0]
+    expect(ogImage).toMatchObject({
+      url: expect.stringContaining('/api/og?id='),
+      width: 1200,
+      height: 630,
+      type: 'image/png',
+    })
+    expect(result.openGraph?.type).toBe('website')
+  })
+
+  it('includes twitter image dimensions', async () => {
+    mockGetTrack.mockResolvedValue({ title: 'My Track', copy: 'desc', emotion: 'calm' })
+    const result = await generateMetadata({
+      params: Promise.resolve({ id: '01HQJK5N7YVDPEM4GHSRX8Q2W3' }),
+    })
+    const twImages = result.twitter?.images as Array<Record<string, unknown>> | undefined
+    const twImage = twImages?.[0]
+    expect(twImage).toMatchObject({
+      url: expect.stringContaining('/api/og?id='),
+      width: 1200,
+      height: 630,
+    })
+  })
+})
+
 describe('ULID_REGEX validation', () => {
   it('accepts valid ULID format', async () => {
     mockGetTrack.mockResolvedValue({

@@ -38,13 +38,25 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       description,
       siteName: 'Soultrack',
       url: `/track/${id}`,
-      images: [`/api/og?id=${id}`],
+      type: 'website',
+      images: [{
+        url: `/api/og?id=${id}`,
+        width: 1200,
+        height: 630,
+        type: 'image/png',
+        alt: title,
+      }],
     },
     twitter: {
       card: 'summary_large_image' as const,
       title,
       description,
-      images: [`/api/og?id=${id}`],
+      images: [{
+        url: `/api/og?id=${id}`,
+        width: 1200,
+        height: 630,
+        alt: title,
+      }],
     },
   }
 }

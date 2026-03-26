@@ -30,13 +30,25 @@ export async function generateMetadata() {
       description: t('description'),
       url: '/',
       siteName: 'Soultrack',
-      images: ['/api/og'],
+      type: 'website',
+      images: [{
+        url: '/api/og',
+        width: 1200,
+        height: 630,
+        type: 'image/png',
+        alt: t('title'),
+      }],
     },
     twitter: {
       card: 'summary_large_image',
       title: t('title'),
       description: t('description'),
-      images: ['/api/og'],
+      images: [{
+        url: '/api/og',
+        width: 1200,
+        height: 630,
+        alt: t('title'),
+      }],
     },
   }
 }
