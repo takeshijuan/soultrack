@@ -1,17 +1,5 @@
 # TODOs
 
-## My Tracks
-
-### My Tracksページのデザインポリッシュ
-
-**Priority:** P2
-
-**What:** `/my-tracks` ページのUIをSoultarck "Chromatic Emotion" デザインシステムに合わせてポリッシュする
-
-**Why:** 現在は機能実装優先で最低限のUIになっており、他ページ（LP・create・track）との一体感に欠ける。
-
----
-
 ## LP / EmotionShowcase
 
 ### LP 音声プレビュー機能
@@ -134,6 +122,12 @@
 ## Completed
 
 <!-- Items completed in PRs are moved here -->
+
+### My Tracksページのデザインポリッシュ
+
+**Completed:** v0.2.8.0 (2026-03-28)
+
+Staggered fade-blur entry animation、emotion badge pill、相対時間表示、アニメーション付きEmpty state (S-waveアイコン)、loading skeleton、teal CTA、i18n (5言語)。Server/Client分離維持、既存パターン完全踏襲。
 
 ### 動的サイトマップ（トラックページ含む）
 
