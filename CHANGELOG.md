@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.8.1] - 2026-03-30
+
+### Added
+- **CLAUDE.md** — project-level AI agent configuration with workflow orchestration rules, task management guidelines, core principles, and gstack skill routing
+
 ## [0.2.8.0] - 2026-03-28
 
 ### Added
