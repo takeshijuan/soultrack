@@ -93,7 +93,7 @@ export default function TrackList({ tracks }: { tracks: TrackItem[] }) {
               />
 
               {/* Emotion badge + relative time */}
-              <div className="flex items-center justify-between mb-3 relative z-[1]">
+              <div className="flex items-center justify-between mb-3 relative z-[1] pr-10">
                 {track.emotion && (
                   <span
                     className="px-3 py-1 rounded-full text-xs font-medium"
