@@ -4,6 +4,7 @@
     "description": "3つの質問。ひとつのメロディー。あなただけの。"
   },
   "hero": {
+    "eyebrow": "AI · Music · Daily Ritual",
     "tagline": "今この瞬間の音楽",
     "cta": "今日のトラックを作る",
     "hint": "3つの質問 · 1つのメロディー · あなただけの"
@@ -207,6 +208,15 @@
   "library": {
     "heading": "マイトラック",
     "newTrack": "+ 新しいトラック",
+    "eyebrow": "あなたの感情アーカイブ",
+    "trackCount": "{count}曲",
+    "timeJustNow": "たった今",
+    "timeMinutesAgo": "{count}分前",
+    "timeHoursAgo": "{count}時間前",
+    "timeDaysAgo": "{count}日前",
+    "timeWeeksAgo": "{count}週前",
+    "emptyTitle": "アーカイブはまだ空です",
+    "emptySubtext": "保存したメロディーはここに並びます — 感情の日記のように。",
     "emptyMessage": "まだトラックがありません",
     "emptyAction": "最初のトラックを作る",
     "saveButton": "この曲を手元に残す",
