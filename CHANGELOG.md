@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.8.0] - 2026-03-28
+
+### Added
+- **My Tracks page polish** — staggered fade-blur entry animations (framer-motion), emotion color badge pills matching track page design, relative time display ("2h ago" / "3日前"), hover glow effects with emotion-reactive colors
+- **Empty library state** — animated S-wave brand icon with teal glow, warm messaging, teal CTA button matching LP/create page style
+- **Loading skeleton** (`app/my-tracks/loading.tsx`) — skeleton UI for slow KV fetch, prevents blank page during cold starts
+- **i18n keys** — eyebrow text, track count, relative time labels, and empty state messaging across all 5 locales (en, ja, ko, zh, zh-TW)
+
+### Changed
+- **My Tracks page structure** — server component now localizes emotion names server-side via `tEmotions.has()` pattern (matching track page), delegates rendering to `TrackList` and `EmptyLibrary` client components
+- **Delete button** — restyled as compact rounded icon button integrated inside track cards with hover-reveal on desktop, always visible on mobile; 44px touch target preserved via negative margin technique; undo state upgraded to pill-style badge
+- **Back navigation** — added "← Soultrack" breadcrumb matching track page pattern
+- **CTA button** — upgraded from plain muted text link to teal rounded-full button with hover glow, matching LP/create page CTA style
+- **Header** — added uppercase eyebrow text, Clash Grotesk display font heading (text-3xl/4xl), and track count
+
+### Tests
+- **formatRelativeTime unit tests** — 6 test cases covering all time buckets (just now, minutes, hours, days, weeks) and falsy input edge case
+
 ## [0.2.7.0] - 2026-03-26
 
 ### Fixed
