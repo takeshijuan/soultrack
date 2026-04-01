@@ -31,13 +31,23 @@
     "shuffleLabel": "셔플",
     "generateButton": "내 트랙 생성 →",
     "generatingButton": "작곡 중...",
-    "tryAriaLabel": "{name} 시도"
+    "tryAriaLabel": "{name} 시도",
+    "durationLabel": "트랙 길이",
+    "durationQuick": "퀵 바이브",
+    "durationFull": "풀 트랙"
   },
   "player": {
     "generationFailed": "생성에 실패했습니다.",
     "generationTimeout": "생성 시간이 초과되었습니다.",
     "tryAgain": "다시 시도하세요 →",
-    "generatingStatus": "약 30-60초 정도 소요됩니다.",
+    "generatingStatus": "약 30-90초 정도 소요됩니다.",
+    "loadingPhase1": "감정의 사운드트랙을 작곡하고 있습니다...",
+    "loadingPhase2": "멜로디를 다듬고 있습니다...",
+    "loadingPhase3": "풀 트랙을 완성하고 있습니다...",
+    "loadingPhase4": "거의 다 됐습니다...",
+    "loadingPhase5": "평소보다 조금 더 걸리고 있습니다...",
+    "fallbackNotice": "이번에는 짧은 버전이 생성되었습니다.",
+    "retryFullTrack": "풀 트랙 다시 시도 →",
     "play": "재생",
     "pause": "일시 중지"
   },

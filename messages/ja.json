@@ -31,13 +31,23 @@
     "shuffleLabel": "シャッフル",
     "generateButton": "トラックを生成する →",
     "generatingButton": "あなたの瞬間を作曲中...",
-    "tryAriaLabel": "{name}を試す"
+    "tryAriaLabel": "{name}を試す",
+    "durationLabel": "曲の長さ",
+    "durationQuick": "ショートバイブ",
+    "durationFull": "フルトラック"
   },
   "player": {
     "generationFailed": "生成に失敗しました。",
     "generationTimeout": "生成がタイムアウトしました。",
     "tryAgain": "もう一度試す →",
-    "generatingStatus": "約30〜60秒かかります",
+    "generatingStatus": "約30〜90秒かかります",
+    "loadingPhase1": "あなたの感情のサウンドトラックを作曲中...",
+    "loadingPhase2": "メロディを形づくっています...",
+    "loadingPhase3": "フルトラックを仕上げています...",
+    "loadingPhase4": "もうすぐです...",
+    "loadingPhase5": "いつもより少し時間がかかっています...",
+    "fallbackNotice": "今回はショートバージョンを生成しました。",
+    "retryFullTrack": "フルトラックをもう一度試す →",
     "play": "再生",
     "pause": "一時停止"
   },

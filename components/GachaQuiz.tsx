@@ -4,9 +4,10 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { EMOTION_COLORS } from '@/lib/emotions'
+import { trackEvent, EVENTS } from '@/lib/analytics'
 
 interface GachaQuizProps {
-  onSubmit: (answers: { q1: string; q2: string; q3: string }) => void
+  onSubmit: (answers: { q1: string; q2: string; q3: string; duration: number }) => void
   isLoading: boolean
 }
 
@@ -43,6 +44,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
   const [shuffleKeys, setShuffleKeys] = useState<Record<'q1' | 'q2' | 'q3', number>>({
     q1: 0, q2: 0, q3: 0,
   })
+  const [duration, setDuration] = useState<30 | 120>(120)
 
   const reshuffle = (key: 'q1' | 'q2' | 'q3', pool: readonly string[]) => {
     const newChoices = pickRandom(pool, 5)
@@ -57,6 +59,10 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
   const handleChipSelect = (key: 'q1' | 'q2' | 'q3', choice: string, isSelected: boolean) => {
     const newVal = isSelected ? '' : choice
     setSelected(prev => ({ ...prev, [key]: newVal }))
+    if (!isSelected) {
+      const eventMap = { q1: EVENTS.Q1_ANSWER, q2: EVENTS.Q2_ANSWER, q3: EVENTS.Q3_ANSWER }
+      trackEvent(eventMap[key], { value: choice })
+    }
 
     // Emotion-reactive background (Q2 only)
     if (key === 'q2' && !isSelected) {
@@ -143,10 +149,59 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
         )
       })}
 
+      {/* Duration selection */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.36, duration: 0.45, ease: 'easeOut' }}
+        className="rounded-2xl p-5"
+        style={{
+          background: 'var(--surface-1)',
+          border: '1px solid var(--border)',
+        }}
+      >
+        <h2 className="text-[var(--text-primary)] font-semibold text-sm tracking-wide mb-4">
+          {t('quiz.durationLabel')}
+        </h2>
+        <div className="flex gap-3" role="radiogroup" aria-label={t('quiz.durationLabel')}>
+          {([30, 120] as const).map(d => {
+            const isSel = duration === d
+            return (
+              <motion.button
+                key={d}
+                type="button"
+                role="radio"
+                aria-checked={isSel}
+                onClick={() => { setDuration(d); trackEvent(EVENTS.DURATION_SELECT, { duration: d }) }}
+                whileTap={{ scale: 0.96 }}
+                animate={isSel ? { scale: 1.02 } : { scale: 1 }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+                className="flex-1 flex flex-col items-center gap-1 py-4 rounded-2xl text-sm font-medium transition-colors duration-200"
+                style={isSel ? {
+                  background: 'rgba(0,245,212,0.08)',
+                  border: '1px solid var(--accent-teal)',
+                  color: 'var(--accent-teal)',
+                  boxShadow: '0 0 18px rgba(0,245,212,0.18), 0 0 4px rgba(0,245,212,0.1)',
+                } : {
+                  background: 'transparent',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-muted)',
+                }}
+              >
+                <span className="text-lg font-semibold">{d === 30 ? '30s' : '2min'}</span>
+                <span className="text-xs opacity-70">
+                  {d === 30 ? t('quiz.durationQuick') : t('quiz.durationFull')}
+                </span>
+              </motion.button>
+            )
+          })}
+        </div>
+      </motion.div>
+
       {/* Submit */}
       <motion.button
         type="button"
-        onClick={() => !isLoading && allAnswered && onSubmit(selected)}
+        onClick={() => !isLoading && allAnswered && onSubmit({ ...selected, duration })}
         disabled={!allAnswered || isLoading}
         className="mt-3 w-full py-4 rounded-2xl font-semibold text-base transition-all duration-300"
         animate={allAnswered && !isLoading ? {

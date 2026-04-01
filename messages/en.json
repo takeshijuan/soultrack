@@ -31,13 +31,23 @@
     "shuffleLabel": "Shuffle",
     "generateButton": "Generate My Track →",
     "generatingButton": "Composing your moment...",
-    "tryAriaLabel": "Try {name}"
+    "tryAriaLabel": "Try {name}",
+    "durationLabel": "Track length",
+    "durationQuick": "Quick Vibe",
+    "durationFull": "Full Track"
   },
   "player": {
     "generationFailed": "Generation failed.",
     "generationTimeout": "Generation timed out.",
     "tryAgain": "Try again →",
-    "generatingStatus": "This takes about 30–60 seconds",
+    "generatingStatus": "This takes about 30–90 seconds",
+    "loadingPhase1": "Composing your emotional soundtrack...",
+    "loadingPhase2": "Shaping the melody...",
+    "loadingPhase3": "Polishing the full track...",
+    "loadingPhase4": "Almost there...",
+    "loadingPhase5": "Taking a bit longer than usual...",
+    "fallbackNotice": "We generated a shorter version this time.",
+    "retryFullTrack": "Try the full track again →",
     "play": "Play",
     "pause": "Pause"
   },
