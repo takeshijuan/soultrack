@@ -1,9 +1,10 @@
 import { NextRequest } from 'next/server'
 import { put } from '@vercel/blob'
 import { getTrack, updateTrack } from '@/lib/kv'
-import { getMusicProvider } from '@/lib/music'
+import { ReplicateProvider } from '@/lib/music/providers/replicate'
 
 const ULID_REGEX = /^[0-9A-HJKMNP-TV-Z]{26}$/
+const LYRIA_TIMEOUT_MS = 180_000 // 3 minutes
 
 export async function GET(
   _request: NextRequest,
@@ -26,12 +27,29 @@ export async function GET(
     track.status === 'failed' ||
     track.status === 'timeout'
   ) {
-    return Response.json({ status: track.status, audioUrl: track.audioUrl })
+    return Response.json({
+      status: track.status,
+      audioUrl: track.audioUrl,
+      trackSize: track.trackSize,
+    })
   }
 
-  // 3. Poll music provider for current status
+  // 3. Lyria tracks: return KV state only (no polling needed)
+  //    Also handles existing tracks without predictionId
+  if (track.provider === 'lyria' || !track.predictionId) {
+    // Check for timeout (processing too long)
+    const elapsed = Date.now() - track.createdAt
+    if (elapsed > LYRIA_TIMEOUT_MS) {
+      await updateTrack(trackId, { status: 'timeout' })
+      return Response.json({ status: 'timeout' })
+    }
+    return Response.json({ status: 'processing' })
+  }
+
+  // 4. Replicate tracks: poll music provider for current status
   try {
-    const result = await getMusicProvider().getStatus(track.predictionId)
+    const replicate = new ReplicateProvider()
+    const result = await replicate.getStatus(track.predictionId!)
 
     if (result.status === 'succeeded') {
       // Persist audio to Vercel Blob for long-term availability
@@ -47,11 +65,14 @@ export async function GET(
         console.log(`[status] blob upload success: trackId=${trackId}, url=${permanentUrl}, size=${audioBuffer.byteLength}`)
       } catch (blobErr) {
         console.error(`[status] blob upload failed, falling back to temp URL: trackId=${trackId}, error=${blobErr}`)
-        // Graceful degradation: use temp URL
       }
 
       await updateTrack(trackId, { status: 'done', audioUrl: permanentUrl })
-      return Response.json({ status: 'done', audioUrl: permanentUrl })
+      return Response.json({
+        status: 'done',
+        audioUrl: permanentUrl,
+        trackSize: track.trackSize,
+      })
     }
 
     if (result.status === 'failed') {

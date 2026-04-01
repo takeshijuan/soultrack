@@ -7,7 +7,7 @@ const SITEMAP_TRACKS_KEY = 'sitemap:tracks'
 export type TrackStatus = 'processing' | 'done' | 'failed' | 'timeout'
 
 export interface TrackRecord {
-  predictionId: string
+  predictionId?: string
   title: string
   copy: string
   status: TrackStatus
@@ -15,7 +15,9 @@ export interface TrackRecord {
   createdAt: number
   emotion?: string
   emotionColor?: string
-  userId?: string  // Auth.js user ID（存在する場合は永続保存）
+  userId?: string
+  provider?: 'replicate' | 'lyria'
+  trackSize?: 'short' | 'long'
 }
 
 // Generate a ULID-based track ID

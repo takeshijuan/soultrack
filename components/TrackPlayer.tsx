@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import ShareButtons from '@/components/ShareButtons'
 import { EMOTION_LOADING_COPY } from '@/lib/emotions'
+import { trackEvent, EVENTS } from '@/lib/analytics'
 
 interface TrackPlayerProps {
   trackId: string
@@ -62,9 +63,23 @@ export default function TrackPlayer({
   const [audioUrl, setAudioUrl] = useState<string | undefined>(initialAudioUrl)
   const [isPlaying, setIsPlaying] = useState(false)
   const [showBurst, setShowBurst] = useState(false)
-  const audioRef     = useRef<HTMLAudioElement>(null)
-  const pollCountRef = useRef(0)
-  const intervalRef  = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [isFallback, setIsFallback] = useState(false)
+  const [elapsedSec, setElapsedSec] = useState(0)
+  const audioRef      = useRef<HTMLAudioElement>(null)
+  const pollCountRef  = useRef(0)
+  const intervalRef   = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timerRef      = useRef<ReturnType<typeof setInterval> | null>(null)
+  const elapsedSecRef = useRef(0)
+
+  // Elapsed timer for multi-phase loading text
+  useEffect(() => {
+    if (status !== 'processing') return
+    timerRef.current = setInterval(() => {
+      elapsedSecRef.current += 1
+      setElapsedSec(s => s + 1)
+    }, 1000)
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [status])
 
   useEffect(() => {
     if (status !== 'processing') return
@@ -79,16 +94,26 @@ export default function TrackPlayer({
       try {
         const res  = await fetch(`/api/status/${trackId}`)
         if (!res.ok) return
-        const data = await res.json() as { status: string; audioUrl?: string }
+        const data = await res.json() as { status: string; audioUrl?: string; trackSize?: string }
         if (data.status === 'done') {
           if (intervalRef.current) clearInterval(intervalRef.current)
+          if (timerRef.current) clearInterval(timerRef.current)
           setAudioUrl(data.audioUrl)
           setStatus('done')
-          // Celebration burst: triggered from async callback (not sync effect body)
+          trackEvent(EVENTS.GENERATION_COMPLETE, { trackId, elapsed: elapsedSecRef.current })
           setShowBurst(true)
           setTimeout(() => setShowBurst(false), 800)
+          // Detect fallback (requested 120s but got a shorter Replicate track)
+          if (data.trackSize === 'long') {
+            // If we finished very quickly, it's likely a Replicate fallback (20s track)
+            // A proper check would compare actual audio duration, but elapsed time is a proxy
+            if (elapsedSecRef.current < 20) {
+              setIsFallback(true)
+            }
+          }
         } else if (data.status === 'failed' || data.status === 'timeout') {
           if (intervalRef.current) clearInterval(intervalRef.current)
+          if (timerRef.current) clearInterval(timerRef.current)
           setStatus(data.status as 'failed' | 'timeout')
         }
       } catch { /* retry on next tick */ }
@@ -96,13 +121,18 @@ export default function TrackPlayer({
 
     intervalRef.current = setInterval(poll, 3000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- elapsedSec tracked via ref to avoid interval recreation
   }, [status, trackId])
 
   const togglePlay = () => {
     const audio = audioRef.current
     if (!audio) return
     if (isPlaying) { audio.pause(); setIsPlaying(false) }
-    else { audio.play().catch(() => {}); setIsPlaying(true) }
+    else {
+      audio.play().catch(() => {})
+      setIsPlaying(true)
+      trackEvent(EVENTS.TRACK_PLAY, { trackId })
+    }
   }
 
   // ── Error states ──
@@ -119,7 +149,16 @@ export default function TrackPlayer({
     )
   }
 
-  const loadingText = (emotion && EMOTION_LOADING_COPY[emotion]) ?? 'Composing your moment...'
+  const emotionLoadingText = (emotion && EMOTION_LOADING_COPY[emotion]) ?? null
+  const phaseText = elapsedSec < 10
+    ? (emotionLoadingText ?? t('loadingPhase1'))
+    : elapsedSec < 30
+      ? t('loadingPhase2')
+      : elapsedSec < 60
+        ? t('loadingPhase3')
+        : elapsedSec < 90
+          ? t('loadingPhase4')
+          : t('loadingPhase5')
 
   // ── Processing state ──
   if (status === 'processing') {
@@ -130,11 +169,13 @@ export default function TrackPlayer({
       >
         <div className="text-center">
           <motion.p
+            key={phaseText}
             className="font-display font-bold text-2xl text-[var(--text-primary)] mb-1"
-            animate={{ opacity: [0.5, 1, 0.5] }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: [0.5, 1, 0.5], y: 0 }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           >
-            {loadingText}
+            {phaseText}
           </motion.p>
           <p className="text-[var(--text-muted)] text-sm">{t('generatingStatus')}</p>
         </div>
@@ -247,6 +288,21 @@ export default function TrackPlayer({
           onEnded={() => setIsPlaying(false)}
           className="hidden"
         />
+
+        {isFallback && (
+          <div
+            className="rounded-xl p-4 text-center text-sm"
+            style={{ background: 'rgba(255,154,60,0.08)', border: '1px solid rgba(255,154,60,0.3)' }}
+          >
+            <p className="text-[var(--accent-amber)] mb-2">{t('fallbackNotice')}</p>
+            <a
+              href="/create"
+              className="text-[var(--accent-teal)] hover:underline text-xs"
+            >
+              {t('retryFullTrack')}
+            </a>
+          </div>
+        )}
 
         <ShareButtons trackId={trackId} title={title} emotion={emotion} />
       </motion.div>

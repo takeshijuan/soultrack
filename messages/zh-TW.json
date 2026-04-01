@@ -31,13 +31,25 @@
     "shuffleLabel": "換一批",
     "generateButton": "生成我的曲目 →",
     "generatingButton": "正在譜寫你的時刻...",
-    "tryAriaLabel": "嘗試 {name}"
+    "tryAriaLabel": "嘗試 {name}",
+    "durationLabel": "曲目長度",
+    "trackSizeShortLabel": "短曲",
+    "trackSizeShortHint": "~30秒",
+    "trackSizeLongLabel": "長曲",
+    "trackSizeLongHint": "完整曲目"
   },
   "player": {
     "generationFailed": "生成失敗。",
     "generationTimeout": "生成超時。",
     "tryAgain": "再試一次 →",
-    "generatingStatus": "大約需要30-60秒",
+    "generatingStatus": "大約需要30-90秒",
+    "loadingPhase1": "正在譜寫你的情感配樂...",
+    "loadingPhase2": "正在雕琢旋律...",
+    "loadingPhase3": "正在完善完整曲目...",
+    "loadingPhase4": "快完成了...",
+    "loadingPhase5": "比平時多花了一點時間...",
+    "fallbackNotice": "這次生成了較短的版本。",
+    "retryFullTrack": "再試一次完整曲目 →",
     "play": "播放",
     "pause": "暫停"
   },
