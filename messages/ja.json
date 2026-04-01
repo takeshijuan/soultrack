@@ -51,7 +51,10 @@
     "fallbackNotice": "今回はショートバージョンを生成しました。",
     "retryFullTrack": "フルトラックをもう一度試す →",
     "play": "再生",
-    "pause": "一時停止"
+    "pause": "一時停止",
+    "seekTo": "{time}にシーク",
+    "timeElapsed": "経過時間",
+    "timeRemaining": "残り時間"
   },
   "share": {
     "copyLink": "リンクをコピー",

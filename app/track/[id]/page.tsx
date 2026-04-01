@@ -149,6 +149,7 @@ export default async function TrackPage({ params }: { params: Promise<{ id: stri
           title={track.title}
           copy={track.copy}
           emotion={track.emotion}
+          trackSize={track.trackSize}
         />
         <div className="mt-6 flex justify-center">
           <SaveToLibraryButton

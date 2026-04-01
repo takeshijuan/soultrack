@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1.0] - 2026-04-02
+
+### Added
+- **Seekable waveform** — tap or click anywhere on the waveform to jump to that point in the track, SoundCloud-style. Played bars light up in the emotion's color, unplayed bars stay muted
+- **Time display** — elapsed time and remaining time shown below the waveform. Short tracks show elapsed only
+- **Ambient glow** — the player card and play button pulse with the emotion's color during playback, creating a breathing light effect
+- **Compact mode** — short tracks (~30s) get a tighter layout with smaller play button and hidden description text
+- **Reduced motion support** — all glow and pulse animations respect `prefers-reduced-motion`, matching the pattern used across the app
+
+### Changed
+- **Emotion-reactive waveform** — waveform bars and play button now use `--emotion-hue` instead of hardcoded teal, connecting the player visually to the selected emotion
+- **Processing waveform** — loading animation uses the emotion's color instead of the amber-to-teal gradient
+- **Touch handling** — fixed potential double-fire on mobile by splitting click and touch handlers with `preventDefault`
+- **Audio time updates** — throttled to 0.25s threshold to reduce unnecessary re-renders on low-end devices
+- **Duration safety** — added `isFinite` guard for streaming audio sources that report `Infinity` duration
+
 ## [0.3.0.0] - 2026-04-01
 
 ### Added
