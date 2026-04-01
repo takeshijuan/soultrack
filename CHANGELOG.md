@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0.0] - 2026-04-01
+
+### Added
+- **Google Lyria 3 Pro music generation** — generate up to 2-minute tracks with natural song structure (intro, verse, chorus, outro) via Gemini API. Select between 30-second quick vibes and 2-minute full tracks
+- **Duration selection UI** — choose track length during the emotional quiz, styled as emotion chips matching the Chromatic Emotion design system. i18n across all 5 locales
+- **Multi-phase loading UX** — 5-stage animated loading text that evolves with generation progress ("Composing your emotional soundtrack..." → "Shaping the melody..." → "Almost there...")
+- **Fallback notification** — when the AI service falls back to a shorter track, a toast notification lets you retry the full-length version
+- **PostHog analytics** — funnel tracking from quiz start through generation, playback, and sharing. Client provider with graceful degradation when unconfigured
+- **Lyria provider with `generateSync`** — new `MusicGenerationProvider` interface extension supporting synchronous generation. Background processing via Next.js `after()` API for instant response
+- **Replicate fallback** — automatic fallback to MusicGen if Lyria is unavailable, with structured error handling and safety filter detection
+- **Provider factory** — two-layer provider selection: `MUSIC_PROVIDER` env var selects the family (replicate/lyria), duration parameter selects the model variant (clip/pro)
+
+### Changed
+- **Generate route** — switched to Node.js runtime with `maxDuration=120`, instant trackId response via `after()` background generation pattern
+- **Status endpoint** — provider-aware branching: Lyria tracks return KV state directly (no polling), Replicate tracks poll as before. 3-minute timeout detection for stuck generations
+- **TrackRecord schema** — `predictionId` now optional, added `provider` and `requestedDuration` fields for multi-provider support
+- **Loading time estimate** — updated from "30-60 seconds" to "30-90 seconds" across all locales
+
+### Fixed
+- **robots.ts** — fixed broken indentation from upstream merge, removed invalid `/$` and `/&` disallow rules
+
 ## [0.2.8.1] - 2026-03-30
 
 ### Added
