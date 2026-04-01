@@ -119,6 +119,28 @@
 
 ---
 
+## TrackPlayer
+
+### TrackPlayer デザインポリッシュ
+
+**Priority:** P2
+
+**What:** `TrackPlayer` コンポーネントの UI/UX を Chromatic Emotion デザインシステムに合わせてポリッシュする
+
+**Why:** Lyria 3 Pro 統合で曲が長くなり（最大2-3分）、TrackPlayer がプロダクトの中心体験になった。現状のプレイヤーは機能的だが、Chromatic Emotion の品質基準に達していない
+
+**Scope:**
+- ウェーブフォームのビジュアル改善（感情カラー連動、再生位置インジケーター）
+- 再生プログレスバー / シークバー追加
+- Short / Long トラックで UI を適応（Short はコンパクト、Long はフル表示）
+- 再生中のアンビエントグロー / パルスアニメーション強化
+- モバイルでのタッチ操作最適化（44px タッチターゲット確認）
+- 曲の残り時間 / 経過時間の表示
+
+**Depends on:** Lyria 3 Pro 統合 (#35) のマージ後
+
+---
+
 ## Completed
 
 <!-- Items completed in PRs are moved here -->
