@@ -148,6 +148,8 @@ export default function TrackPlayer({
     }
   }
 
+  const [isSeeking, setIsSeeking] = useState(false)
+
   const seekToFraction = (clientX: number, rect: DOMRect) => {
     const audio = audioRef.current
     if (!audio || !duration) return
@@ -156,13 +158,37 @@ export default function TrackPlayer({
     setCurrentTime(fraction * duration)
   }
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
     seekToFraction(e.clientX, e.currentTarget.getBoundingClientRect())
   }
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.preventDefault() // Prevent synthetic click (double-fire on mobile)
+  const handleBarTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault()
     seekToFraction(e.changedTouches[0].clientX, e.currentTarget.getBoundingClientRect())
+  }
+
+  // Drag-to-seek for progress bar
+  const handleSeekStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    setIsSeeking(true)
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    seekToFraction(clientX, rect)
+
+    const onMove = (ev: MouseEvent | TouchEvent) => {
+      const cx = 'touches' in ev ? ev.touches[0].clientX : (ev as MouseEvent).clientX
+      seekToFraction(cx, rect)
+    }
+    const onEnd = () => {
+      setIsSeeking(false)
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup', onEnd)
+      document.removeEventListener('touchmove', onMove)
+      document.removeEventListener('touchend', onEnd)
+    }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup', onEnd)
+    document.addEventListener('touchmove', onMove, { passive: false })
+    document.addEventListener('touchend', onEnd)
   }
 
   // ── Error states ──
@@ -211,11 +237,11 @@ export default function TrackPlayer({
         </div>
 
         {/* Animated waveform */}
-        <div className="flex gap-[3px] items-end h-14">
+        <div className="flex gap-[3px] items-end h-14 w-full">
           {WAVEFORM_HEIGHTS.map((h, i) => (
             <motion.div
               key={i}
-              className="w-[3px] rounded-full"
+              className="flex-1 min-w-0 rounded-full"
               style={{
                 background: 'var(--emotion-hue)',
                 originY: 1,
@@ -264,16 +290,11 @@ export default function TrackPlayer({
           )}
         </div>
 
-        {/* Seekable waveform */}
+        {/* Waveform (full-width) */}
         <div
-          className={`flex gap-[3px] items-end ${isCompact ? 'h-10 min-h-[44px]' : 'h-14'} cursor-pointer select-none`}
-          role="progressbar"
-          aria-label={t('seekTo', { time: formatTime(currentTime) })}
-          aria-valuemin={0}
-          aria-valuemax={Math.floor(duration)}
-          aria-valuenow={Math.floor(currentTime)}
-          onClick={handleClick}
-          onTouchEnd={handleTouchEnd}
+          className={`flex gap-[3px] items-end ${isCompact ? 'h-10 min-h-[44px]' : 'h-14'} w-full cursor-pointer select-none`}
+          onClick={handleBarClick}
+          onTouchEnd={handleBarTouchEnd}
         >
           {WAVEFORM_HEIGHTS.map((h, i) => {
             const barProgress = (i + 1) / WAVEFORM_HEIGHTS.length
@@ -283,7 +304,7 @@ export default function TrackPlayer({
             return (
               <div
                 key={i}
-                className="w-[3px] rounded-full transition-all duration-200"
+                className="flex-1 min-w-0 rounded-full transition-all duration-200"
                 style={{
                   height: `${(h / 100) * maxHeight}px`,
                   background: isPlaying
@@ -301,6 +322,47 @@ export default function TrackPlayer({
               />
             )
           })}
+        </div>
+
+        {/* Progress bar (draggable seek) */}
+        <div
+          className="relative w-full select-none touch-none"
+          style={{ height: 20, cursor: 'pointer' }}
+          role="progressbar"
+          aria-label={t('seekTo', { time: formatTime(currentTime) })}
+          aria-valuemin={0}
+          aria-valuemax={Math.floor(duration)}
+          aria-valuenow={Math.floor(currentTime)}
+          onMouseDown={handleSeekStart}
+          onTouchStart={handleSeekStart}
+        >
+          {/* Track */}
+          <div
+            className="absolute top-1/2 -translate-y-1/2 w-full rounded-full"
+            style={{ height: 4, background: 'var(--border-hover)' }}
+          />
+          {/* Filled */}
+          <div
+            className="absolute top-1/2 -translate-y-1/2 rounded-full transition-[width] duration-100"
+            style={{
+              height: 4,
+              width: `${progress * 100}%`,
+              background: 'var(--emotion-hue)',
+            }}
+          />
+          {/* Thumb */}
+          {(duration > 0) && (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full transition-[left] duration-100"
+              style={{
+                width: isSeeking ? 16 : 12,
+                height: isSeeking ? 16 : 12,
+                left: `${progress * 100}%`,
+                background: 'var(--emotion-hue)',
+                boxShadow: '0 0 8px color-mix(in srgb, var(--emotion-hue) 40%, transparent)',
+              }}
+            />
+          )}
         </div>
 
         {/* Time display */}

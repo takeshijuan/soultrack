@@ -45,7 +45,7 @@ describe('TrackPlayer', () => {
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
   })
 
-  it('renders waveform with slider role', () => {
+  it('renders progress bar with progressbar role', () => {
     render(<TrackPlayer {...baseProps} />, { wrapper })
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
@@ -96,8 +96,10 @@ describe('TrackPlayer', () => {
 
   it('renders 32 waveform bars', () => {
     const { container } = render(<TrackPlayer {...baseProps} />, { wrapper })
-    const slider = screen.getByRole('progressbar')
-    const bars = slider.querySelectorAll('div > div')
+    // Waveform is the first flex container with gap-[3px] inside the card
+    const waveform = container.querySelector('.gap-\\[3px\\]')
+    expect(waveform).toBeInTheDocument()
+    const bars = waveform!.children
     expect(bars.length).toBe(32)
   })
 
