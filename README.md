@@ -4,7 +4,7 @@ AI-powered BGM generator — answer 3 questions about your emotional state, get 
 
 ## Features
 
-- 🎵 AI track generation (Replicate MusicGen via Claude metadata)
+- 🎵 AI track generation (Google Lyria 3 Pro with Replicate fallback)
 - 🔐 Password-free magic link auth (Auth.js v5 + Resend)
 - 📚 Personal track library (Vercel KV / Upstash Redis)
 - 🌏 i18n: EN / JA / KO / ZH / ZH-TW (next-intl)
@@ -41,7 +41,7 @@ npm test         # run once
 npm run test:watch  # watch mode
 ```
 
-11 test files, 74 tests — see [TESTING.md](./TESTING.md) for details.
+11 test files, 68 tests — see [TESTING.md](./TESTING.md) for details.
 
 ## Email Template Development
 
@@ -56,7 +56,7 @@ Open [http://localhost:3001](http://localhost:3001) to preview and iterate on `e
 - **Framework:** Next.js 15 (App Router)
 - **Auth:** Auth.js v5 (next-auth@beta) — magic link via Resend
 - **Database:** Vercel KV (Upstash Redis)
-- **Music:** Replicate MusicGen
+- **Music:** Google Lyria 3 Pro (Gemini API) + Replicate MusicGen fallback
 - **AI metadata:** Anthropic Claude (claude-sonnet)
 - **i18n:** next-intl
 - **Animations:** Framer Motion

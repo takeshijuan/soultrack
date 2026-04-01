@@ -36,9 +36,11 @@
 - **Emotion cascade:** 800ms ease (CSS transition on --emotion-hue)
 - **Chip select:** 150ms scale bloom (framer-motion)
 - **Page enter:** 450ms stagger, 120ms delay per card (framer-motion)
-- **Play button pulse:** 1.5s infinite glow (framer-motion)
-- **Celebration burst:** 700ms particle scatter on processing→done (framer-motion)
+- **Play button glow:** 1.5s infinite `play-glow` (CSS keyframes, `color-mix(in srgb, --emotion-hue)`)
+- **Card glow:** 2.5s infinite `card-glow` — player card pulses with `--emotion-hue` during playback (CSS keyframes)
+- **Celebration burst:** 700ms particle scatter on processing→done (framer-motion, `--emotion-hue`)
 - **LP scroll reveal:** 700ms fade/slide, 0.03s chip stagger, Apple ease `[0.25,0.46,0.45,0.94]`
+- **Reduced motion:** All glow/pulse animations gated on `useReducedMotion()` → `animation: 'none'`
 
 ## Emotion Color Map (`lib/emotions.ts`)
 30 emotions, each mapped to a hex color that drives `--emotion-hue` when selected.
@@ -90,3 +92,6 @@ See `lib/emotions.ts` for full map.
 | 2026-03-23 | Unlimited tracks for authenticated users; 3/day for anonymous | Viral loop: users who hit the daily cap are motivated to register rather than abandon |
 | 2026-03-23 | TTL 24h for anonymous tracks; persistent for authenticated | Encourages account creation for track preservation while keeping KV storage bounded for anonymous users |
 | 2026-03-23 | CONTACT_EMAIL env var with contact@soultrack.io fallback | Complies with 個人情報保護法 without blocking deployment; override per environment in Vercel dashboard |
+| 2026-04-02 | Emotion-hue player integration (waveform, button, card glow) | `--accent-teal` hardcode → `--emotion-hue` CSS var; player now visually connects to the selected emotion |
+| 2026-04-02 | CSS `color-mix(in srgb)` for glow effects | Enables dynamic opacity with CSS variables; replaces rgba hardcodes. Safari 16.4+, Chrome 111+, Firefox 113+ |
+| 2026-04-02 | Glow animations via CSS keyframes (not framer-motion) | Framer Motion cannot interpolate `color-mix()` values; CSS keyframes work natively with CSS variables |
