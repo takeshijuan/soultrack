@@ -33,8 +33,10 @@
     "generatingButton": "작곡 중...",
     "tryAriaLabel": "{name} 시도",
     "durationLabel": "트랙 길이",
-    "durationQuick": "퀵 바이브",
-    "durationFull": "풀 트랙"
+    "trackSizeShortLabel": "숏",
+    "trackSizeShortHint": "~30초",
+    "trackSizeLongLabel": "롱",
+    "trackSizeLongHint": "풀 트랙"
   },
   "player": {
     "generationFailed": "생성에 실패했습니다.",

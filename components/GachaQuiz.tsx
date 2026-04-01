@@ -7,7 +7,7 @@ import { EMOTION_COLORS } from '@/lib/emotions'
 import { trackEvent, EVENTS } from '@/lib/analytics'
 
 interface GachaQuizProps {
-  onSubmit: (answers: { q1: string; q2: string; q3: string; duration: number }) => void
+  onSubmit: (answers: { q1: string; q2: string; q3: string; trackSize: 'short' | 'long' }) => void
   isLoading: boolean
 }
 
@@ -44,7 +44,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
   const [shuffleKeys, setShuffleKeys] = useState<Record<'q1' | 'q2' | 'q3', number>>({
     q1: 0, q2: 0, q3: 0,
   })
-  const [duration, setDuration] = useState<30 | 120>(120)
+  const [trackSize, setTrackSize] = useState<'short' | 'long'>('long')
 
   const reshuffle = (key: 'q1' | 'q2' | 'q3', pool: readonly string[]) => {
     const newChoices = pickRandom(pool, 5)
@@ -164,15 +164,15 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
           {t('quiz.durationLabel')}
         </h2>
         <div className="flex gap-3" role="radiogroup" aria-label={t('quiz.durationLabel')}>
-          {([30, 120] as const).map(d => {
-            const isSel = duration === d
+          {(['short', 'long'] as const).map(size => {
+            const isSel = trackSize === size
             return (
               <motion.button
-                key={d}
+                key={size}
                 type="button"
                 role="radio"
                 aria-checked={isSel}
-                onClick={() => { setDuration(d); trackEvent(EVENTS.DURATION_SELECT, { duration: d }) }}
+                onClick={() => { setTrackSize(size); trackEvent(EVENTS.TRACK_SIZE_SELECT, { trackSize: size }) }}
                 whileTap={{ scale: 0.96 }}
                 animate={isSel ? { scale: 1.02 } : { scale: 1 }}
                 transition={{ duration: 0.15, ease: 'easeOut' }}
@@ -188,9 +188,11 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
                   color: 'var(--text-muted)',
                 }}
               >
-                <span className="text-lg font-semibold">{d === 30 ? '30s' : '2min'}</span>
+                <span className="text-lg font-semibold">
+                  {t(`quiz.trackSize${size === 'short' ? 'Short' : 'Long'}Label`)}
+                </span>
                 <span className="text-xs opacity-70">
-                  {d === 30 ? t('quiz.durationQuick') : t('quiz.durationFull')}
+                  {t(`quiz.trackSize${size === 'short' ? 'Short' : 'Long'}Hint`)}
                 </span>
               </motion.button>
             )
@@ -201,7 +203,7 @@ export default function GachaQuiz({ onSubmit, isLoading }: GachaQuizProps) {
       {/* Submit */}
       <motion.button
         type="button"
-        onClick={() => !isLoading && allAnswered && onSubmit({ ...selected, duration })}
+        onClick={() => !isLoading && allAnswered && onSubmit({ ...selected, trackSize })}
         disabled={!allAnswered || isLoading}
         className="mt-3 w-full py-4 rounded-2xl font-semibold text-base transition-all duration-300"
         animate={allAnswered && !isLoading ? {

@@ -5,7 +5,7 @@ export const EVENTS = {
   Q1_ANSWER: 'q1_answer',
   Q2_ANSWER: 'q2_answer',
   Q3_ANSWER: 'q3_answer',
-  DURATION_SELECT: 'duration_select',
+  TRACK_SIZE_SELECT: 'track_size_select',
   GENERATION_START: 'generation_start',
   GENERATION_COMPLETE: 'generation_complete',
   TRACK_PLAY: 'track_play',

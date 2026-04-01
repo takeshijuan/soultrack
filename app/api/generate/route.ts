@@ -24,7 +24,6 @@ const gateway = createGateway()
 const BYPASS_IPS = (process.env.RATE_LIMIT_BYPASS_IPS ?? '')
   .split(',').map(s => s.trim()).filter(Boolean)
 
-const VALID_DURATIONS = new Set([30, 120])
 
 // Q2 uses English slugs (locale-independent enum)
 const Q2_SLUGS = new Set(Object.keys(EMOTION_COLORS))
@@ -44,7 +43,7 @@ export async function POST(request: NextRequest) {
   const userId = session?.user?.id ?? undefined
 
   // 1. Parse body
-  let body: { q1?: string; q2?: string; q3?: string; duration?: number }
+  let body: { q1?: string; q2?: string; q3?: string; trackSize?: string }
   try {
     body = await request.json()
   } catch {
@@ -57,8 +56,14 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: 'Invalid selection' }, { status: 400 })
   }
 
-  // 3. Duration validation (allowlist, default to 120)
-  const duration = typeof body.duration === 'number' && VALID_DURATIONS.has(body.duration) ? body.duration : 120
+  // 3. Track size validation
+  const VALID_SIZES = new Set(['short', 'long'])
+  const trackSize = typeof body.trackSize === 'string' && VALID_SIZES.has(body.trackSize) ? body.trackSize : 'long'
+  const TRACK_CONFIG: Record<string, { model: 'clip' | 'pro'; structure: string; durationHint: number }> = {
+    short: { model: 'clip', structure: '', durationHint: 30 },
+    long:  { model: 'pro',  structure: '[Intro] [Verse 1] [Chorus] [Verse 2] [Chorus] [Outro]', durationHint: 120 },
+  }
+  const config = TRACK_CONFIG[trackSize]
 
   // 4. Rate limiting（認証済みはスキップ）
   let rateLimitCount = 0
@@ -115,14 +120,14 @@ export async function POST(request: NextRequest) {
   }
 
   // 7. Add structure hints for Lyria Pro
-  const fullPrompt = duration > 30
-    ? `${musicPrompt}\nSong structure: [Intro] [Verse 1] [Chorus] [Verse 2] [Chorus] [Outro]`
+  const fullPrompt = config.structure
+    ? `${musicPrompt}\nSong structure: ${config.structure}`
     : musicPrompt
 
   // 8. Save initial record to KV + return trackId immediately
   const trackId = generateTrackId()
   const emotionColor = EMOTION_COLORS[q2] ?? '#00F5D4'
-  const provider = getMusicProvider(duration)
+  const provider = getMusicProvider(config.model)
   const rawProvider = process.env.MUSIC_PROVIDER ?? 'replicate'
   const providerFamily: 'replicate' | 'lyria' = rawProvider === 'lyria' ? 'lyria' : 'replicate'
 
@@ -136,7 +141,7 @@ export async function POST(request: NextRequest) {
       emotionColor,
       userId,
       provider: providerFamily,
-      requestedDuration: duration,
+      trackSize: trackSize as 'short' | 'long',
     })
     if (userId) {
       await kv.lpush(`user:${userId}:tracks`, trackId)
@@ -154,10 +159,9 @@ export async function POST(request: NextRequest) {
     after(async () => {
       const startTime = Date.now()
       try {
-        console.log(`[generate] Lyria ${duration > 30 ? 'Pro' : 'Clip'} starting: trackId=${trackId}`)
+        console.log(`[generate] Lyria ${config.model} starting: trackId=${trackId}`)
         const result = await provider.generateSync!({
           description: fullPrompt,
-          durationSeconds: duration,
         })
         console.log(`[generate] Lyria completed: trackId=${trackId}, latency=${Date.now() - startTime}ms`)
 
@@ -202,7 +206,7 @@ export async function POST(request: NextRequest) {
           const replicate = new ReplicateProvider()
           const predictionId = await replicate.startGeneration({
             description: musicPrompt,
-            durationSeconds: 20,
+            durationSeconds: config.durationHint,
           })
           await updateTrack(trackId, {
             predictionId,
@@ -221,7 +225,7 @@ export async function POST(request: NextRequest) {
     try {
       const predictionId = await provider.startGeneration({
         description: fullPrompt,
-        durationSeconds: duration,
+        durationSeconds: config.durationHint,
       })
       await updateTrack(trackId, { predictionId })
     } catch (err) {

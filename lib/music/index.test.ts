@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// Track constructor calls
 const replicateInstances: unknown[] = []
 const lyriaInstances: Array<{ model: string }> = []
 
@@ -42,21 +41,21 @@ describe('getMusicProvider', () => {
     expect(replicateInstances).toHaveLength(1)
   })
 
-  it('returns LyriaProvider with clip model for 30s duration', () => {
+  it('returns LyriaProvider with clip model', () => {
     vi.stubEnv('MUSIC_PROVIDER', 'lyria')
-    getMusicProvider(30)
+    getMusicProvider('clip')
     expect(lyriaInstances).toHaveLength(1)
     expect(lyriaInstances[0].model).toBe('clip')
   })
 
-  it('returns LyriaProvider with pro model for 120s duration', () => {
+  it('returns LyriaProvider with pro model', () => {
     vi.stubEnv('MUSIC_PROVIDER', 'lyria')
-    getMusicProvider(120)
+    getMusicProvider('pro')
     expect(lyriaInstances).toHaveLength(1)
     expect(lyriaInstances[0].model).toBe('pro')
   })
 
-  it('defaults to pro model when no duration specified', () => {
+  it('defaults to pro model when no model specified', () => {
     vi.stubEnv('MUSIC_PROVIDER', 'lyria')
     getMusicProvider()
     expect(lyriaInstances).toHaveLength(1)

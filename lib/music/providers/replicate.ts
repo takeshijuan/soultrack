@@ -24,7 +24,7 @@ export class ReplicateProvider implements MusicGenerationProvider {
         prompt: prompt.description,
         model_version: 'stereo-large',
         output_format: 'mp3',
-        duration: prompt.durationSeconds,
+        duration: prompt.durationSeconds ?? 20,
         normalization_strategy: 'peak',
       },
     })

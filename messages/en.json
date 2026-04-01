@@ -33,8 +33,10 @@
     "generatingButton": "Composing your moment...",
     "tryAriaLabel": "Try {name}",
     "durationLabel": "Track length",
-    "durationQuick": "Quick Vibe",
-    "durationFull": "Full Track"
+    "trackSizeShortLabel": "Short",
+    "trackSizeShortHint": "~30 sec",
+    "trackSizeLongLabel": "Long",
+    "trackSizeLongHint": "Full track"
   },
   "player": {
     "generationFailed": "Generation failed.",

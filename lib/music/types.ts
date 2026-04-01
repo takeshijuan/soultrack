@@ -1,6 +1,6 @@
 export interface MusicPrompt {
   description: string
-  durationSeconds: number
+  durationSeconds?: number
   structure?: string
 }
 

@@ -94,7 +94,7 @@ export default function TrackPlayer({
       try {
         const res  = await fetch(`/api/status/${trackId}`)
         if (!res.ok) return
-        const data = await res.json() as { status: string; audioUrl?: string; requestedDuration?: number }
+        const data = await res.json() as { status: string; audioUrl?: string; trackSize?: string }
         if (data.status === 'done') {
           if (intervalRef.current) clearInterval(intervalRef.current)
           if (timerRef.current) clearInterval(timerRef.current)
@@ -104,7 +104,7 @@ export default function TrackPlayer({
           setShowBurst(true)
           setTimeout(() => setShowBurst(false), 800)
           // Detect fallback (requested 120s but got a shorter Replicate track)
-          if (data.requestedDuration && data.requestedDuration > 30) {
+          if (data.trackSize === 'long') {
             // If we finished very quickly, it's likely a Replicate fallback (20s track)
             // A proper check would compare actual audio duration, but elapsed time is a proxy
             if (elapsedSecRef.current < 20) {

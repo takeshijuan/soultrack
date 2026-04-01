@@ -30,7 +30,7 @@ export async function GET(
     return Response.json({
       status: track.status,
       audioUrl: track.audioUrl,
-      requestedDuration: track.requestedDuration,
+      trackSize: track.trackSize,
     })
   }
 
@@ -71,7 +71,7 @@ export async function GET(
       return Response.json({
         status: 'done',
         audioUrl: permanentUrl,
-        requestedDuration: track.requestedDuration,
+        trackSize: track.trackSize,
       })
     }
 

@@ -17,7 +17,7 @@ export interface TrackRecord {
   emotionColor?: string
   userId?: string
   provider?: 'replicate' | 'lyria'
-  requestedDuration?: number
+  trackSize?: 'short' | 'long'
 }
 
 // Generate a ULID-based track ID

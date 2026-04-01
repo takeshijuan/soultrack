@@ -32,9 +32,11 @@
     "generateButton": "生成我的曲目 →",
     "generatingButton": "正在譜寫你的時刻...",
     "tryAriaLabel": "嘗試 {name}",
-    "durationLabel": "曲目時長",
-    "durationQuick": "快速氛圍",
-    "durationFull": "完整曲目"
+    "durationLabel": "曲目長度",
+    "trackSizeShortLabel": "短曲",
+    "trackSizeShortHint": "~30秒",
+    "trackSizeLongLabel": "長曲",
+    "trackSizeLongHint": "完整曲目"
   },
   "player": {
     "generationFailed": "生成失敗。",

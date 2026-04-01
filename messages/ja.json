@@ -33,8 +33,10 @@
     "generatingButton": "あなたの瞬間を作曲中...",
     "tryAriaLabel": "{name}を試す",
     "durationLabel": "曲の長さ",
-    "durationQuick": "ショートバイブ",
-    "durationFull": "フルトラック"
+    "trackSizeShortLabel": "ショート",
+    "trackSizeShortHint": "~30秒",
+    "trackSizeLongLabel": "ロング",
+    "trackSizeLongHint": "フルトラック"
   },
   "player": {
     "generationFailed": "生成に失敗しました。",
