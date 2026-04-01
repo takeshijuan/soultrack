@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import ShareButtons from '@/components/ShareButtons'
 import { EMOTION_LOADING_COPY } from '@/lib/emotions'
@@ -14,6 +14,7 @@ interface TrackPlayerProps {
   title: string
   copy: string
   emotion?: string
+  trackSize?: 'short' | 'long'
 }
 
 const WAVEFORM_HEIGHTS = [
@@ -22,6 +23,12 @@ const WAVEFORM_HEIGHTS = [
 ]
 
 type Status = 'processing' | 'done' | 'failed' | 'timeout'
+
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
 
 function CelebrationBurst() {
   return (
@@ -41,8 +48,8 @@ function CelebrationBurst() {
           style={{
             width: 12,
             height: 12,
-            background: 'var(--accent-teal)',
-            boxShadow: '0 0 12px var(--accent-teal)',
+            background: 'var(--emotion-hue)',
+            boxShadow: '0 0 12px var(--emotion-hue)',
           }}
         />
       ))}
@@ -57,19 +64,27 @@ export default function TrackPlayer({
   title,
   copy,
   emotion,
+  trackSize: initialTrackSize,
 }: TrackPlayerProps) {
   const t = useTranslations('player')
+  const shouldReduceMotion = useReducedMotion()
   const [status, setStatus]     = useState<Status>(initialStatus)
   const [audioUrl, setAudioUrl] = useState<string | undefined>(initialAudioUrl)
   const [isPlaying, setIsPlaying] = useState(false)
   const [showBurst, setShowBurst] = useState(false)
   const [isFallback, setIsFallback] = useState(false)
   const [elapsedSec, setElapsedSec] = useState(0)
+  const [trackSize, setTrackSize] = useState<'short' | 'long' | undefined>(initialTrackSize)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
   const audioRef      = useRef<HTMLAudioElement>(null)
   const pollCountRef  = useRef(0)
   const intervalRef   = useRef<ReturnType<typeof setInterval> | null>(null)
   const timerRef      = useRef<ReturnType<typeof setInterval> | null>(null)
   const elapsedSecRef = useRef(0)
+
+  const isCompact = trackSize === 'short'
+  const progress = duration > 0 ? currentTime / duration : 0
 
   // Elapsed timer for multi-phase loading text
   useEffect(() => {
@@ -100,13 +115,12 @@ export default function TrackPlayer({
           if (timerRef.current) clearInterval(timerRef.current)
           setAudioUrl(data.audioUrl)
           setStatus('done')
+          if (data.trackSize) setTrackSize(data.trackSize as 'short' | 'long')
           trackEvent(EVENTS.GENERATION_COMPLETE, { trackId, elapsed: elapsedSecRef.current })
           setShowBurst(true)
           setTimeout(() => setShowBurst(false), 800)
           // Detect fallback (requested 120s but got a shorter Replicate track)
           if (data.trackSize === 'long') {
-            // If we finished very quickly, it's likely a Replicate fallback (20s track)
-            // A proper check would compare actual audio duration, but elapsed time is a proxy
             if (elapsedSecRef.current < 20) {
               setIsFallback(true)
             }
@@ -121,7 +135,6 @@ export default function TrackPlayer({
 
     intervalRef.current = setInterval(poll, 3000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- elapsedSec tracked via ref to avoid interval recreation
   }, [status, trackId])
 
   const togglePlay = () => {
@@ -133,6 +146,23 @@ export default function TrackPlayer({
       setIsPlaying(true)
       trackEvent(EVENTS.TRACK_PLAY, { trackId })
     }
+  }
+
+  const seekToFraction = (clientX: number, rect: DOMRect) => {
+    const audio = audioRef.current
+    if (!audio || !duration) return
+    const fraction = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+    audio.currentTime = fraction * duration
+    setCurrentTime(fraction * duration)
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    seekToFraction(e.clientX, e.currentTarget.getBoundingClientRect())
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault() // Prevent synthetic click (double-fire on mobile)
+    seekToFraction(e.changedTouches[0].clientX, e.currentTarget.getBoundingClientRect())
   }
 
   // ── Error states ──
@@ -187,7 +217,7 @@ export default function TrackPlayer({
               key={i}
               className="w-[3px] rounded-full"
               style={{
-                background: 'linear-gradient(to top, var(--accent-amber), var(--accent-teal))',
+                background: 'var(--emotion-hue)',
                 originY: 1,
                 height: `${(h / 100) * 56}px`,
               }}
@@ -216,36 +246,70 @@ export default function TrackPlayer({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="rounded-2xl p-6 flex flex-col gap-6"
-        style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}
+        className={`rounded-2xl ${isCompact ? 'p-5' : 'p-6'} flex flex-col ${isCompact ? 'gap-4' : 'gap-6'}`}
+        style={{
+          background: 'var(--surface-1)',
+          border: `1px solid ${isPlaying ? 'color-mix(in srgb, var(--emotion-hue) 20%, transparent)' : 'var(--border)'}`,
+          animation: isPlaying && !shouldReduceMotion ? 'card-glow 2.5s ease-in-out infinite' : 'none',
+          transition: 'border-color 0.5s ease',
+        }}
       >
         {/* Title & copy */}
         <div>
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-[var(--text-primary)] leading-tight mb-2">
+          <h2 className={`font-display font-bold ${isCompact ? 'text-xl' : 'text-2xl sm:text-3xl'} text-[var(--text-primary)] leading-tight mb-2`}>
             {title}
           </h2>
-          <p className="text-[var(--text-muted)] text-sm italic leading-relaxed">{copy}</p>
+          {!isCompact && (
+            <p className="text-[var(--text-muted)] text-sm italic leading-relaxed">{copy}</p>
+          )}
         </div>
 
-        {/* Waveform */}
-        <div className="flex gap-[3px] items-end h-14">
-          {WAVEFORM_HEIGHTS.map((h, i) => (
-            <div
-              key={i}
-              className="w-[3px] rounded-full transition-all duration-200"
-              style={{
-                height: `${(h / 100) * 56}px`,
-                background: isPlaying
-                  ? 'linear-gradient(to top, var(--accent-amber), var(--accent-teal))'
-                  : 'var(--border-hover)',
-                transformOrigin: 'bottom',
-                animation: isPlaying
-                  ? `waveform-pulse 1s ease-in-out ${i * 0.04}s infinite alternate`
-                  : 'none',
-              }}
-            />
-          ))}
+        {/* Seekable waveform */}
+        <div
+          className={`flex gap-[3px] items-end ${isCompact ? 'h-10 min-h-[44px]' : 'h-14'} cursor-pointer select-none`}
+          role="progressbar"
+          aria-label={t('seekTo', { time: formatTime(currentTime) })}
+          aria-valuemin={0}
+          aria-valuemax={Math.floor(duration)}
+          aria-valuenow={Math.floor(currentTime)}
+          onClick={handleClick}
+          onTouchEnd={handleTouchEnd}
+        >
+          {WAVEFORM_HEIGHTS.map((h, i) => {
+            const barProgress = (i + 1) / WAVEFORM_HEIGHTS.length
+            const isPlayed = barProgress <= progress
+            const maxHeight = isCompact ? 40 : 56
+
+            return (
+              <div
+                key={i}
+                className="w-[3px] rounded-full transition-all duration-200"
+                style={{
+                  height: `${(h / 100) * maxHeight}px`,
+                  background: isPlaying
+                    ? isPlayed
+                      ? 'var(--emotion-hue)'
+                      : 'color-mix(in srgb, var(--emotion-hue) 30%, transparent)'
+                    : isPlayed && currentTime > 0
+                      ? 'color-mix(in srgb, var(--emotion-hue) 50%, transparent)'
+                      : 'var(--border-hover)',
+                  transformOrigin: 'bottom',
+                  animation: isPlaying && isPlayed && !shouldReduceMotion
+                    ? `waveform-pulse 1s ease-in-out ${i * 0.04}s infinite alternate`
+                    : 'none',
+                }}
+              />
+            )
+          })}
         </div>
+
+        {/* Time display */}
+        {duration > 0 && (
+          <div className="flex justify-between text-xs font-sans font-medium text-[var(--text-muted)] tabular-nums">
+            <span>{formatTime(currentTime)}</span>
+            {!isCompact && <span>-{formatTime(duration - currentTime)}</span>}
+          </div>
+        )}
 
         {/* Play button */}
         <div className="flex justify-center">
@@ -253,29 +317,20 @@ export default function TrackPlayer({
             type="button"
             onClick={togglePlay}
             whileTap={{ scale: 0.93 }}
-            className="w-16 h-16 rounded-full flex items-center justify-center text-black font-bold text-xl"
+            className={`${isCompact ? 'w-12 h-12' : 'w-16 h-16'} rounded-full flex items-center justify-center text-black font-bold text-xl`}
             style={{
-              background: 'var(--accent-teal)',
-              boxShadow: isPlaying
-                ? '0 0 40px rgba(0,245,212,0.5), 0 0 80px rgba(0,245,212,0.2)'
-                : '0 0 20px rgba(0,245,212,0.25)',
+              background: 'var(--emotion-hue)',
+              boxShadow: '0 0 20px color-mix(in srgb, var(--emotion-hue) 25%, transparent)',
+              animation: isPlaying && !shouldReduceMotion ? 'play-glow 1.5s ease-in-out infinite' : 'none',
             }}
-            animate={isPlaying ? {
-              boxShadow: [
-                '0 0 20px rgba(0,245,212,0.3)',
-                '0 0 50px rgba(0,245,212,0.6)',
-                '0 0 20px rgba(0,245,212,0.3)',
-              ],
-            } : {}}
-            transition={isPlaying ? { duration: 1.5, repeat: Infinity } : {}}
             aria-label={isPlaying ? t('pause') : t('play')}
           >
             {isPlaying
-              ? <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6" aria-hidden="true">
+              ? <svg viewBox="0 0 24 24" fill="currentColor" className={isCompact ? 'w-5 h-5' : 'w-6 h-6'} aria-hidden="true">
                   <rect x="6" y="4" width="4" height="16"/>
                   <rect x="14" y="4" width="4" height="16"/>
                 </svg>
-              : <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 translate-x-0.5" aria-hidden="true">
+              : <svg viewBox="0 0 24 24" fill="currentColor" className={`${isCompact ? 'w-5 h-5' : 'w-6 h-6'} translate-x-0.5`} aria-hidden="true">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
             }
@@ -285,7 +340,18 @@ export default function TrackPlayer({
         <audio
           ref={audioRef}
           src={audioUrl}
-          onEnded={() => setIsPlaying(false)}
+          onEnded={() => { setIsPlaying(false); setCurrentTime(0) }}
+          onTimeUpdate={() => {
+            if (audioRef.current) {
+              const t = audioRef.current.currentTime
+              setCurrentTime(prev => Math.abs(t - prev) > 0.25 ? t : prev)
+            }
+          }}
+          onLoadedMetadata={() => {
+            if (audioRef.current && isFinite(audioRef.current.duration)) {
+              setDuration(audioRef.current.duration)
+            }
+          }}
           className="hidden"
         />
 

@@ -51,7 +51,10 @@
     "fallbackNotice": "We generated a shorter version this time.",
     "retryFullTrack": "Try the full track again →",
     "play": "Play",
-    "pause": "Pause"
+    "pause": "Pause",
+    "seekTo": "Seek to {time}",
+    "timeElapsed": "Time elapsed",
+    "timeRemaining": "Time remaining"
   },
   "share": {
     "copyLink": "Copy Link",

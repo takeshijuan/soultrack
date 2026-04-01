@@ -90,3 +90,23 @@
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
 }
+@keyframes card-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 40px color-mix(in srgb, var(--emotion-hue) 12%, transparent),
+      0 0 80px color-mix(in srgb, var(--emotion-hue) 5%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 60px color-mix(in srgb, var(--emotion-hue) 18%, transparent),
+      0 0 120px color-mix(in srgb, var(--emotion-hue) 8%, transparent);
+  }
+}
+@keyframes play-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px color-mix(in srgb, var(--emotion-hue) 30%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 50px color-mix(in srgb, var(--emotion-hue) 60%, transparent);
+  }
+}

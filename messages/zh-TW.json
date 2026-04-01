@@ -51,7 +51,10 @@
     "fallbackNotice": "這次生成了較短的版本。",
     "retryFullTrack": "再試一次完整曲目 →",
     "play": "播放",
-    "pause": "暫停"
+    "pause": "暫停",
+    "seekTo": "跳轉到 {time}",
+    "timeElapsed": "經過時間",
+    "timeRemaining": "剩餘時間"
   },
   "share": {
     "copyLink": "複製連結",
